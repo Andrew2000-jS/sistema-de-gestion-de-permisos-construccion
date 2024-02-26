@@ -1,2 +1,2 @@
-export * from './auth-login/auth-login'
-export * from './auth-register/auth-register'
+export * from './auth-login'
+export * from './auth-register'

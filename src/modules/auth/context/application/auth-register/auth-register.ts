@@ -24,6 +24,12 @@ export class AuthRegister {
     password: string
   }): Promise<ApplicationResponse<User>> {
     try {
+      const isUserExist = await this.repository.findByCi(params.ci)
+
+      if (isUserExist) {
+        return { message: 'El usuario ya existe', statusCode: 409, data: null }
+      }
+
       const user = User.create(
         new UserId(0),
         new UserCi(params.ci),

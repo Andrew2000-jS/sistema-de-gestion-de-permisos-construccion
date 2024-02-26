@@ -13,21 +13,21 @@ export class AuthController {
   ) {}
 
   @httpPost('/register')
-  async register (req: RequestType<UserEntity>, _: Response): Promise<any> {
-    const res = await this.authRegister.run(req.body)
-    return res
+  async register (req: RequestType<UserEntity>, res: Response): Promise<any> {
+    const response = await this.authRegister.run(req.body)
+    return res.status(response.statusCode).json(response)
   }
 
   @httpPost('/login')
   async login (
     req: RequestType<{ ci: number, password: string, ctx: string }>,
-    _: Response
+    res: Response
   ): Promise<any> {
     const { ci, password, ctx } = req.body
 
     this.authLogin.setStrategy(ctx)
-    const res = await this.authLogin.run({ ci, password })
-    return res
+    const response = await this.authLogin.run({ ci, password })
+    return res.status(response.statusCode).json(response)
   }
 
   @httpGet('/health-check')
