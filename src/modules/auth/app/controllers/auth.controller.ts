@@ -18,16 +18,24 @@ export class AuthController {
     return res.status(response.statusCode).json(response)
   }
 
-  @httpPost('/login')
+  @httpPost('/login/:token?')
   async login (
     req: RequestType<{ ci: number, password: string, ctx: string }>,
     res: Response
   ): Promise<any> {
     const { ci, password, ctx } = req.body
+    const { token } = req.query
 
     this.authLogin.setStrategy(ctx)
     const response = await this.authLogin.run({ ci, password })
-    return res.status(response.statusCode).json(response)
+    if (ctx === 'email') {
+      if (!token) {
+        return res.status(401).json({ message: 'No autorizado', statusCode: 401, data: null })
+      }
+    }
+    const data = token ?? response.data
+
+    return res.status(response.statusCode).json({ message: response.message, statusCode: response.statusCode, data })
   }
 
   @httpGet('/health-check')

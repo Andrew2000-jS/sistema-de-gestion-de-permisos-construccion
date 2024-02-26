@@ -2,7 +2,7 @@ import { type Criteria } from '../../domain/criteria'
 
 interface IConverter {
   where: any
-  orderBy: Record<string, any>
+  orderBy: any
   take?: number
   skip?: number
 }
