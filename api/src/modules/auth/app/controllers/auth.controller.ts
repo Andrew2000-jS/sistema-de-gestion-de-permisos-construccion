@@ -2,14 +2,17 @@ import { type User as UserEntity } from '@prisma/client'
 import { RequestType } from '@src/shared/modules'
 import { Response } from 'express'
 import { inject } from 'inversify'
-import { controller, httpGet, httpPost } from 'inversify-express-utils'
-import { AuthLogin, AuthRegister } from '../../context/application'
+import { controller, httpPost } from 'inversify-express-utils'
+import { AuthLogin, AuthRegister, RecoverPassword } from '../../context/application'
+
+let token: string | null = null
 
 @controller('/auth')
 export class AuthController {
   constructor (
     @inject(AuthRegister) private readonly authRegister: AuthRegister,
-    @inject(AuthLogin) private readonly authLogin: AuthLogin
+    @inject(AuthLogin) private readonly authLogin: AuthLogin,
+    @inject(RecoverPassword) private readonly recoveryPassword: RecoverPassword
   ) {}
 
   @httpPost('/register')
@@ -18,28 +21,43 @@ export class AuthController {
     return res.status(response.statusCode).json(response)
   }
 
-  @httpPost('/login/:token?')
+  @httpPost('/login')
   async login (
-    req: RequestType<{ ci: number, password: string, ctx: string }>,
+    req: RequestType<{ ci?: number, email?: string, password: string, ctx: string }>,
     res: Response
   ): Promise<any> {
-    const { ci, password, ctx } = req.body
-    const { token } = req.query
+    const { ci, password, email, ctx } = req.body
 
     this.authLogin.setStrategy(ctx)
-    const response = await this.authLogin.run({ ci, password })
+    const { statusCode, message, data } = await this.authLogin.run({ ci, email, password })
     if (ctx === 'email') {
-      if (!token) {
-        return res.status(401).json({ message: 'No autorizado', statusCode: 401, data: null })
-      }
+      token = data.token
+      res.cookie('sesion-data', { code: data!.sesionCode }, { maxAge: 900000, secure: false, httpOnly: false })
+    } else if (ctx === 'digest') {
+      res.cookie('sesion-data', { token: data }, { maxAge: 900000, secure: false, httpOnly: false })
     }
-    const data = token ?? response.data
 
-    return res.status(response.statusCode).json({ message: response.message, statusCode: response.statusCode, data })
+    return res.status(statusCode).json({ message, statusCode, data })
   }
 
-  @httpGet('/health-check')
-  async healthCheck (_: Request, res: Response): Promise<Response> {
-    return res.status(200).send('Ok')
+  @httpPost('/login/code')
+  async loginCode (
+    req: RequestType<{ code: string }>,
+    res: Response
+  ): Promise<any> {
+    const { code } = req.body
+    if (code !== req.cookies['sesion-data'].code) { return res.status(401).json({ message: 'Codigo incorrecto', statusCode: 401, data: null }) }
+    res.cookie('sesion-data', { token }, { maxAge: 900000, secure: false, httpOnly: false })
+    return res.status(200).json({ message: 'Bienvenido', statusCode: 200, data: req.cookies['sesion-data'].token })
+  }
+
+  @httpPost('/recovery')
+  async recovery (
+    req: RequestType<{ email: string }>,
+    res: Response
+  ): Promise<any> {
+    const { data, message, statusCode } = await this.recoveryPassword.run(req.body)
+    res.cookie('recovery-code', { data }, { maxAge: 900000, secure: false, httpOnly: false })
+    return res.status(statusCode).json({ message, statusCode, data })
   }
 }

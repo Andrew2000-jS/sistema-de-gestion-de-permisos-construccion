@@ -15,6 +15,6 @@ export class DigestStrategy implements DigestAuthStrategy {
 
     const token = generateToken({ userCi: user.ci, userEmail: user.email }, '3g8rgz4G7NH4', '24h')
 
-    return { message: 'Autorizado', statusCode: 200, data: token }
+    return { message: 'Bienvenido', statusCode: 200, data: token }
   }
 }

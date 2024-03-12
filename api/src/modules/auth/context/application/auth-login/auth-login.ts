@@ -5,6 +5,7 @@ import {
 } from '../../domain'
 import { TYPES } from '../../utils/constants'
 import { DigestStrategy, EmailStrategy } from './auth-strategy'
+import { Criteria } from '@src/shared/modules/context/domain/criteria'
 
 @injectable()
 export class AuthLogin {
@@ -13,14 +14,17 @@ export class AuthLogin {
   constructor (@inject(TYPES.AuthRepository) private readonly repository: AuthRepository) {}
 
   async run (params: {
-    ci: number
+    ci?: number
+    email?: string
     password: string
-  }): Promise<ApplicationResponse<string>> {
+  }): Promise<ApplicationResponse<any>> {
     try {
-      const foundUser = await this.repository.findByCi(params.ci)
+      const filter = !params.ci ? { email: params.email } : { ci: params.ci }
+      const criteria = new Criteria(filter)
+      const foundUser = await this.repository.match(criteria)
 
       if (!foundUser) {
-        return { message: 'Usuario no encontrado', statusCode: 404, data: null }
+        return { message: 'Usuario y/o clave invalidas', statusCode: 404, data: null }
       }
 
       let strategy
@@ -36,7 +40,7 @@ export class AuthLogin {
       return authReponse
     } catch (error) {
       console.log(error)
-      return { message: 'Ocurrió un error desconocido' as string, statusCode: 500, data: null }
+      return { message: 'Algo ha salido mal, intente mas tarde' as string, statusCode: 500, data: null }
     }
   }
 

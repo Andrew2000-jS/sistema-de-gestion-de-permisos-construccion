@@ -23,11 +23,7 @@ export class UserName {
       throw new Exception(`El nombre: ${value} tiene menos de 3 caracters`, 'UserNameLengthTooShort')
     }
 
-    if (hasNumbers.test(value)) {
-      throw new Exception(`El nombre: ${value} no puede contener numeros`, 'UserInvalidName')
-    }
-
-    if (specialChars.test(value)) {
+    if (specialChars.test(value) || hasNumbers.test(value)) {
       throw new Exception(`El nombre: ${value} no puede contener caracteres invalidos`, 'UserInvalidName')
     }
   }

@@ -11,6 +11,7 @@ import {
 } from '../../domain'
 import { TYPES } from '../../utils/constants'
 import { errorHandler } from './error-hanlder'
+import { Criteria } from '@src/shared/modules/context/domain/criteria'
 
 @injectable()
 export class AuthRegister {
@@ -24,7 +25,14 @@ export class AuthRegister {
     password: string
   }): Promise<ApplicationResponse<User>> {
     try {
-      const isUserExist = await this.repository.findByCi(params.ci)
+      const filter = {
+        OR: [
+          { email: params.email },
+          { ci: params.ci }
+        ]
+      }
+      const criteria = new Criteria(filter)
+      const isUserExist = await this.repository.match(criteria)
 
       if (isUserExist) {
         return { message: 'El usuario ya existe', statusCode: 409, data: null }
@@ -41,7 +49,7 @@ export class AuthRegister {
 
       await this.repository.register(user)
 
-      return { message: 'Usuario Creado', statusCode: 201, data: user }
+      return { message: 'Registro existoso!', statusCode: 201, data: user }
     } catch (error: any) {
       return errorHandler(error.name, error.message as string)
     }
