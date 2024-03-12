@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "es2016",                                 
+    "module": "commonjs",                               
+    "baseUrl": ".",                                 
+    "paths": {
+      "@src/*": ["src/modules/*"]
+    },                                     
+    "sourceMap": true,                               
+    "outDir": "./dist",                                  
+    "esModuleInterop": true,                            
+    "forceConsistentCasingInFileNames": true,           
+    "strict": true,                                     
+    "noImplicitAny": true,                           
+    "strictNullChecks": true,                        
+    "strictFunctionTypes": true,                     
+    "useUnknownInCatchVariables": true,              
+    "noUnusedLocals": true,                          
+    "noUnusedParameters": true,                      
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true                           
+  },
+  "include": ["src/**/*", "**/*.ts"],
+  "exclude": ["node_modules"],
+  "files": ["types.d.ts"]
+}
