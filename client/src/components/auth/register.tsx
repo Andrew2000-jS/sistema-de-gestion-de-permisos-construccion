@@ -3,102 +3,283 @@
 import Link from "next/link";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/lib";
 import { Card, Button, Input, Spacer } from "@nextui-org/react";
-import { useState } from "react";
+import {
+  messageAdapter,
+  validationCiDict,
+  validationEmailDict,
+  validationLastNameDict,
+  validationNameDict,
+  validationPasswordDict,
+  valuesAdapter,
+} from "./utils";
+import { useForm, Controller } from "react-hook-form";
+import { useSubmit } from "./hook";
+import AnimatedMessage from "../custome-elements/animated-message";
+import { register } from "./services";
+
+interface IFormInput {
+  ci: string;
+  password: string;
+  email: string;
+  name: string;
+  lastname: string;
+  validatePassword: string;
+}
 
 function Register() {
-  const [isVisible, setIsVisible] = useState(false);
-  const toggleVisibility = () => setIsVisible(!isVisible);
+  const { formState, isVisible, setFormState, onSubmit } =
+    useSubmit<IFormInput>({
+      callback: (data) => register(data),
+      href: "/login",
+    });
+
+  const {
+    control,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      ci: "",
+      password: "",
+      email: "",
+      name: "",
+      lastname: "",
+      validatePassword: "",
+    },
+  });
+
+  const validatePasswordConfirmation = (value: string) =>
+    value === watch("password") || "Las contraseñas no coinciden";
+
+  const errorMessageCi =
+    messageAdapter(validationCiDict)[errors.ci?.type ?? ""];
+
+  const errorMessagePassword = messageAdapter(validationPasswordDict)[
+    errors.password?.type ?? ""
+  ];
+
+  const errorMessageEmail =
+    messageAdapter(validationEmailDict)[errors.email?.type ?? ""];
+
+  const errorMessageName =
+    messageAdapter(validationNameDict)[errors.name?.type ?? ""];
+
+  const errorMessageLastName = messageAdapter(validationLastNameDict)[
+    errors.lastname?.type ?? ""
+  ];
 
   return (
-    <Card className="p-5 w-full">
+    <Card className="p-5 w-[30em]">
       <div>
         <h2 className="text-lg font-bold">Registro</h2>
         <p className="text-sm mt-3">Bienvenido.</p>
       </div>
-      <div className="flex flex-col justify-center">
-        <Spacer y={7} />
-        <div>
-          <Input
-            isRequired
-            type="email"
-            label="Email"
-            className="w-full"
-            variant="bordered"
-            color="default"
-          />
-        </div>
-        <Spacer y={7} />
-        <div className="flex justify-between">
-          <Input
-            isRequired
-            type="text"
-            label="Nombre"
-            className="w-full"
-            variant="bordered"
-            color="default"
-          />
-          <Spacer x={2} />
-          <Input
-            isRequired
-            type="text"
-            label="Apellido"
-            className="w-full"
-            variant="bordered"
-            color="default"
-          />
-        </div>
-        <Spacer y={7} />
-        <div>
-          <Input
-            isRequired
-            type="email"
-            label="Cedula"
-            className="w-full"
-            variant="bordered"
-            color="default"
-          />
-        </div>
-        <Spacer y={7} />
-        <div className="flex justify-between">
-          <Input
-            isRequired
-            label="Contraseña"
-            className="w-full"
-            variant="bordered"
-            color="default"
-            endContent={
-              <button
-                className="focus:outline-none"
-                type="button"
-                onClick={toggleVisibility}
-              >
-                {isVisible ? (
-                  <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                ) : (
-                  <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+      {formState.response.message && (
+        <AnimatedMessage
+          message={formState.response.message}
+          position={["absolute", "right-5"]}
+          color={
+            formState.response.statusCode !== 201
+              ? "text-red-600"
+              : "text-green-600"
+          }
+          isVisible={isVisible}
+        />
+      )}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-col justify-center">
+          <Spacer y={7} />
+          <div>
+            <Controller
+              name="email"
+              control={control}
+              rules={{
+                validate: valuesAdapter(validationEmailDict),
+              }}
+              render={({ field }) => (
+                <Input
+                  isRequired
+                  type="email"
+                  label="Email"
+                  className="w-full"
+                  variant="bordered"
+                  color={errors.email ? "danger" : "default"}
+                  {...field}
+                />
+              )}
+            />
+            {errorMessageEmail && (
+              <p className="text-sm text-red-600">{errorMessageEmail}</p>
+            )}
+          </div>
+          <Spacer y={7} />
+          <div className="flex justify-between">
+            <div className="flex flex-col">
+              <Controller
+                name="name"
+                control={control}
+                rules={{
+                  validate: valuesAdapter(validationLastNameDict),
+                }}
+                render={({ field }) => (
+                  <Input
+                    isRequired
+                    type="text"
+                    label="Nombre"
+                    className="w-full"
+                    variant="bordered"
+                    color={errors.name ? "danger" : "default"}
+                    {...field}
+                  />
                 )}
-              </button>
-            }
-            type={isVisible ? "text" : "password"}
-          />
-          <Input
-            isRequired
-            label="Comprobar Contraseña"
-            className="w-full"
-            variant="bordered"
-            color="default"
-            type="password"
-          />
-        </div>
-        <Spacer y={7} />
+              />
+              {errorMessageName && (
+                <p className="text-sm text-red-600">{errorMessageName}</p>
+              )}
+            </div>
 
-        <div className="flex justify-around">
-          <Button color="primary">Registrate</Button>
-          <Link href="/">
-            <Button>¿Ya tienes cuenta?</Button>
-          </Link>
+            <Spacer x={2} />
+            <div className="flex flex-col">
+              <Controller
+                name="lastname"
+                control={control}
+                rules={{
+                  validate: valuesAdapter(validationLastNameDict),
+                }}
+                render={({ field }) => (
+                  <Input
+                    isRequired
+                    type="text"
+                    label="Apellido"
+                    className="w-full"
+                    variant="bordered"
+                    color={errors.lastname ? "danger" : "default"}
+                    {...field}
+                  />
+                )}
+              />
+              {errorMessageLastName && (
+                <p className="text-sm text-red-600">{errorMessageLastName}</p>
+              )}
+            </div>
+          </div>
+          <Spacer y={7} />
+          <div>
+            <Controller
+              name="ci"
+              control={control}
+              rules={{
+                validate: valuesAdapter(validationCiDict),
+              }}
+              render={({ field }) => (
+                <Input
+                  isRequired
+                  type="text"
+                  label="Cedula"
+                  className="w-full"
+                  variant="bordered"
+                  color={errors.ci ? "danger" : "default"}
+                  {...field}
+                />
+              )}
+            />
+            {errorMessageCi && (
+              <p className="text-sm text-red-600">{errorMessageCi}</p>
+            )}
+          </div>
+          <Spacer y={7} />
+          <div className="flex justify-between">
+            <div className="flex flex-col">
+              <Controller
+                name="password"
+                control={control}
+                rules={{
+                  validate: valuesAdapter(validationPasswordDict),
+                }}
+                render={({ field }) => (
+                  <Input
+                    isRequired
+                    label="Contraseña"
+                    className="w-full"
+                    variant="bordered"
+                    color={errors.password ? "danger" : "default"}
+                    endContent={
+                      <button
+                        className="focus:outline-none"
+                        type="button"
+                        onClick={() =>
+                          setFormState((prevState) => ({
+                            ...prevState,
+                            showPassword: !prevState.showPassword,
+                          }))
+                        }
+                      >
+                        {formState.showPassword ? (
+                          <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                        ) : (
+                          <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                        )}
+                      </button>
+                    }
+                    type={formState.showPassword ? "text" : "password"}
+                    {...field}
+                  />
+                )}
+              />
+              {errorMessagePassword && (
+                <p className="text-sm text-red-600">{errorMessagePassword}</p>
+              )}
+            </div>
+            <Spacer y={7} />
+
+            <div className="flex flex-col">
+              <Controller
+                name="validatePassword"
+                control={control}
+                rules={{
+                  validate: validatePasswordConfirmation,
+                }}
+                render={({ field }) => (
+                  <Input
+                    type="password"
+                    isRequired
+                    label="Comprobar contraseña"
+                    className="w-full"
+                    variant="bordered"
+                    color={errors.validatePassword ? "danger" : "default"}
+                    {...field}
+                  />
+                )}
+              />
+              {errors.validatePassword && (
+                <p className="text-sm text-red-600">
+                  {errors.validatePassword.message}
+                </p>
+              )}
+            </div>
+          </div>
+          <Spacer y={7} />
+
+          <div className="flex justify-around">
+            <Button
+              color={
+                formState.response.statusCode === 201 ? "success" : "primary"
+              }
+              isLoading={formState.response.loading}
+              isDisabled={formState.response.statusCode === 201}
+              type="submit"
+            >
+              {formState.response.statusCode === 201!
+                ? "Registro exitoso!"
+                : "Registrate"}
+            </Button>
+            <Link href="/">
+              <Button>¿Ya tienes cuenta?</Button>
+            </Link>
+          </div>
         </div>
-      </div>
+      </form>
     </Card>
   );
 }
