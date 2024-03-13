@@ -1,8 +1,8 @@
 import { PrismaClient } from '@prisma/client'
 import { type Nullable } from '@src/shared/modules'
-import { type User, type AuthRepository } from '../../domain'
+import { type AuthRepository } from '../../domain'
+import { type User, type UserPrimitives } from '../../../../user/context/domain'
 import { injectable } from 'inversify'
-import { type UserPrimitives } from '@src/user/context/domain'
 import { type Criteria } from '@src/shared/modules/context/domain/criteria'
 import { CriteriaPrismaConverter } from '@src/shared/modules/context/infrastructure/orm'
 

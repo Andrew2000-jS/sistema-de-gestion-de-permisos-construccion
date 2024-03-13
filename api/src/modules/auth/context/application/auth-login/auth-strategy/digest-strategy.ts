@@ -1,7 +1,7 @@
 import { type ApplicationResponse } from '@src/shared/modules'
 import { type DigestAuthStrategy } from './interfaces'
-import { UserPassword, type UserPrimitives } from '@src/auth/context/domain'
 import { generateToken } from '@src/auth/context/utils/token'
+import { UserPassword, type UserPrimitives } from '@src/user/context/domain'
 
 export class DigestStrategy implements DigestAuthStrategy {
   constructor (public password: string) {}

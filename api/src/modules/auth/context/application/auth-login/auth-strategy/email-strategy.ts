@@ -1,8 +1,8 @@
 import { type ApplicationResponse } from '@src/shared/modules'
 import { type EmailAuthStrategy } from './interfaces'
-import { type UserPrimitives } from '@src/auth/context/domain'
 import { generateToken, sendGmail } from '@src/auth/context/utils'
 import { v4 } from 'uuid'
+import { type UserPrimitives } from '@src/user/context/domain'
 
 export class EmailStrategy implements EmailAuthStrategy {
   constructor (public email: string) {}
@@ -38,7 +38,7 @@ export class EmailStrategy implements EmailAuthStrategy {
         subject: 'Inicio de Sesion'
       })
 
-      return { message: 'El codigo ha sido enviado a su correo electronico', statusCode: 200, data }
+      return { message: 'Correo enviado', statusCode: 200, data }
     } catch (error) {
       console.log(error)
       return { message: 'Algo ha salido mal', statusCode: 500, data: null }

@@ -23,8 +23,10 @@ export class AuthLogin {
       const criteria = new Criteria(filter)
       const foundUser = await this.repository.match(criteria)
 
+      const message = this.ctx === 'digest' ? 'Usuario y/o clave invalidas' : 'Usuario no encontrado'
+
       if (!foundUser) {
-        return { message: 'Usuario y/o clave invalidas', statusCode: 404, data: null }
+        return { message, statusCode: 404, data: null }
       }
 
       let strategy

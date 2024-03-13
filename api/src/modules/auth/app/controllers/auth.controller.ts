@@ -31,8 +31,10 @@ export class AuthController {
     this.authLogin.setStrategy(ctx)
     const { statusCode, message, data } = await this.authLogin.run({ ci, email, password })
     if (ctx === 'email') {
-      token = data.token
-      res.cookie('sesion-data', { code: data!.sesionCode }, { maxAge: 900000, secure: false, httpOnly: false })
+      token = !data ? { token: '' } : data.token
+      if (data) {
+        res.cookie('sesion-data', { code: data!.sesionCode }, { maxAge: 900000, secure: false, httpOnly: false })
+      }
     } else if (ctx === 'digest') {
       res.cookie('sesion-data', { token: data }, { maxAge: 900000, secure: false, httpOnly: false })
     }
@@ -47,6 +49,7 @@ export class AuthController {
   ): Promise<any> {
     const { code } = req.body
     if (code !== req.cookies['sesion-data'].code) { return res.status(401).json({ message: 'Codigo incorrecto', statusCode: 401, data: null }) }
+    console.log(token)
     res.cookie('sesion-data', { token }, { maxAge: 900000, secure: false, httpOnly: false })
     return res.status(200).json({ message: 'Bienvenido', statusCode: 200, data: req.cookies['sesion-data'].token })
   }

@@ -6,12 +6,12 @@ import {
   UserEmail,
   UserId,
   UserName,
-  UserPassword,
-  AuthRepository
-} from '../../domain'
+  UserPassword
+} from '@src/user/context/domain'
 import { TYPES } from '../../utils/constants'
 import { errorHandler } from './error-hanlder'
 import { Criteria } from '@src/shared/modules/context/domain/criteria'
+import { AuthRepository } from '../../domain'
 
 @injectable()
 export class AuthRegister {
