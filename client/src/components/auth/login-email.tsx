@@ -7,6 +7,8 @@ import { messageAdapter, validationEmailDict, valuesAdapter } from "./utils";
 import { emailAuth } from "./services";
 import { useSubmit } from "./hook";
 import AnimatedMessage from "../custome-elements/animated-message";
+import Image from "next/image";
+import AlertMessage from "../custome-elements/alert-message";
 
 function LoginEmail() {
   const { formState, isVisible, onSubmit } = useSubmit<{
@@ -26,20 +28,36 @@ function LoginEmail() {
     messageAdapter(validationEmailDict)[errors.email?.type ?? ""];
 
   return (
-    <Card className="p-5 w-full">
+    <Card className="p-5 w-[25em]">
       <div>
         <div className="relative">
-          <h2 className="text-lg font-bold">Inicio de Sesión</h2>
-          <p className="text-sm py-3">
-            Ingresa tu correo electronico para iniciar sesión.
-          </p>
-          {formState.response.statusCode === 200 && (
-            <AnimatedMessage
-              message={"Correo enviado!"}
-              position={["absolute", "right-0", "top-0"]}
-              color={"text-green-600"}
-              isVisible={isVisible}
+          <div className="flex flex-col justify-center items-center">
+            <Image
+              src={"/logo-alcaldia-2.png"}
+              alt="logo alcaldia"
+              height={250}
+              width={250}
+              className="mb-2"
             />
+            <h2 className="text-lg font-bold">Inicio de Sesión</h2>
+            <p className="text-sm py-3">
+              Ingresa tu correo electronico para iniciar sesión.
+            </p>
+          </div>
+          {formState.response.message && (
+            <AnimatedMessage
+              position={["absolute", "top-2", "right-0"]}
+              isVisible={isVisible}
+            >
+              <AlertMessage
+                description={formState.response.message}
+                styles={
+                  formState.response.statusCode !== 200
+                    ? ["text-red-800", "bg-red-50"]
+                    : ["text-green-800", "bg-green-50"]
+                }
+              />
+            </AnimatedMessage>
           )}
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -78,9 +96,7 @@ function LoginEmail() {
                 isLoading={formState.response.loading}
                 isDisabled={formState.response.statusCode === 200}
               >
-                {formState.response.statusCode === 200
-                  ? "Correo enviado"
-                  : "Enviar"}
+                Enviar
               </Button>
             </div>
 

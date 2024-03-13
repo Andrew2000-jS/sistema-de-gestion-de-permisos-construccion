@@ -14,6 +14,7 @@ import { digestAuth } from "./services";
 import AnimatedMessage from "../custome-elements/animated-message";
 import { AuthResponse } from "@/lib/common/interfaces";
 import { useSubmit } from "./hook";
+import AlertMessage from "../custome-elements/alert-message";
 
 interface IResponseState extends AuthResponse {
   loading: boolean;
@@ -43,7 +44,7 @@ function Login() {
   ];
 
   return (
-    <Card className="p-5 w-[30em]">
+    <Card className="p-5 w-[30em] h-full">
       <div className="relative">
         <h2 className="text-lg font-bold">Inicio de Sesion</h2>
         <p className="text-sm mt-3">
@@ -52,15 +53,18 @@ function Login() {
       </div>
       {formState.response.message && (
         <AnimatedMessage
-          position={["absolute", "right-5"]}
-          message={formState.response.message}
-          color={
-            formState.response.statusCode !== 200
-              ? "text-red-600"
-              : "text-green-600"
-          }
+          position={["absolute", "top-2", "right-0"]}
           isVisible={isVisible}
-        />
+        >
+          <AlertMessage
+            description={formState.response.message}
+            styles={
+              formState.response.statusCode !== 200
+                ? ["text-red-800", "bg-red-50"]
+                : ["text-green-800", "bg-green-50"]
+            }
+          />
+        </AnimatedMessage>
       )}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col justify-center">
