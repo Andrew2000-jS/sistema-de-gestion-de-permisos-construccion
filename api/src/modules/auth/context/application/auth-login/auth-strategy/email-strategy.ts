@@ -1,6 +1,6 @@
-import { type ApplicationResponse } from '@src/shared/modules'
+import { sendEmail, type ApplicationResponse } from '@src/shared/modules'
 import { type EmailAuthStrategy } from './interfaces'
-import { generateToken, sendGmail } from '@src/auth/context/utils'
+import { generateToken } from '@src/auth/context/utils'
 import { v4 } from 'uuid'
 import { type UserPrimitives } from '@src/user/context/domain'
 
@@ -10,7 +10,7 @@ export class EmailStrategy implements EmailAuthStrategy {
   async execute (user: UserPrimitives): Promise<ApplicationResponse<any>> {
     try {
       const sesionCode = v4().substring(0, 6)
-      const token = generateToken({ userCi: user.ci, userEmail: user.email }, '3g8rgz4G7NH4', '24h')
+      const token = generateToken({ userCi: user.ci, userEmail: user.email, ctx: 'login' }, '3g8rgz4G7NH4', '24h')
       const data = { sesionCode, token }
       const html = `
       <!DOCTYPE html>
@@ -25,18 +25,7 @@ export class EmailStrategy implements EmailAuthStrategy {
       </body>
       </html>
       `
-      const auth = {
-        user: 'alcaldiacarirubanabot@gmail.com',
-        pass: 'snza gbhs aval rovd'
-      }
-
-      await sendGmail({
-        html,
-        auth,
-        from: 'alcaldiacarirubanabot@gmail.com',
-        to: this.email,
-        subject: 'Inicio de Sesion'
-      })
+      await sendEmail({ to: this.email, subject: 'Inicio de Sesion', html })
 
       return { message: 'Correo enviado', statusCode: 200, data }
     } catch (error) {

@@ -45,29 +45,12 @@ export class MySQLAuthRepository implements AuthRepository {
     }
   }
 
-  async findByCi (ci: number): Promise<Nullable<UserPrimitives>> {
+  async recover (email: string, password: string): Promise<Nullable<UserPrimitives>> {
     try {
       const prisma = new PrismaClient()
-      const foundUser = await prisma.user.findFirst({
-        where: { ci }
-      })
-
-      if (!foundUser) {
-        return null
-      }
-
-      return foundUser
-    } catch (error) {
-      console.log(error)
-      throw new Error(error as string)
-    }
-  }
-
-  async findById (id: number): Promise<Nullable<UserPrimitives>> {
-    try {
-      const prisma = new PrismaClient()
-      const foundUser = await prisma.user.findFirst({
-        where: { id }
+      const foundUser = await prisma.user.update({
+        where: { email },
+        data: { password }
       })
 
       if (!foundUser) {
