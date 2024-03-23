@@ -2,36 +2,32 @@
 
 import { Button, Card, Input } from "@nextui-org/react";
 import { useForm, Controller } from "react-hook-form";
-import { verifyCode } from "./services";
-import { useSubmit } from "./hook";
 import AnimatedMessage from "../custome-elements/animated-message";
 import Image from "next/image";
 import AlertMessage from "../custome-elements/alert-message";
-import { useStorage } from "@/hooks";
-import { clearLocalStorage } from "@/lib/common/utils";
+import { sendEmailToRecoverPassword } from "./services";
+import { useSubmit } from "./hook";
+import { saveToLocalStorage } from "@/lib/common/utils";
 
-function VerifyCode() {
-  const { item } = useStorage("code_ctx");
-  const href = item === "login_email" ? "/home" : "/login/reset-password";
-
+function ForgotPassword() {
   const { formState, isVisible, onSubmit } = useSubmit<{
-    code: string;
-    ctx: string;
-  }>({ callback: (data) => verifyCode(data), href });
-
+    email: string;
+  }>({
+    callback: (data) => sendEmailToRecoverPassword(data),
+    href: "/login/verify",
+  });
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      code: "",
-      ctx: item === "login_email" ? "login" : "recovery",
+      email: "",
     },
   });
 
   if (formState.response.statusCode === 200) {
-    clearLocalStorage();
+    saveToLocalStorage("recovery_password", "code_ctx");
   }
 
   return (
@@ -46,19 +42,19 @@ function VerifyCode() {
             className="mb-2"
           />
           <div className="py-3">
-            <h2 className="text-lg font-bold">Código de verificación</h2>
+            <h2 className="text-lg font-bold">Recuperacion de clave</h2>
           </div>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="mb-2">
           <div className="flex flex-col">
             <Controller
-              name="code"
+              name="email"
               control={control}
               render={({ field }) => (
                 <Input
                   isRequired
-                  type="text"
-                  placeholder="Ingrese el codigo de verificacion"
+                  type="email"
+                  placeholder="Ingrese su correo electronico"
                   className="w-full"
                   variant="bordered"
                   {...field}
@@ -90,7 +86,7 @@ function VerifyCode() {
                 isLoading={formState.response.loading}
                 isDisabled={formState.response.statusCode === 200}
               >
-                Verificar codigo
+                Enviar codigo
               </Button>
             </div>
           </div>
@@ -100,4 +96,4 @@ function VerifyCode() {
   );
 }
 
-export default VerifyCode;
+export default ForgotPassword;

@@ -1,7 +1,7 @@
-import Login from "@/components/auth/login";
+import { Login } from "@/components";
 import Image from "next/image";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="flex justify-around w-full items-center h-[100vh]">

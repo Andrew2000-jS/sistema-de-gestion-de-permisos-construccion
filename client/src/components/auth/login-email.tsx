@@ -9,6 +9,7 @@ import { useSubmit } from "./hook";
 import AnimatedMessage from "../custome-elements/animated-message";
 import Image from "next/image";
 import AlertMessage from "../custome-elements/alert-message";
+import { saveToLocalStorage } from "@/lib/common/utils";
 
 function LoginEmail() {
   const { formState, isVisible, onSubmit } = useSubmit<{
@@ -23,6 +24,10 @@ function LoginEmail() {
       email: "",
     },
   });
+
+  if (formState.response.statusCode === 200) {
+    saveToLocalStorage("login_email", "code_ctx");
+  }
 
   const errorMessageEmail =
     messageAdapter(validationEmailDict)[errors.email?.type ?? ""];
@@ -96,7 +101,7 @@ function LoginEmail() {
                 isLoading={formState.response.loading}
                 isDisabled={formState.response.statusCode === 200}
               >
-                Enviar
+                Enviar codigo
               </Button>
             </div>
 

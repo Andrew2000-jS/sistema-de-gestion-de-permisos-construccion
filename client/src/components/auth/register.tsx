@@ -274,9 +274,7 @@ function Register() {
               isDisabled={formState.response.statusCode === 201}
               type="submit"
             >
-              {formState.response.statusCode === 201!
-                ? "Registro exitoso!"
-                : "Registrate"}
+              Registrate
             </Button>
             <Link href="/">
               <Button>¿Ya tienes cuenta?</Button>

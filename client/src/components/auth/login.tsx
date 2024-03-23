@@ -24,7 +24,10 @@ function Login() {
   const { formState, isVisible, setFormState, onSubmit } = useSubmit<{
     ci: string;
     password: string;
-  }>({ callback: (data) => digestAuth(data), href: "/home" });
+  }>({
+    callback: (data) => digestAuth(data),
+    href: "/home",
+  });
   const {
     control,
     handleSubmit,
@@ -132,10 +135,12 @@ function Login() {
             )}
           </div>
           <div className="flex justify-between items-center mt-7">
-            <Checkbox size="sm">Recuerdame</Checkbox>
-            <p className="text-[.8em] font-bold text-blue-600 cursor-pointer">
+            <Link
+              href="/login/forgot-password"
+              className="text-[.8em] font-bold text-blue-600"
+            >
               ¿Olvidaste tu contraseña?
-            </p>
+            </Link>
           </div>
 
           <div className="flex justify-around items-center mt-7">
@@ -150,9 +155,7 @@ function Login() {
               isLoading={formState.response.loading}
               isDisabled={formState.response.statusCode === 200}
             >
-              {formState.response.statusCode === 200
-                ? "Bienvenido"
-                : "Inicia Sesión"}
+              Inicia Sesión
             </Button>
           </div>
         </div>

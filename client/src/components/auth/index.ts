@@ -1,4 +1,6 @@
-export { default as loginEmail } from "./login-email";
-export { default as login } from "./login";
-export { default as register } from "./register";
-export {default as verifyCode} from './verify-code'
+export { default as LoginEmail } from "./login-email";
+export { default as Login } from "./login";
+export { default as Register } from "./register";
+export { default as VerifyCode } from "./verify-code";
+export { default as ForgotPassword } from "./forgot-password";
+export {default as ResetPassword} from './reset-password'

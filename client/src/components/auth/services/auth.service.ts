@@ -85,3 +85,46 @@ export async function verifyCode({ code }: { code: string }) {
     return (error as AxiosError<AuthResponse>).response!.data;
   }
 }
+
+export async function sendEmailToRecoverPassword({ email }: { email: string }) {
+  try {
+    const response: AxiosResponse<AuthResponse> = await axios.post(
+      "http://localhost:3001/auth/login/send-email",
+      {
+        email,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return (error as AxiosError<AuthResponse>).response!.data;
+  }
+}
+
+export async function resetPassword({
+  password,
+  validatePassword,
+  token,
+}: {
+  password: string;
+  validatePassword: string;
+  token: string;
+}) {
+  axios.defaults.withCredentials = false;
+  try {
+    const response: AxiosResponse<AuthResponse> = await axios.patch(
+      "http://localhost:3001/auth/login/reset-password",
+      {
+        password,
+        confirmPassword: validatePassword,
+      },
+      {
+        headers: {
+          'authorization': token,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return (error as AxiosError<AuthResponse>).response!.data;
+  }
+}
