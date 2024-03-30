@@ -9,12 +9,22 @@ import { useSubmit } from "./hook";
 import AnimatedMessage from "../custome-elements/animated-message";
 import Image from "next/image";
 import AlertMessage from "../custome-elements/alert-message";
-import { saveToLocalStorage } from "@/lib/common/utils";
+import { useCookies } from "react-cookie";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+type DataType = {
+  sessionCode: string;
+};
 
 function LoginEmail() {
+  const router = useRouter();
+  const [_, setCookie] = useCookies(["session-data"]);
   const { formState, isVisible, onSubmit } = useSubmit<{
     email: string;
-  }>({ callback: (data) => emailAuth(data), href: "/login/verify" });
+  }>({
+    callback: (data) => emailAuth(data),
+  });
   const {
     control,
     handleSubmit,
@@ -25,9 +35,25 @@ function LoginEmail() {
     },
   });
 
-  if (formState.response.statusCode === 200) {
-    saveToLocalStorage("login_email", "code_ctx");
-  }
+  useEffect(() => {
+    if (formState.response.statusCode === 200) {
+      const data = formState.response.data as DataType;
+      setCookie(
+        "session-data",
+        {
+          sessionCode: data.sessionCode,
+          ctx: "login_email",
+        },
+        { path: "/" }
+      );
+      router.push("/login/verify");
+    }
+  }, [
+    formState.response.statusCode,
+    formState.response.data,
+    setCookie,
+    router,
+  ]);
 
   const errorMessageEmail =
     messageAdapter(validationEmailDict)[errors.email?.type ?? ""];

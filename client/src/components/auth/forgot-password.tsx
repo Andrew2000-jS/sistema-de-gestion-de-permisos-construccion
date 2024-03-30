@@ -7,18 +7,27 @@ import Image from "next/image";
 import AlertMessage from "../custome-elements/alert-message";
 import { sendEmailToRecoverPassword } from "./services";
 import { useSubmit } from "./hook";
-import { saveToLocalStorage } from "@/lib/common/utils";
+import { useEffect } from "react";
+import { useCookies } from "react-cookie";
+import { useRouter } from "next/navigation";
+
+type DataType = {
+  sessionCode: string;
+};
 
 function ForgotPassword() {
+  const router = useRouter();
+  const [_, setCookie] = useCookies(["session-data"]);
+
   const { formState, isVisible, onSubmit } = useSubmit<{
     email: string;
   }>({
     callback: (data) => sendEmailToRecoverPassword(data),
-    href: "/login/verify",
   });
   const {
     control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -26,9 +35,23 @@ function ForgotPassword() {
     },
   });
 
-  if (formState.response.statusCode === 200) {
-    saveToLocalStorage("recovery_password", "code_ctx");
-  }
+  useEffect(() => {
+    if (formState.response.statusCode === 200) {
+      const data = formState.response.data as DataType;
+      setCookie("session-data", {
+        sessionCode: data.sessionCode,
+        ctx: "recovery_password",
+        email: getValues("email"),
+      });
+      router.push("/login/verify");
+    }
+  }, [
+    formState.response.statusCode,
+    formState.response.data,
+    setCookie,
+    router,
+    getValues,
+  ]);
 
   return (
     <Card className="p-5 w-[25em]">

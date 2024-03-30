@@ -1,7 +1,7 @@
 "use client";
 
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/lib";
-import { Button, Card, Checkbox, Input, Spacer } from "@nextui-org/react";
+import { Button, Card, Input, Spacer } from "@nextui-org/react";
 import Link from "next/link";
 import { useForm, Controller } from "react-hook-form";
 import {
@@ -14,19 +14,23 @@ import { digestAuth } from "./services";
 import AnimatedMessage from "../custome-elements/animated-message";
 import { AuthResponse } from "@/lib/common/interfaces";
 import { useSubmit } from "./hook";
+import { useCookies } from "react-cookie";
 import AlertMessage from "../custome-elements/alert-message";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface IResponseState extends AuthResponse {
   loading: boolean;
 }
 
 function Login() {
+  const router = useRouter();
+  const [_, setCookie] = useCookies(["session-data"]);
   const { formState, isVisible, setFormState, onSubmit } = useSubmit<{
     ci: string;
     password: string;
   }>({
     callback: (data) => digestAuth(data),
-    href: "/home",
   });
   const {
     control,
@@ -38,6 +42,19 @@ function Login() {
       password: "",
     },
   });
+
+  useEffect(() => {
+    if (formState.response.statusCode === 200) {
+      const token = formState.response.data;
+      setCookie("session-data", { token, ctx: "login_digest" }, { path: "/" });
+      router.push("/home");
+    }
+  }, [
+    formState.response.data,
+    formState.response.statusCode,
+    setCookie,
+    router,
+  ]);
 
   const errorMessageCi =
     messageAdapter(validationCiDict)[errors.ci?.type ?? ""];

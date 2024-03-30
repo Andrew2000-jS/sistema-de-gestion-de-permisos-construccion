@@ -9,17 +9,32 @@ import AlertMessage from "../custome-elements/alert-message";
 import { useSubmit } from "./hook";
 import { messageAdapter, validationPasswordDict, valuesAdapter } from "./utils";
 import { resetPassword } from "./services";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 
 function ResetPassword() {
-  const [cookies] = useCookies(["sesion-data"]);
+  const router = useRouter();
+  const [cookies] = useCookies(["session-data"]);
+  const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+    if (cookies["session-data"].email) {
+      setUserEmail(cookies["session-data"].email);
+    }
+  }, [cookies]);
+
   const { formState, isVisible, setFormState, onSubmit } = useSubmit<{
     password: string;
     validatePassword: string;
-    token: string;
+    email: string;
   }>({
-    callback: (data) => resetPassword(data),
-    href: "/login",
+    callback: (data) =>
+      resetPassword({
+        validatePassword: data.validatePassword,
+        password: data.password,
+        email: userEmail,
+      }),
   });
 
   const {
@@ -31,9 +46,15 @@ function ResetPassword() {
     defaultValues: {
       password: "",
       validatePassword: "",
-      token: cookies["sesion-data"].token,
+      email: userEmail,
     },
   });
+
+  useEffect(() => {
+    if (formState.response.statusCode === 200) {
+      router.push("/login");
+    }
+  }, [router, formState]);
 
   const validatePasswordConfirmation = (value: string) =>
     value === watch("password") || "Las contraseñas no coinciden";
@@ -150,10 +171,10 @@ function ResetPassword() {
           <div className="flex justify-around">
             <Button
               color={
-                formState.response.statusCode === 201 ? "success" : "primary"
+                formState.response.statusCode === 200 ? "success" : "primary"
               }
               isLoading={formState.response.loading}
-              isDisabled={formState.response.statusCode === 201}
+              isDisabled={formState.response.statusCode === 200}
               type="submit"
             >
               Actualizar contraseña

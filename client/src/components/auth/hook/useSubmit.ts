@@ -1,21 +1,17 @@
 import { AuthResponse } from "@/lib/common/interfaces";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import { saveToLocalStorage } from "@/lib/common/utils";
 
 interface IResponseState extends AuthResponse {
   loading: boolean;
 }
 
 interface Props<T> {
-  callback: (data: T) => Promise<AuthResponse>;
-  href?: string;
+  callback: (data: T) => Promise<AuthResponse> | any;
 }
 
 function useSubmit<T extends FieldValues>({
   callback,
-  href,
 }: Props<T>) {
   const [formState, setFormState] = useState<{
     response: IResponseState;
@@ -26,7 +22,6 @@ function useSubmit<T extends FieldValues>({
     showPassword: false,
     errors: {},
   });
-  const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
 
   const onSubmit: SubmitHandler<T> = async (data) => {
@@ -47,7 +42,6 @@ function useSubmit<T extends FieldValues>({
       }));
       setIsVisible(true);
 
-      if (res.statusCode?.toString().startsWith("2")) href && router.push(href);
     } catch (error) {
       setFormState((prevState) => ({
         ...prevState,
@@ -63,6 +57,7 @@ function useSubmit<T extends FieldValues>({
       setTimeout(() => setIsVisible(false), 4000);
     }
   };
+
   return { formState, isVisible, setFormState, onSubmit };
 }
 

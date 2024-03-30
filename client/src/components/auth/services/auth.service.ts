@@ -10,8 +10,6 @@ interface AuthProps {
   validatePassword: string;
 }
 
-axios.defaults.withCredentials = true;
-
 export async function digestAuth({
   ci,
   password,
@@ -72,20 +70,6 @@ export async function register({
   }
 }
 
-export async function verifyCode({ code }: { code: string }) {
-  try {
-    const response: AxiosResponse<AuthResponse> = await axios.post(
-      "http://localhost:3001/auth/login/code",
-      {
-        code,
-      }
-    );
-    return response.data;
-  } catch (error) {
-    return (error as AxiosError<AuthResponse>).response!.data;
-  }
-}
-
 export async function sendEmailToRecoverPassword({ email }: { email: string }) {
   try {
     const response: AxiosResponse<AuthResponse> = await axios.post(
@@ -103,24 +87,19 @@ export async function sendEmailToRecoverPassword({ email }: { email: string }) {
 export async function resetPassword({
   password,
   validatePassword,
-  token,
+  email,
 }: {
   password: string;
   validatePassword: string;
-  token: string;
+  email: string;
 }) {
-  axios.defaults.withCredentials = false;
   try {
     const response: AxiosResponse<AuthResponse> = await axios.patch(
       "http://localhost:3001/auth/login/reset-password",
       {
         password,
         confirmPassword: validatePassword,
-      },
-      {
-        headers: {
-          'authorization': token,
-        },
+        email
       }
     );
     return response.data;

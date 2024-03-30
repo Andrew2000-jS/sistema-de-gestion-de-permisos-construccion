@@ -17,6 +17,7 @@ import { useSubmit } from "./hook";
 import AnimatedMessage from "../custome-elements/animated-message";
 import { register } from "./services";
 import AlertMessage from "../custome-elements/alert-message";
+import { useRouter } from "next/navigation";
 
 interface IFormInput {
   ci: string;
@@ -28,10 +29,10 @@ interface IFormInput {
 }
 
 function Register() {
+  const router = useRouter();
   const { formState, isVisible, setFormState, onSubmit } =
     useSubmit<IFormInput>({
       callback: (data) => register(data),
-      href: "/login",
     });
 
   const {
@@ -70,6 +71,9 @@ function Register() {
     errors.lastname?.type ?? ""
   ];
 
+  if (formState.response.statusCode === 201) {
+    router.push("/login");
+  }
   return (
     <Card className="p-5 w-[30em] h-full">
       <div>
