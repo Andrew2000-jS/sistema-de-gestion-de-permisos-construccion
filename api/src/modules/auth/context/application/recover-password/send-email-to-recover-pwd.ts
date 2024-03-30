@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify'
 import { AuthRepository } from '../../domain'
-import { TYPES, generateToken } from '../../utils'
+import { TYPES } from '../../utils'
 import { sendEmail, type ApplicationResponse } from '@src/shared/modules'
 import { Criteria } from '@src/shared/modules/context/domain/criteria'
 import { v4 } from 'uuid'
@@ -24,8 +24,7 @@ export class SendEmailToRecoverPwd {
         }
       }
 
-      const sesionCode = v4().substring(0, 8)
-      const token = generateToken({ userCi: foundUser.ci, userEmail: foundUser.email, ctx: 'recover_password' }, '3g8rgz4G7NH4', '24h')
+      const sessionCode = v4().substring(0, 8)
       const html = `
       <!DOCTYPE html>
       <html lang="en">
@@ -35,7 +34,7 @@ export class SendEmailToRecoverPwd {
       </head>
       <body>
         <p>Su código de verificación es el siguiente.</p>
-        <h1>${sesionCode}</h1>
+        <h1>${sessionCode}</h1>
       </body>
       </html>
       `
@@ -44,7 +43,7 @@ export class SendEmailToRecoverPwd {
       return {
         message: 'Verifique su correo electronico',
         statusCode: 200,
-        data: { sesionCode, token }
+        data: { sessionCode }
       }
     } catch (error) {
       console.log(error)

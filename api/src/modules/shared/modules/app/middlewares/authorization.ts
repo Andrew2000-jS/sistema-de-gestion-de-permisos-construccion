@@ -3,7 +3,6 @@ import { type Request, type Response, type NextFunction } from 'express'
 
 export const authorization = (req: Request, res: Response, next: NextFunction): any => {
   const authToken = req.header('Authorization')
-  console.log('Token', authToken)
 
   if (!authToken) {
     return res.status(401).json({ message: 'No autorizado', statusCode: 401, data: null })

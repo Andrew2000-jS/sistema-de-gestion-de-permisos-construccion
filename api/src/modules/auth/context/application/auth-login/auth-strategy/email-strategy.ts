@@ -9,9 +9,9 @@ export class EmailStrategy implements EmailAuthStrategy {
 
   async execute (user: UserPrimitives): Promise<ApplicationResponse<any>> {
     try {
-      const sesionCode = v4().substring(0, 6)
+      const sessionCode = v4().substring(0, 6)
       const token = generateToken({ userCi: user.ci, userEmail: user.email, ctx: 'login' }, '3g8rgz4G7NH4', '24h')
-      const data = { sesionCode, token }
+      const data = { sessionCode, token }
       const html = `
       <!DOCTYPE html>
       <html lang="en">
@@ -21,7 +21,7 @@ export class EmailStrategy implements EmailAuthStrategy {
       </head>
       <body>
         <p>Su código de verificación es el siguiente.</p>
-        <h1>${sesionCode}</h1>
+        <h1>${sessionCode}</h1>
       </body>
       </html>
       `
