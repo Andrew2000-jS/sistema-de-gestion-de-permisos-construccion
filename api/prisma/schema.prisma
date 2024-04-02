@@ -20,5 +20,54 @@ model User {
 }
 
 model Permission {
-  id Int @id @default(autoincrement())
+  id           Int           @id @default(autoincrement())
+  ownerId      Int           @unique
+  date         DateTime
+  quantity     Int
+  amount       Float
+  civ          Int
+  observation  String
+  receiptNo    String
+  status       String
+  owner        Owner         @relation(fields: [ownerId], references: [id])
+  construction Construction?
+}
+
+model Construction {
+  id           Int        @id @default(autoincrement())
+  address      String
+  type         String
+  area         Area?
+  amount       Amount?
+  floorsNo     Int
+  manager      String
+  engineer     String
+  company      String
+  permissionId Int        @unique
+  permission   Permission @relation(fields: [permissionId], references: [id])
+}
+
+model Area {
+  id               Int          @id @default(autoincrement())
+  landArea         String
+  constructionArea String
+  constructionId   Int          @unique
+  construction     Construction @relation(fields: [constructionId], references: [id])
+}
+
+model Amount {
+  id             Int          @id @default(autoincrement())
+  landAmount     Float
+  workAmount     Float
+  tax            Float
+  constructionId Int          @unique
+  construction   Construction @relation(fields: [constructionId], references: [id])
+}
+
+model Owner {
+  id         Int          @id @default(autoincrement())
+  ci         Int          @unique
+  name       String
+  address    String
+  permission Permission[]
 }

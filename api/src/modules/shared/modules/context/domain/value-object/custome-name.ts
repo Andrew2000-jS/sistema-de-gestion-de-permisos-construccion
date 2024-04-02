@@ -1,5 +1,6 @@
 import { Exception } from '@src/shared/modules'
-export class UserName {
+
+export class CustomeName {
   private readonly value: string
 
   constructor (value: string) {

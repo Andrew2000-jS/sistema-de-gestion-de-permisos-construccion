@@ -2,12 +2,10 @@ import { type ApplicationResponse } from '@src/shared/modules'
 import { inject, injectable } from 'inversify'
 import {
   User,
-  UserCi,
   UserEmail,
-  UserId,
-  UserName,
   UserPassword
 } from '@src/user/context/domain'
+import { CustomeCi, CustomeId, CustomeName } from '@src/shared/modules/context/domain/value-object'
 import { TYPES } from '../../utils/constants'
 import { errorHandler } from './error-hanlder'
 import { Criteria } from '@src/shared/modules/context/domain/criteria'
@@ -39,10 +37,10 @@ export class AuthRegister {
       }
 
       const user = User.create(
-        new UserId(0),
-        new UserCi(params.ci),
-        new UserName(params.name),
-        new UserName(params.lastname),
+        new CustomeId(0),
+        new CustomeCi(params.ci),
+        new CustomeName(params.name),
+        new CustomeName(params.lastname),
         new UserEmail(params.email),
         new UserPassword(params.password)
       )
