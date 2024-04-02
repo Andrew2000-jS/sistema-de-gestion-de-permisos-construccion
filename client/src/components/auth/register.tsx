@@ -16,6 +16,8 @@ import { useForm, Controller } from "react-hook-form";
 import { useSubmit } from "./hook";
 import AnimatedMessage from "../custome-elements/animated-message";
 import { register } from "./services";
+import AlertMessage from "../custome-elements/alert-message";
+import { useRouter } from "next/navigation";
 
 interface IFormInput {
   ci: string;
@@ -27,10 +29,10 @@ interface IFormInput {
 }
 
 function Register() {
+  const router = useRouter();
   const { formState, isVisible, setFormState, onSubmit } =
     useSubmit<IFormInput>({
       callback: (data) => register(data),
-      href: "/login",
     });
 
   const {
@@ -69,23 +71,29 @@ function Register() {
     errors.lastname?.type ?? ""
   ];
 
+  if (formState.response.statusCode === 201) {
+    router.push("/login");
+  }
   return (
-    <Card className="p-5 w-[30em]">
+    <Card className="p-5 w-[30em] h-full">
       <div>
         <h2 className="text-lg font-bold">Registro</h2>
         <p className="text-sm mt-3">Bienvenido.</p>
       </div>
       {formState.response.message && (
         <AnimatedMessage
-          message={formState.response.message}
-          position={["absolute", "right-5"]}
-          color={
-            formState.response.statusCode !== 201
-              ? "text-red-600"
-              : "text-green-600"
-          }
+          position={["absolute", "top-2", "right-0"]}
           isVisible={isVisible}
-        />
+        >
+          <AlertMessage
+            description={formState.response.message}
+            styles={
+              formState.response.statusCode !== 201
+                ? ["text-red-800", "bg-red-50"]
+                : ["text-green-800", "bg-green-50"]
+            }
+          />
+        </AnimatedMessage>
       )}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col justify-center">
@@ -115,7 +123,7 @@ function Register() {
           </div>
           <Spacer y={7} />
           <div className="flex justify-between">
-            <div className="flex flex-col">
+            <div className="flex flex-col w-full">
               <Controller
                 name="name"
                 control={control}
@@ -140,7 +148,7 @@ function Register() {
             </div>
 
             <Spacer x={2} />
-            <div className="flex flex-col">
+            <div className="flex flex-col w-full">
               <Controller
                 name="lastname"
                 control={control}
@@ -270,9 +278,7 @@ function Register() {
               isDisabled={formState.response.statusCode === 201}
               type="submit"
             >
-              {formState.response.statusCode === 201!
-                ? "Registro exitoso!"
-                : "Registrate"}
+              Registrate
             </Button>
             <Link href="/">
               <Button>¿Ya tienes cuenta?</Button>

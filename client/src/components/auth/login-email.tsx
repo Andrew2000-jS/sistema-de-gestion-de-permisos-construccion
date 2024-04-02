@@ -7,11 +7,24 @@ import { messageAdapter, validationEmailDict, valuesAdapter } from "./utils";
 import { emailAuth } from "./services";
 import { useSubmit } from "./hook";
 import AnimatedMessage from "../custome-elements/animated-message";
+import Image from "next/image";
+import AlertMessage from "../custome-elements/alert-message";
+import { useCookies } from "react-cookie";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+type DataType = {
+  sessionCode: string;
+};
 
 function LoginEmail() {
+  const router = useRouter();
+  const [_, setCookie] = useCookies(["session-data"]);
   const { formState, isVisible, onSubmit } = useSubmit<{
     email: string;
-  }>({ callback: (data) => emailAuth(data), href: "/login/verify" });
+  }>({
+    callback: (data) => emailAuth(data),
+  });
   const {
     control,
     handleSubmit,
@@ -22,24 +35,60 @@ function LoginEmail() {
     },
   });
 
+  useEffect(() => {
+    if (formState.response.statusCode === 200) {
+      const data = formState.response.data as DataType;
+      setCookie(
+        "session-data",
+        {
+          sessionCode: data.sessionCode,
+          ctx: "login_email",
+        },
+        { path: "/" }
+      );
+      router.push("/login/verify");
+    }
+  }, [
+    formState.response.statusCode,
+    formState.response.data,
+    setCookie,
+    router,
+  ]);
+
   const errorMessageEmail =
     messageAdapter(validationEmailDict)[errors.email?.type ?? ""];
 
   return (
-    <Card className="p-5 w-full">
+    <Card className="p-5 w-[25em]">
       <div>
         <div className="relative">
-          <h2 className="text-lg font-bold">Inicio de Sesión</h2>
-          <p className="text-sm py-3">
-            Ingresa tu correo electronico para iniciar sesión.
-          </p>
-          {formState.response.statusCode === 200 && (
-            <AnimatedMessage
-              message={"Correo enviado!"}
-              position={["absolute", "right-0", "top-0"]}
-              color={"text-green-600"}
-              isVisible={isVisible}
+          <div className="flex flex-col justify-center items-center">
+            <Image
+              src={"/logo-alcaldia-2.png"}
+              alt="logo alcaldia"
+              height={250}
+              width={250}
+              className="mb-2"
             />
+            <h2 className="text-lg font-bold">Inicio de Sesión</h2>
+            <p className="text-sm py-3">
+              Ingresa tu correo electronico para iniciar sesión.
+            </p>
+          </div>
+          {formState.response.message && (
+            <AnimatedMessage
+              position={["absolute", "top-2", "right-0"]}
+              isVisible={isVisible}
+            >
+              <AlertMessage
+                description={formState.response.message}
+                styles={
+                  formState.response.statusCode !== 200
+                    ? ["text-red-800", "bg-red-50"]
+                    : ["text-green-800", "bg-green-50"]
+                }
+              />
+            </AnimatedMessage>
           )}
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -78,9 +127,7 @@ function LoginEmail() {
                 isLoading={formState.response.loading}
                 isDisabled={formState.response.statusCode === 200}
               >
-                {formState.response.statusCode === 200
-                  ? "Correo enviado"
-                  : "Enviar"}
+                Enviar codigo
               </Button>
             </div>
 

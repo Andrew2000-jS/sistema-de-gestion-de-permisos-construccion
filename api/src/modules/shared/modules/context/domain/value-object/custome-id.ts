@@ -1,4 +1,4 @@
-export class UserId {
+export class CustomeId {
   private readonly value: number
 
   constructor (value: number) {

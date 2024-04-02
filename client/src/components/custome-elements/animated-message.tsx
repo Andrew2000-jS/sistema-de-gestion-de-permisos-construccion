@@ -1,15 +1,13 @@
 import { motion, AnimatePresence } from "framer-motion";
 
 const AnimatedMessage = ({
-  message,
-  color,
   isVisible,
   position = [],
+  children,
 }: {
-  message: string | null;
-  color: string;
   isVisible: boolean;
   position: string[];
+  children: React.ReactNode;
 }) => {
   return (
     <AnimatePresence>
@@ -20,9 +18,7 @@ const AnimatedMessage = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <div>
-            <p className={`text-center ${color}`}>{message}</p>
-          </div>
+          {children}
         </motion.div>
       )}
     </AnimatePresence>

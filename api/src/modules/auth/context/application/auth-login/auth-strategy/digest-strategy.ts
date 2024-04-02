@@ -1,7 +1,7 @@
 import { type ApplicationResponse } from '@src/shared/modules'
 import { type DigestAuthStrategy } from './interfaces'
-import { UserPassword, type UserPrimitives } from '@src/auth/context/domain'
 import { generateToken } from '@src/auth/context/utils/token'
+import { UserPassword, type UserPrimitives } from '@src/user/context/domain'
 
 export class DigestStrategy implements DigestAuthStrategy {
   constructor (public password: string) {}
@@ -13,7 +13,7 @@ export class DigestStrategy implements DigestAuthStrategy {
       return { message: 'Usuario y/o clave invalidas', statusCode: 401, data: null }
     }
 
-    const token = generateToken({ userCi: user.ci, userEmail: user.email }, '3g8rgz4G7NH4', '24h')
+    const token = generateToken({ userCi: user.ci, userEmail: user.email, ctx: 'login' }, '3g8rgz4G7NH4', '24h')
 
     return { message: 'Bienvenido', statusCode: 200, data: token }
   }

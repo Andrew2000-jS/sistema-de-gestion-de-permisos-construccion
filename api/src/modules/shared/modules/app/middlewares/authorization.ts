@@ -2,14 +2,14 @@ import jwt from 'jsonwebtoken'
 import { type Request, type Response, type NextFunction } from 'express'
 
 export const authorization = (req: Request, res: Response, next: NextFunction): any => {
-  const authHeader = req.header('Authorization')
+  const authToken = req.header('Authorization')
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  if (!authToken) {
     return res.status(401).json({ message: 'No autorizado', statusCode: 401, data: null })
   }
 
   try {
-    const payload = jwt.verify(authHeader, '3g8rgz4G7NH4')
+    const payload = jwt.verify(authToken, '3g8rgz4G7NH4')
     req.userInfo = payload
     next()
   } catch (error) {

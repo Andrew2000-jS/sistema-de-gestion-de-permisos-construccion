@@ -1,4 +1,4 @@
-import { loginEmail as LoginEmail } from "@/components";
+import { LoginEmail } from "@/components";
 
 export default function LoginEmailPage() {
   return (

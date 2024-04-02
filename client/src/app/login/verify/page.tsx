@@ -1,4 +1,4 @@
-import { verifyCode as VerifyCode } from "@/components";
+import { VerifyCode } from "@/components";
 
 export default function VerifyPage() {
   return (

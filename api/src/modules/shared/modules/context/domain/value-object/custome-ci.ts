@@ -1,6 +1,6 @@
 import { Exception } from '@src/shared/modules'
 
-export class UserCi {
+export class CustomeCi {
   private readonly value: number
 
   constructor (value: number) {

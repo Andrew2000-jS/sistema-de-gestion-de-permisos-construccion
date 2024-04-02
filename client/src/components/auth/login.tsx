@@ -1,7 +1,7 @@
 "use client";
 
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/lib";
-import { Button, Card, Checkbox, Input, Spacer } from "@nextui-org/react";
+import { Button, Card, Input, Spacer } from "@nextui-org/react";
 import Link from "next/link";
 import { useForm, Controller } from "react-hook-form";
 import {
@@ -14,16 +14,24 @@ import { digestAuth } from "./services";
 import AnimatedMessage from "../custome-elements/animated-message";
 import { AuthResponse } from "@/lib/common/interfaces";
 import { useSubmit } from "./hook";
+import { useCookies } from "react-cookie";
+import AlertMessage from "../custome-elements/alert-message";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface IResponseState extends AuthResponse {
   loading: boolean;
 }
 
 function Login() {
+  const router = useRouter();
+  const [_, setCookie] = useCookies(["session-data"]);
   const { formState, isVisible, setFormState, onSubmit } = useSubmit<{
     ci: string;
     password: string;
-  }>({ callback: (data) => digestAuth(data), href: "/home" });
+  }>({
+    callback: (data) => digestAuth(data),
+  });
   const {
     control,
     handleSubmit,
@@ -35,6 +43,19 @@ function Login() {
     },
   });
 
+  useEffect(() => {
+    if (formState.response.statusCode === 200) {
+      const token = formState.response.data;
+      setCookie("session-data", { token, ctx: "login_digest" }, { path: "/" });
+      router.push("/home");
+    }
+  }, [
+    formState.response.data,
+    formState.response.statusCode,
+    setCookie,
+    router,
+  ]);
+
   const errorMessageCi =
     messageAdapter(validationCiDict)[errors.ci?.type ?? ""];
 
@@ -43,7 +64,7 @@ function Login() {
   ];
 
   return (
-    <Card className="p-5 w-[30em]">
+    <Card className="p-5 w-[30em] h-full">
       <div className="relative">
         <h2 className="text-lg font-bold">Inicio de Sesion</h2>
         <p className="text-sm mt-3">
@@ -52,15 +73,18 @@ function Login() {
       </div>
       {formState.response.message && (
         <AnimatedMessage
-          position={["absolute", "right-5"]}
-          message={formState.response.message}
-          color={
-            formState.response.statusCode !== 200
-              ? "text-red-600"
-              : "text-green-600"
-          }
+          position={["absolute", "top-2", "right-0"]}
           isVisible={isVisible}
-        />
+        >
+          <AlertMessage
+            description={formState.response.message}
+            styles={
+              formState.response.statusCode !== 200
+                ? ["text-red-800", "bg-red-50"]
+                : ["text-green-800", "bg-green-50"]
+            }
+          />
+        </AnimatedMessage>
       )}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col justify-center">
@@ -128,10 +152,12 @@ function Login() {
             )}
           </div>
           <div className="flex justify-between items-center mt-7">
-            <Checkbox size="sm">Recuerdame</Checkbox>
-            <p className="text-[.8em] font-bold text-blue-600 cursor-pointer">
+            <Link
+              href="/login/forgot-password"
+              className="text-[.8em] font-bold text-blue-600"
+            >
               ¿Olvidaste tu contraseña?
-            </p>
+            </Link>
           </div>
 
           <div className="flex justify-around items-center mt-7">
@@ -146,9 +172,7 @@ function Login() {
               isLoading={formState.response.loading}
               isDisabled={formState.response.statusCode === 200}
             >
-              {formState.response.statusCode === 200
-                ? "Bienvenido"
-                : "Inicia Sesión"}
+              Inicia Sesión
             </Button>
           </div>
         </div>
