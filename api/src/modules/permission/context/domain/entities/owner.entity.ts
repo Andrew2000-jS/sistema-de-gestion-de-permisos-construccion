@@ -13,3 +13,10 @@ export class Owner {
     this.address = address
   }
 }
+
+export type OwnerPrimitives = {
+  id: number
+  ci: number
+  name: string
+  address: string
+}

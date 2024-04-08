@@ -1,11 +1,11 @@
 import { type CustomeId } from '@src/shared/modules/context/domain/value-object'
-import { type Construction } from './construction.entity'
-import { type Owner } from './owner.entity'
+import { type ConstructionPrimitives, type Construction } from './construction.entity'
+import { type OwnerPrimitives, type Owner } from './owner.entity'
 
 export class Permission {
   private readonly id: CustomeId
   private readonly date: Date
-  private readonly quantity: string
+  private readonly quantity: number
   private readonly amount: number
   private readonly CIV: number
   private readonly observation: string
@@ -17,7 +17,7 @@ export class Permission {
   constructor (
     id: CustomeId,
     date: Date,
-    quantity: string,
+    quantity: number,
     amount: number,
     CIV: number,
     observation: string,
@@ -41,7 +41,7 @@ export class Permission {
   static create (
     id: CustomeId,
     date: Date,
-    quantity: string,
+    quantity: number,
     amount: number,
     CIV: number,
     observation: string,
@@ -63,4 +63,17 @@ export class Permission {
       status
     )
   }
+}
+
+export type PermissionPrimitives = {
+  id: number
+  date: Date
+  quantity: number
+  amount: number
+  CIV: number
+  observation: string
+  receiptNo: string
+  status: string
+  construction: ConstructionPrimitives
+  owner: OwnerPrimitives
 }

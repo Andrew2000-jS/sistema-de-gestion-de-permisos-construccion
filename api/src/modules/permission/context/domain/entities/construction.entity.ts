@@ -1,5 +1,7 @@
+import { type CustomeId } from '@src/shared/modules/context/domain/value-object'
+
 export class Construction {
-  private readonly id: string | number
+  private readonly id: CustomeId
   private readonly address: string
   private readonly type: string
   private readonly constructionArea: string
@@ -14,7 +16,7 @@ export class Construction {
   private readonly tax: number
 
   constructor (
-    id: string | number,
+    id: CustomeId,
     address: string,
     type: string,
     constructionArea: string,
@@ -42,4 +44,20 @@ export class Construction {
     this.workAmount = workAmount
     this.tax = tax
   }
+}
+
+export type ConstructionPrimitives = {
+  id: number
+  address: string
+  type: string
+  constructionArea: string
+  landArea: string
+  destination: string
+  floorsNo: number
+  manager: string
+  engineer: string
+  constructionCompany: string
+  landAmount: number
+  workAmount: number
+  tax: number
 }

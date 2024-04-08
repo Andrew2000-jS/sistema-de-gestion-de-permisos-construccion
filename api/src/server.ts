@@ -2,9 +2,9 @@ import express from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
 import { InversifyExpressServer } from 'inversify-express-utils'
-import container from './modules/auth/app/config/inversify'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
+import container from './config/inversify'
 
 const app = express()
 

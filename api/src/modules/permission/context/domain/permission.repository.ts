@@ -1,8 +1,10 @@
-import { type Criteria } from '@src/shared/modules/context/domain/criteria'
-import { type Permission } from './entities'
-import { type Nullable } from '@src/shared/modules'
+// import { type Criteria } from '@src/shared/modules/context/domain/criteria'
+import { type PermissionPrimitives } from './entities'
+// import { type Nullable } from '@src/shared/modules'
 
 export interface PermissionRepository {
-  save: (permission: Permission) => Promise<Permission>
-  match: (criteria: Criteria) => Promise<Nullable<Permission[]>>
+  save: (permission: PermissionPrimitives) => Promise<PermissionPrimitives>
+  // update: (id: number, data: Partial<PermissionPrimitives>) => Promise<Permission>
+  // delete: (id: number) => Promise<void>
+  // match: (criteria: Criteria) => Promise<Nullable<Permission[]>>
 }
