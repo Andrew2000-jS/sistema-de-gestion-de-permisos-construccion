@@ -1,67 +1,65 @@
 // import { type Criteria } from '@src/shared/modules/context/domain/criteria'
 import { injectable } from 'inversify'
-import { type PermissionPrimitives, type PermissionRepository } from '../../domain'
+import { type Permission, type PermissionRepository } from '../../domain'
 // import { type Nullable } from '@src/shared/modules'
 import { PrismaClient } from '@prisma/client'
 
 @injectable()
 export class MySQLPermissionRepository implements PermissionRepository {
-  async save (permission: PermissionPrimitives): Promise<PermissionPrimitives> {
+  async save (permission: Permission): Promise<void> {
     const prisma = new PrismaClient()
     try {
+      const permissionPrimitives = permission.toPrimitives()
       const amount = await prisma.amount.create({
         data: {
-          landAmount: permission.construction.landAmount,
-          workAmount: permission.construction.workAmount,
-          tax: permission.construction.tax
+          landAmount: permissionPrimitives.construction.landAmount,
+          workAmount: permissionPrimitives.construction.workAmount,
+          tax: permissionPrimitives.construction.tax
         }
       })
 
       const area = await prisma.area.create({
         data: {
-          constructionArea: permission.construction.constructionArea,
-          landArea: permission.construction.landArea
+          constructionArea: permissionPrimitives.construction.constructionArea,
+          landArea: permissionPrimitives.construction.landArea
         }
       })
 
       const construction = await prisma.construction.create({
         data: {
-          address: permission.construction.address,
-          type: permission.construction.type,
-          company: permission.construction.constructionCompany,
-          engineer: permission.construction.engineer,
-          floorsNo: permission.construction.floorsNo,
-          manager: permission.construction.manager,
+          address: permissionPrimitives.construction.address,
+          type: permissionPrimitives.construction.type,
+          company: permissionPrimitives.construction.constructionCompany,
+          engineer: permissionPrimitives.construction.engineer,
+          floorsNo: permissionPrimitives.construction.floorsNo,
+          manager: permissionPrimitives.construction.manager,
           amountId: amount.id,
           areaId: area.id
 
         }
       })
 
-      // Crear el propietario
       const owner = await prisma.owner.create({
         data: {
-          ci: permission.owner.ci,
-          name: permission.owner.name,
-          address: permission.owner.address
+          ci: permissionPrimitives.owner.ci,
+          name: permissionPrimitives.owner.name,
+          address: permissionPrimitives.owner.address
         }
       })
 
       await prisma.permission.create({
         data: {
-          amount: permission.amount,
-          civ: permission.CIV,
-          date: permission.date,
-          observation: permission.observation,
-          quantity: permission.quantity,
-          receiptNo: permission.receiptNo,
-          status: permission.status,
+          amount: permissionPrimitives.amount,
+          civ: permissionPrimitives.CIV,
+          date: permissionPrimitives.date,
+          observation: permissionPrimitives.observation,
+          quantity: permissionPrimitives.quantity,
+          receiptNo: permissionPrimitives.receiptNo,
+          status: permissionPrimitives.status,
           constructionId: construction.id,
           ownerId: owner.id
         }
       })
-
-      return permission
     } catch (error) {
       console.log(error)
       throw new Error((error as string))

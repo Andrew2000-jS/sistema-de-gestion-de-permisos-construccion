@@ -52,7 +52,6 @@ export class AuthController {
 
   @httpPatch('/login/reset-password')
   async updatePassword (req: RequestType<{ password: string, email: string }>, res: Response): Promise<any> {
-    console.log('email', req.body.email)
     const response = await this.recoverPassword.run({ email: req.body.email, password: req.body.password })
     return res.status(response.statusCode).json(response)
   }

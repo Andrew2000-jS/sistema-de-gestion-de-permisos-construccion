@@ -5,7 +5,7 @@ import {
   UserEmail,
   UserPassword
 } from '@src/user/context/domain'
-import { CustomeCi, CustomeId, CustomeName } from '@src/shared/modules/context/domain/value-object'
+import { CiValueObject, IdValueObject, NameValueObject } from '@src/shared/modules/context/domain/value-object'
 import { TYPES } from '../../utils/constants'
 import { errorHandler } from './error-hanlder'
 import { Criteria } from '@src/shared/modules/context/domain/criteria'
@@ -37,10 +37,10 @@ export class AuthRegister {
       }
 
       const user = User.create(
-        new CustomeId(0),
-        new CustomeCi(params.ci),
-        new CustomeName(params.name),
-        new CustomeName(params.lastname),
+        new IdValueObject(0),
+        new CiValueObject(params.ci),
+        new NameValueObject(params.name),
+        new NameValueObject(params.lastname),
         new UserEmail(params.email),
         new UserPassword(params.password)
       )
