@@ -1,11 +1,10 @@
 import { Exception } from '@src/shared/modules'
+import { ValueObject } from './value-object'
 
-export class CustomeName {
-  private readonly value: string
-
+export class NameValueObject extends ValueObject<string> {
   constructor (value: string) {
+    super(value)
     this.ensureUserNameIsValid(value)
-    this.value = value
   }
 
   public getValue (): string {

@@ -1,15 +1,10 @@
 import { Exception } from '@src/shared/modules'
+import { ValueObject } from './value-object'
 
-export class CustomeCi {
-  private readonly value: number
-
+export class CiValueObject extends ValueObject<number> {
   constructor (value: number) {
+    super(value)
     this.ensureUserCiIsValid(value)
-    this.value = value
-  }
-
-  public getValue (): number {
-    return this.value
   }
 
   private ensureUserCiIsValid (value: number): void {

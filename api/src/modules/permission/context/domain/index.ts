@@ -1,2 +1,2 @@
-export * from './entities'
+export * from './permission.entity'
 export * from './permission.repository'

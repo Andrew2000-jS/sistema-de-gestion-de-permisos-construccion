@@ -1,15 +1,15 @@
 import { UserEmail, UserPassword } from './value-objects'
-import { CustomeCi, CustomeId, CustomeName } from '@src/shared/modules/context/domain/value-object'
+import { CiValueObject, IdValueObject, NameValueObject } from '@src/shared/modules/context/domain/value-object'
 
 export class User {
-  private readonly id: CustomeId
-  private readonly ci: CustomeCi
-  private readonly name: CustomeName
-  private readonly lastname: CustomeName
+  private readonly id: IdValueObject
+  private readonly ci: CiValueObject
+  private readonly name: NameValueObject
+  private readonly lastname: NameValueObject
   private readonly email: UserEmail
   private readonly password: UserPassword
 
-  constructor (id: CustomeId, ci: CustomeCi, name: CustomeName, lastname: CustomeName, email: UserEmail, password: UserPassword) {
+  constructor (id: IdValueObject, ci: CiValueObject, name: NameValueObject, lastname: NameValueObject, email: UserEmail, password: UserPassword) {
     this.id = id
     this.ci = ci
     this.name = name
@@ -18,7 +18,7 @@ export class User {
     this.password = password
   }
 
-  static create (id: CustomeId, ci: CustomeCi, name: CustomeName, lastname: CustomeName, email: UserEmail, password: UserPassword): User {
+  static create (id: IdValueObject, ci: CiValueObject, name: NameValueObject, lastname: NameValueObject, email: UserEmail, password: UserPassword): User {
     const user = new User(id, ci, name, lastname, email, password)
     return user
   }
@@ -36,10 +36,10 @@ export class User {
 
   static fromPrimitives (plainData: { id: number, ci: number, name: string, lastname: string, email: string, password: string }): User {
     return new User(
-      new CustomeId(plainData.id),
-      new CustomeCi(plainData.ci),
-      new CustomeName(plainData.name),
-      new CustomeName(plainData.lastname),
+      new IdValueObject(plainData.id),
+      new CiValueObject(plainData.ci),
+      new NameValueObject(plainData.name),
+      new NameValueObject(plainData.lastname),
       new UserEmail(plainData.email),
       new UserPassword(plainData.password)
     )

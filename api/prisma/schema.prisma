@@ -20,48 +20,50 @@ model User {
 }
 
 model Permission {
-  id           Int           @id @default(autoincrement())
-  ownerId      Int           @unique
-  date         DateTime
-  quantity     Int
-  amount       Float
-  civ          Int
-  observation  String
-  receiptNo    String
-  status       String
-  owner        Owner         @relation(fields: [ownerId], references: [id])
-  construction Construction?
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  quantity    Int
+  amount      Float
+  civ         Int
+  observation String
+  receiptNo   String
+  status      String
+
+  ownerId        Int          @unique
+  constructionId Int          @unique
+  owner          Owner        @relation(fields: [ownerId], references: [id])
+  construction   Construction @relation(fields: [constructionId], references: [id])
 }
 
 model Construction {
-  id           Int        @id @default(autoincrement())
-  address      String
-  type         String
-  area         Area?
-  amount       Amount?
-  floorsNo     Int
-  manager      String
-  engineer     String
-  company      String
-  permissionId Int        @unique
-  permission   Permission @relation(fields: [permissionId], references: [id])
+  id       Int    @id @default(autoincrement())
+  address  String
+  type     String
+  floorsNo Int
+  manager  String
+  engineer String
+  company  String
+
+  areaId     Int         @unique
+  area       Area        @relation(fields: [areaId], references: [id])
+  amountId   Int         @unique
+  amount     Amount      @relation(fields: [amountId], references: [id])
+  Permission Permission?
 }
 
 model Area {
-  id               Int          @id @default(autoincrement())
+  id               Int           @id @default(autoincrement())
   landArea         String
   constructionArea String
-  constructionId   Int          @unique
-  construction     Construction @relation(fields: [constructionId], references: [id])
+  Construction     Construction?
 }
 
 model Amount {
-  id             Int          @id @default(autoincrement())
-  landAmount     Float
-  workAmount     Float
-  tax            Float
-  constructionId Int          @unique
-  construction   Construction @relation(fields: [constructionId], references: [id])
+  id           Int           @id @default(autoincrement())
+  landAmount   Float
+  workAmount   Float
+  tax          Float
+  Construction Construction?
 }
 
 model Owner {
