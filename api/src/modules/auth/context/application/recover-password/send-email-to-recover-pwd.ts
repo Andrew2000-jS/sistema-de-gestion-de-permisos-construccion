@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify'
 import { AuthRepository } from '../../domain'
 import { TYPES } from '../../utils'
-import { sendEmail, type ApplicationResponse } from '@src/shared/modules'
+import { sendGmail, type ApplicationResponse } from '@src/shared/modules'
 import { Criteria } from '@src/shared/modules/context/domain/criteria'
 import { v4 } from 'uuid'
 
@@ -38,7 +38,12 @@ export class SendEmailToRecoverPwd {
       </body>
       </html>
       `
-      await sendEmail({ to: params.email, html, subject: 'Recuperación de clave' })
+      const auth = {
+        user: 'alcaldiacarirubanabot@gmail.com',
+        pass: 'snza gbhs aval rovd'
+      }
+
+      await sendGmail({ to: params.email, html, subject: 'Recuperación de clave', auth, from: 'alcaldiacarirubanabot@gmail.com' })
 
       return {
         message: 'Verifique su correo electronico',

@@ -1,6 +1,6 @@
 import { StringValueObject, IdValueObject, EnumValueObject, PositiveNumberValueObject } from '@src/shared/modules/context/domain/value-object'
-import { type ConstructionPrimitives, Construction } from './construction.entity'
-import { type OwnerPrimitives, Owner } from './owner.entity'
+import { Construction, type ConstructionPrimitives } from '@src/construction/context/domain'
+import { Owner, type OwnerPrimitives } from '@src/owner/context/domain'
 
 export const enum Status {
   PENDING = 'Pending',

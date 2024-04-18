@@ -1,8 +1,6 @@
-// import { type Criteria } from '@src/shared/modules/context/domain/criteria'
 import { injectable } from 'inversify'
-import { type Permission, type PermissionRepository } from '../../domain'
-// import { type Nullable } from '@src/shared/modules'
 import { PrismaClient } from '@prisma/client'
+import { type PermissionPrimitives, type Permission, type PermissionRepository } from '../../domain'
 
 @injectable()
 export class MySQLPermissionRepository implements PermissionRepository {
@@ -10,42 +8,14 @@ export class MySQLPermissionRepository implements PermissionRepository {
     const prisma = new PrismaClient()
     try {
       const permissionPrimitives = permission.toPrimitives()
-      const amount = await prisma.amount.create({
-        data: {
-          landAmount: permissionPrimitives.construction.landAmount,
-          workAmount: permissionPrimitives.construction.workAmount,
-          tax: permissionPrimitives.construction.tax
-        }
-      })
 
-      const area = await prisma.area.create({
-        data: {
-          constructionArea: permissionPrimitives.construction.constructionArea,
-          landArea: permissionPrimitives.construction.landArea
-        }
-      })
-
-      const construction = await prisma.construction.create({
-        data: {
-          address: permissionPrimitives.construction.address,
-          type: permissionPrimitives.construction.type,
-          company: permissionPrimitives.construction.constructionCompany,
-          engineer: permissionPrimitives.construction.engineer,
-          floorsNo: permissionPrimitives.construction.floorsNo,
-          manager: permissionPrimitives.construction.manager,
-          amountId: amount.id,
-          areaId: area.id
-
-        }
-      })
-
-      const owner = await prisma.owner.create({
-        data: {
-          ci: permissionPrimitives.owner.ci,
-          name: permissionPrimitives.owner.name,
-          address: permissionPrimitives.owner.address
-        }
-      })
+      // const owner = await prisma.owner.create({
+      //   data: {
+      //     ci: permissionPrimitives.owner.ci,
+      //     name: permissionPrimitives.owner.name,
+      //     address: permissionPrimitives.owner.address
+      //   }
+      // })
 
       await prisma.permission.create({
         data: {
@@ -56,8 +26,8 @@ export class MySQLPermissionRepository implements PermissionRepository {
           quantity: permissionPrimitives.quantity,
           receiptNo: permissionPrimitives.receiptNo,
           status: permissionPrimitives.status,
-          constructionId: construction.id,
-          ownerId: owner.id
+          constructionId: permissionPrimitives.construction.id,
+          ownerId: permissionPrimitives.owner.id
         }
       })
     } catch (error) {
@@ -69,14 +39,55 @@ export class MySQLPermissionRepository implements PermissionRepository {
   }
 
   async delete (id: number): Promise<void> {
-    console.log(id)
+    const prisma = new PrismaClient()
+    try {
+      const permission = await prisma.permission.findUnique({
+        where: { id }
+      })
+
+      await prisma.permission.delete({
+        where: { id: permission?.id }
+      })
+
+      await prisma.owner.delete({
+        where: { id: permission?.ownerId }
+      })
+
+      await prisma.construction.delete({
+        where: { id: permission?.constructionId }
+      })
+    } catch (error) {
+      console.log(error)
+      throw new Error((error as string))
+    } finally {
+      await prisma.$disconnect()
+    }
   }
 
-  // async update (id: number, data: Partial<PermissionPrimitives>): Promise<Permission> {
+  async update (id: number, data: PermissionPrimitives): Promise<void> {
+    const prisma = new PrismaClient()
 
-  // }
-
-  // async match (criteria: Criteria): Promise<Nullable<Permission[]>> {
-
-  // }
+    try {
+      await prisma.permission.update({
+        where: { id },
+        data: {
+          amount: data.amount,
+          civ: data.CIV,
+          date: data.date,
+          status: data.status,
+          quantity: data.quantity,
+          observation: data.observation
+        },
+        include: {
+          owner: true,
+          construction: true
+        }
+      })
+    } catch (error) {
+      console.log(error)
+      throw new Error((error as string))
+    } finally {
+      await prisma.$disconnect()
+    }
+  }
 }

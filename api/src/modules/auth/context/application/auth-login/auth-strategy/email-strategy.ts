@@ -1,4 +1,4 @@
-import { sendEmail, type ApplicationResponse } from '@src/shared/modules'
+import { sendGmail, type ApplicationResponse } from '@src/shared/modules'
 import { type EmailAuthStrategy } from './interfaces'
 import { generateToken } from '@src/auth/context/utils'
 import { v4 } from 'uuid'
@@ -25,7 +25,12 @@ export class EmailStrategy implements EmailAuthStrategy {
       </body>
       </html>
       `
-      await sendEmail({ to: this.email, subject: 'Inicio de Sesion', html })
+      const auth = {
+        user: 'alcaldiacarirubanabot@gmail.com',
+        pass: 'snza gbhs aval rovd'
+      }
+
+      await sendGmail({ to: this.email, subject: 'Inicio de Sesion', html, auth, from: 'alcaldiacarirubanabot@gmail.com' })
 
       return { message: 'Correo enviado', statusCode: 200, data }
     } catch (error) {

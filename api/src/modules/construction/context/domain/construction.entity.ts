@@ -52,6 +52,38 @@ export class Construction {
     this.tax = tax
   }
 
+  static create (
+    id: IdValueObject,
+    address: StringValueObject,
+    type: EnumValueObject<ConstructionType>,
+    constructionArea: StringValueObject,
+    landArea: StringValueObject,
+    destination: StringValueObject,
+    floorsNo: PositiveNumberValueObject,
+    manager: NameValueObject,
+    engineer: NameValueObject,
+    constructionCompany: StringValueObject,
+    landAmount: PositiveNumberValueObject,
+    workAmount: PositiveNumberValueObject,
+    tax: PositiveNumberValueObject
+  ): Construction {
+    return new Construction(
+      id,
+      address,
+      type,
+      constructionArea,
+      landArea,
+      destination,
+      floorsNo,
+      manager,
+      engineer,
+      constructionCompany,
+      landAmount,
+      workAmount,
+      tax
+    )
+  }
+
   toPrimitives (): ConstructionPrimitives {
     return {
       id: this.id.getValue(),
