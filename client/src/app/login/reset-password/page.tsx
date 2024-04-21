@@ -1,4 +1,4 @@
-import { ResetPassword } from "@/components";
+import { ResetPassword } from "@/modules";
 
 export default function ResetPasswordPage() {
   return (

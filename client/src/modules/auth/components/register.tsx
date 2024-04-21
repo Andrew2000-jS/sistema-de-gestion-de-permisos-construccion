@@ -11,12 +11,11 @@ import {
   validationNameDict,
   validationPasswordDict,
   valuesAdapter,
-} from "./utils";
+} from "../utils";
 import { useForm, Controller } from "react-hook-form";
-import { useSubmit } from "./hook";
-import AnimatedMessage from "../custome-elements/animated-message";
-import { register } from "./services";
-import AlertMessage from "../custome-elements/alert-message";
+import { useSubmit } from "../hook";
+import { AnimatedMessage, AlertMessage } from "@/lib";
+import { register } from "../services";
 import { useRouter } from "next/navigation";
 
 interface IFormInput {

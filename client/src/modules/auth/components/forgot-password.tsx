@@ -2,11 +2,10 @@
 
 import { Button, Card, Input } from "@nextui-org/react";
 import { useForm, Controller } from "react-hook-form";
-import AnimatedMessage from "../custome-elements/animated-message";
 import Image from "next/image";
-import AlertMessage from "../custome-elements/alert-message";
-import { sendEmailToRecoverPassword } from "./services";
-import { useSubmit } from "./hook";
+import { AnimatedMessage, AlertMessage } from "@/lib";
+import { sendEmailToRecoverPassword } from "../services";
+import { useSubmit } from "../hook";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";

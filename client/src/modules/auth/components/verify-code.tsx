@@ -2,13 +2,12 @@
 
 import { Button, Card, Input } from "@nextui-org/react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import AnimatedMessage from "../custome-elements/animated-message";
+import { AnimatedMessage, AlertMessage } from "@/lib";
 import Image from "next/image";
-import AlertMessage from "../custome-elements/alert-message";
 import { useCookies } from "react-cookie";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { generateToken } from "./utils";
+import { generateToken } from "../utils";
 
 function VerifyCode() {
   const [isVisible, setIsVisible] = useState(false);

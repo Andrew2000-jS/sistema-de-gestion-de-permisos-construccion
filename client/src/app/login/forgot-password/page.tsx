@@ -1,4 +1,4 @@
-import { ForgotPassword } from "@/components";
+import { ForgotPassword } from "@/modules";
 
 export default function ForgotPasswordPage() {
   return (
