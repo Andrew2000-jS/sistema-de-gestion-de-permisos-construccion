@@ -1,5 +1,5 @@
-import { Construction, type ConstructionPrimitives, ConstructioRepository } from '@src/construction/context/domain'
-import { TYPES } from '@src/construction/utils'
+import { Construction, type ConstructionPrimitives, ConstructioRepository, ConstructionType } from '@src/construction/context/domain'
+import { TYPES } from '@src/construction/context/utils'
 import { type ApplicationResponse } from '@src/shared/modules'
 import { EnumValueObject, IdValueObject, NameValueObject, PositiveNumberValueObject, StringValueObject } from '@src/shared/modules/context/domain/value-object'
 import { inject, injectable } from 'inversify'
@@ -13,7 +13,7 @@ export class ConstructionCreator {
       const newConstruction = Construction.create(
         new IdValueObject(0),
         new StringValueObject(construction.address),
-        new EnumValueObject(construction.type, []),
+        new EnumValueObject(construction.type, [ConstructionType.NEW, ConstructionType.EXPANSION, ConstructionType.PERIMETER_FENCE, ConstructionType.REMODELING]),
         new StringValueObject(construction.constructionArea),
         new StringValueObject(construction.landArea),
         new StringValueObject(construction.destination),

@@ -14,6 +14,7 @@ export class MySQLSharedRepository implements SharedRepository {
       if (type === 'permission') return await prisma.permission.findMany(prismaCriteria)
       if (type === 'construction') return await prisma.construction.findMany(prismaCriteria)
       if (type === 'owner') return await prisma.owner.findMany(prismaCriteria)
+      if (type === 'user') return await prisma.user.findMany(prismaCriteria)
       else throw new Exception('Invalid type', 'InvalidMatcherType')
     } catch (error) {
       console.log(error)
