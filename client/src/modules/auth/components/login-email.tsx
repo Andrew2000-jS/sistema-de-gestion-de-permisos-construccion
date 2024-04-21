@@ -3,12 +3,11 @@
 import { Button, Card, Input } from "@nextui-org/react";
 import Link from "next/link";
 import { useForm, Controller } from "react-hook-form";
-import { messageAdapter, validationEmailDict, valuesAdapter } from "./utils";
-import { emailAuth } from "./services";
-import { useSubmit } from "./hook";
-import AnimatedMessage from "../custome-elements/animated-message";
+import { messageAdapter, validationEmailDict, valuesAdapter } from "../utils";
+import { emailAuth } from "../services";
+import { useSubmit } from "../hook";
+import { AnimatedMessage, AlertMessage } from "@/lib";
 import Image from "next/image";
-import AlertMessage from "../custome-elements/alert-message";
 import { useCookies } from "react-cookie";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";

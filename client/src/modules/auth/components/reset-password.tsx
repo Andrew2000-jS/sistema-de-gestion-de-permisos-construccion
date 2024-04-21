@@ -2,13 +2,16 @@
 
 import { Button, Card, Input, Spacer } from "@nextui-org/react";
 import { useForm, Controller } from "react-hook-form";
-import AnimatedMessage from "../custome-elements/animated-message";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/lib";
 import Image from "next/image";
-import AlertMessage from "../custome-elements/alert-message";
-import { useSubmit } from "./hook";
-import { messageAdapter, validationPasswordDict, valuesAdapter } from "./utils";
-import { resetPassword } from "./services";
+import { AnimatedMessage, AlertMessage } from "@/lib";
+import { useSubmit } from "../hook";
+import {
+  messageAdapter,
+  validationPasswordDict,
+  valuesAdapter,
+} from "../utils";
+import { resetPassword } from "../services";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";

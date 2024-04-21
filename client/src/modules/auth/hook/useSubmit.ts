@@ -1,13 +1,13 @@
-import { AuthResponse } from "@/lib/common/interfaces";
+import { ApiResponse } from "@/lib/common/interfaces";
 import { useState } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 
-interface IResponseState extends AuthResponse {
+interface IResponseState extends ApiResponse {
   loading: boolean;
 }
 
 interface Props<T> {
-  callback: (data: T) => Promise<AuthResponse> | any;
+  callback: (data: T) => Promise<ApiResponse> | any;
 }
 
 function useSubmit<T extends FieldValues>({

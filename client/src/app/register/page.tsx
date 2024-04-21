@@ -1,4 +1,4 @@
-import { Register } from "@/components";
+import { Register } from "@/modules";
 import Image from "next/image";
 
 export default function RegiserPage() {

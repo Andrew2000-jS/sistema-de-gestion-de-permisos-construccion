@@ -1,4 +1,4 @@
-import { Login } from "@/components";
+import { Login } from "@/modules";
 import Image from "next/image";
 
 export default function HomePage() {

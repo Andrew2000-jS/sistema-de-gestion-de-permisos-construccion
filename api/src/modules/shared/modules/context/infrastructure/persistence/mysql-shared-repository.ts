@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/dot-notation */
-import { PrismaClient } from '@prisma/client'
 import { type TableType, type SharedRepository, Exception } from '../../domain'
 import { type Criteria } from '../../domain/criteria'
-import { CriteriaPrismaConverter } from '../orm'
+import { CriteriaPrismaConverter, PrismaSingleton } from '../orm'
 import { injectable } from 'inversify'
 
 @injectable()
 export class MySQLSharedRepository implements SharedRepository {
   async match (criteria: Criteria, type: TableType): Promise<any[]> {
-    const prisma = new PrismaClient()
+    const prisma = PrismaSingleton.getInstance()
     try {
       const prismaCriteria = CriteriaPrismaConverter.convert(criteria)
       if (type === 'permission') return await prisma.permission.findMany(prismaCriteria)

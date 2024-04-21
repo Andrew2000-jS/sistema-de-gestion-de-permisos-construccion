@@ -1,13 +1,15 @@
-function HomePage() {
+import { Permission } from "@/modules";
+
+function PermissionPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="flex justify-around w-full items-center">
         <div>
-          <h1>Home page</h1>
+          <Permission />
         </div>
       </div>
     </main>
   );
 }
 
-export default HomePage;
+export default PermissionPage;

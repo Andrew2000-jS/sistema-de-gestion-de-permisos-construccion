@@ -9,17 +9,16 @@ import {
   validationCiDict,
   validationPasswordDict,
   valuesAdapter,
-} from "./utils";
-import { digestAuth } from "./services";
-import AnimatedMessage from "../custome-elements/animated-message";
-import { AuthResponse } from "@/lib/common/interfaces";
-import { useSubmit } from "./hook";
+} from "../utils";
+import { digestAuth } from "../services";
+import { AnimatedMessage, AlertMessage } from "@/lib";
+import { ApiResponse } from "@/lib/common/interfaces";
+import { useSubmit } from "../hook";
 import { useCookies } from "react-cookie";
-import AlertMessage from "../custome-elements/alert-message";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-interface IResponseState extends AuthResponse {
+interface IResponseState extends ApiResponse {
   loading: boolean;
 }
 

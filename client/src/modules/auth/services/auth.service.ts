@@ -1,21 +1,13 @@
-import { AuthResponse } from "@/lib/common/interfaces";
+import { ApiResponse } from "@/lib/common/interfaces";
 import axios, { AxiosError, AxiosResponse } from "axios";
-
-interface AuthProps {
-  ci: string;
-  password: string;
-  email: string;
-  name: string;
-  lastname: string;
-  validatePassword: string;
-}
+import { Auth } from "../auth.entity";
 
 export async function digestAuth({
   ci,
   password,
-}: Pick<AuthProps, "ci" | "password">): Promise<AuthResponse> {
+}: Pick<Auth, "ci" | "password">): Promise<ApiResponse> {
   try {
-    const response: AxiosResponse<AuthResponse> = await axios.post(
+    const response: AxiosResponse<ApiResponse> = await axios.post(
       "http://localhost:3001/auth/login",
       {
         ci: Number(ci),
@@ -25,15 +17,15 @@ export async function digestAuth({
     );
     return response.data;
   } catch (error: any) {
-    return (error as AxiosError<AuthResponse>).response!.data;
+    return (error as AxiosError<ApiResponse>).response!.data;
   }
 }
 
 export async function emailAuth({
   email,
-}: Pick<AuthProps, "email">): Promise<AuthResponse> {
+}: Pick<Auth, "email">): Promise<ApiResponse> {
   try {
-    const response: AxiosResponse<AuthResponse> = await axios.post(
+    const response: AxiosResponse<ApiResponse> = await axios.post(
       "http://localhost:3001/auth/login",
       {
         email,
@@ -42,7 +34,7 @@ export async function emailAuth({
     );
     return response.data;
   } catch (error: any) {
-    return (error as AxiosError<AuthResponse>).response!.data;
+    return (error as AxiosError<ApiResponse>).response!.data;
   }
 }
 
@@ -52,9 +44,9 @@ export async function register({
   lastname,
   name,
   password,
-}: AuthProps) {
+}: Auth) {
   try {
-    const response: AxiosResponse<AuthResponse> = await axios.post(
+    const response: AxiosResponse<ApiResponse> = await axios.post(
       "http://localhost:3001/auth/register",
       {
         ci: Number(ci),
@@ -66,13 +58,13 @@ export async function register({
     );
     return response.data;
   } catch (error) {
-    return (error as AxiosError<AuthResponse>).response!.data;
+    return (error as AxiosError<ApiResponse>).response!.data;
   }
 }
 
 export async function sendEmailToRecoverPassword({ email }: { email: string }) {
   try {
-    const response: AxiosResponse<AuthResponse> = await axios.post(
+    const response: AxiosResponse<ApiResponse> = await axios.post(
       "http://localhost:3001/auth/login/send-email",
       {
         email,
@@ -80,7 +72,7 @@ export async function sendEmailToRecoverPassword({ email }: { email: string }) {
     );
     return response.data;
   } catch (error) {
-    return (error as AxiosError<AuthResponse>).response!.data;
+    return (error as AxiosError<ApiResponse>).response!.data;
   }
 }
 
@@ -94,7 +86,7 @@ export async function resetPassword({
   email: string;
 }) {
   try {
-    const response: AxiosResponse<AuthResponse> = await axios.patch(
+    const response: AxiosResponse<ApiResponse> = await axios.patch(
       "http://localhost:3001/auth/login/reset-password",
       {
         password,
@@ -104,6 +96,6 @@ export async function resetPassword({
     );
     return response.data;
   } catch (error) {
-    return (error as AxiosError<AuthResponse>).response!.data;
+    return (error as AxiosError<ApiResponse>).response!.data;
   }
 }
