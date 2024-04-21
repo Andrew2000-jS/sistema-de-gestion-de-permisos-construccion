@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify'
-import { TYPES as ConstructionTypes } from '@src/construction/utils'
+import { TYPES as ConstructionTypes } from '@src/construction/context/utils'
 import {
   type ConstructionPrimitives,
   ConstructioRepository

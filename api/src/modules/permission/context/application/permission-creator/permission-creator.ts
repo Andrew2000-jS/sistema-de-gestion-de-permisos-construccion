@@ -18,8 +18,6 @@ import {
   StringValueObject
 } from '@src/shared/modules/context/domain/value-object'
 import { Criteria } from '@src/shared/modules/context/domain/criteria'
-import { Construction } from '@src/construction/context/domain'
-import { Owner } from '@src/owner/context/domain'
 
 @injectable()
 export class PermissionCreator {
@@ -49,8 +47,8 @@ export class PermissionCreator {
         data.CIV,
         new StringValueObject(data.observation),
         new StringValueObject(data.receiptNo),
-        Construction.fromPrimitives(data.construction),
-        Owner.fromPrimitives(data.owner),
+        new IdValueObject(data.constructionId),
+        new IdValueObject(data.ownerId),
         new EnumValueObject(data.status, [Status.PENDING])
       )
       await this.repository.save(newPermission)

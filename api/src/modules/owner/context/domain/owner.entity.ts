@@ -13,6 +13,15 @@ export class Owner {
     this.address = address
   }
 
+  static create (id: IdValueObject, ci: CiValueObject, name: NameValueObject, address: StringValueObject): Owner {
+    return new Owner(
+      id,
+      ci,
+      name,
+      address
+    )
+  }
+
   toPrimitives (): OwnerPrimitives {
     return {
       id: this.id.getValue(),

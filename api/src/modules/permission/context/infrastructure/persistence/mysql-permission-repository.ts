@@ -9,14 +9,6 @@ export class MySQLPermissionRepository implements PermissionRepository {
     try {
       const permissionPrimitives = permission.toPrimitives()
 
-      // const owner = await prisma.owner.create({
-      //   data: {
-      //     ci: permissionPrimitives.owner.ci,
-      //     name: permissionPrimitives.owner.name,
-      //     address: permissionPrimitives.owner.address
-      //   }
-      // })
-
       await prisma.permission.create({
         data: {
           amount: permissionPrimitives.amount,
@@ -26,8 +18,12 @@ export class MySQLPermissionRepository implements PermissionRepository {
           quantity: permissionPrimitives.quantity,
           receiptNo: permissionPrimitives.receiptNo,
           status: permissionPrimitives.status,
-          constructionId: permissionPrimitives.construction.id,
-          ownerId: permissionPrimitives.owner.id
+          constructionId: permissionPrimitives.constructionId,
+          ownerId: permissionPrimitives.ownerId
+        },
+        include: {
+          construction: true,
+          owner: true
         }
       })
     } catch (error) {
@@ -47,14 +43,6 @@ export class MySQLPermissionRepository implements PermissionRepository {
 
       await prisma.permission.delete({
         where: { id: permission?.id }
-      })
-
-      await prisma.owner.delete({
-        where: { id: permission?.ownerId }
-      })
-
-      await prisma.construction.delete({
-        where: { id: permission?.constructionId }
       })
     } catch (error) {
       console.log(error)
@@ -76,7 +64,9 @@ export class MySQLPermissionRepository implements PermissionRepository {
           date: data.date,
           status: data.status,
           quantity: data.quantity,
-          observation: data.observation
+          observation: data.observation,
+          ownerId: data.ownerId,
+          constructionId: data.constructionId
         },
         include: {
           owner: true,

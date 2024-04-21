@@ -1,6 +1,4 @@
 import { StringValueObject, IdValueObject, EnumValueObject, PositiveNumberValueObject } from '@src/shared/modules/context/domain/value-object'
-import { Construction, type ConstructionPrimitives } from '@src/construction/context/domain'
-import { Owner, type OwnerPrimitives } from '@src/owner/context/domain'
 
 export const enum Status {
   PENDING = 'Pending',
@@ -20,8 +18,8 @@ export class Permission {
   private readonly observation: StringValueObject
   private readonly receiptNo: StringValueObject
   private readonly status: EnumValueObject<Status>
-  private readonly construction: Construction
-  private readonly owner: Owner
+  private readonly constructionId: IdValueObject
+  private readonly ownerId: IdValueObject
 
   constructor (
     id: IdValueObject,
@@ -31,8 +29,8 @@ export class Permission {
     CIV: number,
     observation: StringValueObject,
     receiptNo: StringValueObject,
-    construction: Construction,
-    owner: Owner,
+    constructionId: IdValueObject,
+    ownerId: IdValueObject,
     status: EnumValueObject<Status>
   ) {
     this.id = id
@@ -42,8 +40,8 @@ export class Permission {
     this.CIV = CIV
     this.observation = observation
     this.receiptNo = receiptNo
-    this.construction = construction
-    this.owner = owner
+    this.constructionId = constructionId
+    this.ownerId = ownerId
     this.status = status
   }
 
@@ -55,8 +53,8 @@ export class Permission {
     CIV: number,
     observation: StringValueObject,
     receiptNo: StringValueObject,
-    construction: Construction,
-    owner: Owner,
+    constructionId: IdValueObject,
+    ownerId: IdValueObject,
     status: EnumValueObject<Status>
   ): Permission {
     return new Permission(
@@ -67,8 +65,8 @@ export class Permission {
       CIV,
       observation,
       receiptNo,
-      construction,
-      owner,
+      constructionId,
+      ownerId,
       status
     )
   }
@@ -83,8 +81,8 @@ export class Permission {
       observation: this.observation.getValue(),
       receiptNo: this.receiptNo.getValue(),
       status: this.status.getValue(),
-      construction: this.construction.toPrimitives(),
-      owner: this.owner.toPrimitives()
+      constructionId: this.constructionId.getValue(),
+      ownerId: this.ownerId.getValue()
     }
   }
 
@@ -96,8 +94,8 @@ export class Permission {
     observation: string
     receiptNo: string
     status: Status
-    construction: ConstructionPrimitives
-    owner: OwnerPrimitives }): Permission {
+    constructionId: number
+    ownerId: number }): Permission {
     return new Permission(
       new IdValueObject(plainData.id),
       plainData.date,
@@ -106,8 +104,8 @@ export class Permission {
       plainData.CIV,
       new StringValueObject(plainData.observation),
       new StringValueObject(plainData.receiptNo),
-      Construction.fromPrimitives(plainData.construction),
-      Owner.fromPrimitives(plainData.owner),
+      new IdValueObject(plainData.constructionId),
+      new IdValueObject(plainData.ownerId),
       new EnumValueObject(plainData.status, [Status.PENDING, Status.APPROVED, Status.CANCELED, Status.COMPLETED, Status.IN_PROGRESS, Status.REJECTED])
     )
   }
@@ -122,6 +120,6 @@ export type PermissionPrimitives = {
   observation: string
   receiptNo: string
   status: Status
-  construction: ConstructionPrimitives
-  owner: OwnerPrimitives
+  constructionId: number
+  ownerId: number
 }

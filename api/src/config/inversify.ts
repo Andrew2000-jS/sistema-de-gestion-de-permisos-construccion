@@ -1,5 +1,5 @@
 import { AuthController } from '@src/auth/app/controllers'
-import { AuthLogin, AuthRegister, RecoverPassword, SearchUser, SendEmailToRecoverPwd } from '@src/auth/context/application'
+import { AuthLogin, AuthRegister, RecoverPassword, SearchUser } from '@src/auth/context/application'
 import { type AuthRepository } from '@src/auth/context/domain'
 import { MySQLAuthRepository } from '@src/auth/context/infrastructure/persistence'
 import { TYPES as AuthTypes } from '@src/auth/context/utils'
@@ -7,13 +7,19 @@ import { ConstructionController } from '@src/construction/app'
 import { ConstructionCreator, ConstructionDeleter, ConstructionUpdater } from '@src/construction/context/application'
 import { type ConstructioRepository } from '@src/construction/context/domain'
 import { MySQLConstructionRepository } from '@src/construction/context/infrastructure/persistence'
-import { TYPES as ConstructionTypes } from '@src/construction/utils'
+import { TYPES as ConstructionTypes } from '@src/construction/context/utils'
+import { OwnerController } from '@src/owner/app'
+import { OwnerCreator, OwnerDeleter, OwnerUpdater } from '@src/owner/context/application'
+import { type OwnerRepository } from '@src/owner/context/domain'
+import { MySQLOwnernRepository } from '@src/owner/context/infrastructure'
+import { TYPES as OwnerTypes } from '@src/owner/context/utils'
 import { PermissionController } from '@src/permission/apps/controllers'
 import { PermissionCreator, PermissionDeleter, PermissionUpdater } from '@src/permission/context/application'
 import { type PermissionRepository } from '@src/permission/context/domain'
 import { MySQLPermissionRepository } from '@src/permission/context/infrastructure/persistence'
 import { TYPES as PermissionTypes } from '@src/permission/context/utils'
 import { Matcher, type SharedRepository } from '@src/shared/modules'
+import { EmailNotification } from '@src/shared/modules/context/application/notfications'
 import { MySQLSharedRepository } from '@src/shared/modules/context/infrastructure/persistence'
 import { TYPES as SharedTypes } from '@src/shared/modules/context/utils'
 import { Container } from 'inversify'
@@ -26,7 +32,6 @@ container.bind<AuthRegister>(AuthRegister).toSelf()
 container.bind<AuthLogin>(AuthLogin).toSelf()
 container.bind<RecoverPassword>(RecoverPassword).toSelf()
 container.bind<SearchUser>(SearchUser).toSelf()
-container.bind<SendEmailToRecoverPwd>(SendEmailToRecoverPwd).toSelf()
 container.bind<AuthController>(AuthController).toSelf()
 
 // Permission dependency injection
@@ -43,8 +48,16 @@ container.bind<ConstructionDeleter>(ConstructionDeleter).toSelf()
 container.bind<ConstructionUpdater>(ConstructionUpdater).toSelf()
 container.bind<ConstructionController>(ConstructionController).toSelf()
 
+// Owner dependency injection
+container.bind<OwnerRepository>(OwnerTypes.OwnerRepository).to(MySQLOwnernRepository)
+container.bind<OwnerCreator>(OwnerCreator).toSelf()
+container.bind<OwnerDeleter>(OwnerDeleter).toSelf()
+container.bind<OwnerUpdater>(OwnerUpdater).toSelf()
+container.bind<OwnerController>(OwnerController).toSelf()
+
 // Shared dependency injection
 container.bind<SharedRepository>(SharedTypes.SharedRepository).to(MySQLSharedRepository)
 container.bind<Matcher>(Matcher).toSelf()
+container.bind<EmailNotification>(EmailNotification).toSelf()
 
 export default container

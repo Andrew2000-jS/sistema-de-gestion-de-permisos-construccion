@@ -6,6 +6,7 @@ import { injectable } from 'inversify'
 export class MySQLConstructionRepository implements ConstructioRepository {
   async save (construction: Construction): Promise<void> {
     const prisma = new PrismaClient()
+
     try {
       const constructionPrimitives = construction.toPrimitives()
       const amount = await prisma.amount.create({
