@@ -1,10 +1,9 @@
-import { PrismaClient } from '@prisma/client'
 import { type Nullable } from '@src/shared/modules'
 import { type AuthRepository } from '../../domain'
 import { type User, type UserPrimitives } from '../../../../user/context/domain'
 import { injectable } from 'inversify'
 import { type Criteria } from '@src/shared/modules/context/domain/criteria'
-import { CriteriaPrismaConverter } from '@src/shared/modules/context/infrastructure/orm'
+import { CriteriaPrismaConverter, PrismaSingleton } from '@src/shared/modules/context/infrastructure/orm'
 
 @injectable()
 export class MySQLAuthRepository implements AuthRepository {
@@ -12,7 +11,7 @@ export class MySQLAuthRepository implements AuthRepository {
     try {
       const userPrimitives = user.toPrimitives()
 
-      const prisma = new PrismaClient()
+      const prisma = PrismaSingleton.getInstance()
       await prisma.user.create({
         data: {
           ci: userPrimitives.ci,
@@ -30,7 +29,7 @@ export class MySQLAuthRepository implements AuthRepository {
 
   async match (criteria: Criteria): Promise<Nullable<UserPrimitives>> {
     try {
-      const prisma = new PrismaClient()
+      const prisma = PrismaSingleton.getInstance()
       const prismaCriteria = CriteriaPrismaConverter.convert(criteria)
       const foundUser = await prisma.user.findFirst(prismaCriteria)
 
@@ -47,7 +46,7 @@ export class MySQLAuthRepository implements AuthRepository {
 
   async recover (email: string, password: string): Promise<Nullable<UserPrimitives>> {
     try {
-      const prisma = new PrismaClient()
+      const prisma = PrismaSingleton.getInstance()
       const foundUser = await prisma.user.update({
         where: { email },
         data: { password }

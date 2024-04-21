@@ -1,11 +1,11 @@
-import { PrismaClient } from '@prisma/client'
 import { type ConstructionPrimitives, type Construction, type ConstructioRepository } from '@src/construction/context/domain'
+import { PrismaSingleton } from '@src/shared/modules/context/infrastructure/orm'
 import { injectable } from 'inversify'
 
 @injectable()
 export class MySQLConstructionRepository implements ConstructioRepository {
   async save (construction: Construction): Promise<void> {
-    const prisma = new PrismaClient()
+    const prisma = PrismaSingleton.getInstance()
 
     try {
       const constructionPrimitives = construction.toPrimitives()
@@ -45,7 +45,7 @@ export class MySQLConstructionRepository implements ConstructioRepository {
   }
 
   async delete (id: number): Promise<void> {
-    const prisma = new PrismaClient()
+    const prisma = PrismaSingleton.getInstance()
     try {
       await prisma.construction.delete({
         where: { id }
@@ -59,7 +59,7 @@ export class MySQLConstructionRepository implements ConstructioRepository {
   }
 
   async update (id: number, data: ConstructionPrimitives): Promise<void> {
-    const prisma = new PrismaClient()
+    const prisma = PrismaSingleton.getInstance()
 
     try {
       await prisma.construction.update({

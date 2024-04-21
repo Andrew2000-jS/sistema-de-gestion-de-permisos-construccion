@@ -1,11 +1,11 @@
 import { injectable } from 'inversify'
-import { PrismaClient } from '@prisma/client'
 import { type PermissionPrimitives, type Permission, type PermissionRepository } from '../../domain'
+import { PrismaSingleton } from '@src/shared/modules/context/infrastructure/orm'
 
 @injectable()
 export class MySQLPermissionRepository implements PermissionRepository {
   async save (permission: Permission): Promise<void> {
-    const prisma = new PrismaClient()
+    const prisma = PrismaSingleton.getInstance()
     try {
       const permissionPrimitives = permission.toPrimitives()
 
@@ -35,7 +35,7 @@ export class MySQLPermissionRepository implements PermissionRepository {
   }
 
   async delete (id: number): Promise<void> {
-    const prisma = new PrismaClient()
+    const prisma = PrismaSingleton.getInstance()
     try {
       const permission = await prisma.permission.findUnique({
         where: { id }
@@ -53,7 +53,7 @@ export class MySQLPermissionRepository implements PermissionRepository {
   }
 
   async update (id: number, data: PermissionPrimitives): Promise<void> {
-    const prisma = new PrismaClient()
+    const prisma = PrismaSingleton.getInstance()
 
     try {
       await prisma.permission.update({
