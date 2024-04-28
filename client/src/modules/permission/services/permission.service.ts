@@ -2,6 +2,16 @@ import { ApiResponse } from "@/lib";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Permission } from "../permission.entity";
 
+
+export async function getPermissions(): Promise<ApiResponse> {
+  try {
+    const response: AxiosResponse<ApiResponse> = await axios.get("http://localhost:3001/permissions");
+    return response.data;
+  } catch (error: any) {
+    return (error as AxiosError<ApiResponse>).response!.data;
+  }
+}
+
 export async function createPermission({
   CIV,
   amount,

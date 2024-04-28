@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import Image from "next/image";
 import { AnimatedMessage, AlertMessage } from "@/lib";
 import { sendEmailToRecoverPassword } from "../services";
-import { useSubmit } from "../hook";
+import { useSubmit } from "@/lib/common/hooks";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";

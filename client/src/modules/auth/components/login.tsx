@@ -12,15 +12,10 @@ import {
 } from "../utils";
 import { digestAuth } from "../services";
 import { AnimatedMessage, AlertMessage } from "@/lib";
-import { ApiResponse } from "@/lib/common/interfaces";
-import { useSubmit } from "../hook";
+import { useSubmit } from "@/lib/common/hooks";
 import { useCookies } from "react-cookie";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-interface IResponseState extends ApiResponse {
-  loading: boolean;
-}
 
 function Login() {
   const router = useRouter();

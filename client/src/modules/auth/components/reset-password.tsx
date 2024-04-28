@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/lib";
 import Image from "next/image";
 import { AnimatedMessage, AlertMessage } from "@/lib";
-import { useSubmit } from "../hook";
+import { useSubmit } from "@/lib/common/hooks";
 import {
   messageAdapter,
   validationPasswordDict,

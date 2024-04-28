@@ -5,9 +5,9 @@ import { Auth } from "../auth.entity";
 export async function digestAuth({
   ci,
   password,
-}: Pick<Auth, "ci" | "password">): Promise<ApiResponse> {
+}: Pick<Auth, "ci" | "password">): Promise<ApiResponse<Auth>> {
   try {
-    const response: AxiosResponse<ApiResponse> = await axios.post(
+    const response: AxiosResponse<ApiResponse<Auth>> = await axios.post(
       "http://localhost:3001/auth/login",
       {
         ci: Number(ci),
@@ -17,15 +17,15 @@ export async function digestAuth({
     );
     return response.data;
   } catch (error: any) {
-    return (error as AxiosError<ApiResponse>).response!.data;
+    return (error as AxiosError<ApiResponse<Auth>>).response!.data;
   }
 }
 
 export async function emailAuth({
   email,
-}: Pick<Auth, "email">): Promise<ApiResponse> {
+}: Pick<Auth, "email">): Promise<ApiResponse<Auth>> {
   try {
-    const response: AxiosResponse<ApiResponse> = await axios.post(
+    const response: AxiosResponse<ApiResponse<Auth>> = await axios.post(
       "http://localhost:3001/auth/login",
       {
         email,
@@ -34,7 +34,7 @@ export async function emailAuth({
     );
     return response.data;
   } catch (error: any) {
-    return (error as AxiosError<ApiResponse>).response!.data;
+    return (error as AxiosError<ApiResponse<Auth>>).response!.data;
   }
 }
 
@@ -46,7 +46,7 @@ export async function register({
   password,
 }: Auth) {
   try {
-    const response: AxiosResponse<ApiResponse> = await axios.post(
+    const response: AxiosResponse<ApiResponse<Auth>> = await axios.post(
       "http://localhost:3001/auth/register",
       {
         ci: Number(ci),
@@ -58,13 +58,13 @@ export async function register({
     );
     return response.data;
   } catch (error) {
-    return (error as AxiosError<ApiResponse>).response!.data;
+    return (error as AxiosError<ApiResponse<Auth>>).response!.data;
   }
 }
 
 export async function sendEmailToRecoverPassword({ email }: { email: string }) {
   try {
-    const response: AxiosResponse<ApiResponse> = await axios.post(
+    const response: AxiosResponse<ApiResponse<Auth>> = await axios.post(
       "http://localhost:3001/auth/login/send-email",
       {
         email,
@@ -72,7 +72,7 @@ export async function sendEmailToRecoverPassword({ email }: { email: string }) {
     );
     return response.data;
   } catch (error) {
-    return (error as AxiosError<ApiResponse>).response!.data;
+    return (error as AxiosError<ApiResponse<Auth>>).response!.data;
   }
 }
 
@@ -86,7 +86,7 @@ export async function resetPassword({
   email: string;
 }) {
   try {
-    const response: AxiosResponse<ApiResponse> = await axios.patch(
+    const response: AxiosResponse<ApiResponse<Auth>> = await axios.patch(
       "http://localhost:3001/auth/login/reset-password",
       {
         password,
@@ -96,6 +96,6 @@ export async function resetPassword({
     );
     return response.data;
   } catch (error) {
-    return (error as AxiosError<ApiResponse>).response!.data;
+    return (error as AxiosError<ApiResponse<Auth>>).response!.data;
   }
 }

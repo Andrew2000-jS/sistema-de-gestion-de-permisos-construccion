@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useForm, Controller } from "react-hook-form";
 import { messageAdapter, validationEmailDict, valuesAdapter } from "../utils";
 import { emailAuth } from "../services";
-import { useSubmit } from "../hook";
+import { useSubmit } from "@/lib/common/hooks";
 import { AnimatedMessage, AlertMessage } from "@/lib";
 import Image from "next/image";
 import { useCookies } from "react-cookie";

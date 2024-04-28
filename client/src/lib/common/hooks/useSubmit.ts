@@ -2,19 +2,15 @@ import { ApiResponse } from "@/lib/common/interfaces";
 import { useState } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 
-interface IResponseState extends ApiResponse {
-  loading: boolean;
-}
-
 interface Props<T> {
-  callback: (data: T) => Promise<ApiResponse> | any;
+  callback: (data: T) => Promise<ApiResponse<T>> | any;
 }
 
 function useSubmit<T extends FieldValues>({
   callback,
 }: Props<T>) {
   const [formState, setFormState] = useState<{
-    response: IResponseState;
+    response: ApiResponse<T>;
     showPassword: boolean;
     errors: {};
   }>({
@@ -34,9 +30,9 @@ function useSubmit<T extends FieldValues>({
       setFormState((prevState) => ({
         ...prevState,
         response: {
-          message: res.message,
-          statusCode: res.statusCode,
-          data: res.data,
+          message: res?.message,
+          statusCode: res?.statusCode,
+          data: res?.data,
           loading: false,
         },
       }));
