@@ -10,10 +10,11 @@ import {
 } from "@nextui-org/react";
 import { useState, useContext } from "react";
 import { FilterCtx } from "../../context";
+import CalendarIcon from "@/lib/common/Icons/calendar-icon";
 
 function PermissionDate() {
+  const { isOpen, onOpenChange } = useDisclosure();
   const { setFilterData } = useContext(FilterCtx);
-  const { isOpen, onOpenChange, onOpen } = useDisclosure();
   const [formVals, setFormVals] = useState({
     init_date: "",
     end_date: "",
@@ -26,7 +27,12 @@ function PermissionDate() {
 
   return (
     <>
-      <Button variant="flat" color="primary" onPress={onOpen}>
+      <Button
+        variant="flat"
+        color="primary"
+        onPress={onOpenChange}
+        endContent={<CalendarIcon />}
+      >
         Buscar por fecha
       </Button>
       <Modal

@@ -2,12 +2,12 @@ import { ChipProps } from "@nextui-org/react";
 
 const columns = [
   {name: "ID", uid: "id", sortable: true},
-  {name: "CEDULA", uid: "cedula"},
+  {name: "CEDULA", uid: "cedula", sortable: true},
   {name: "NÚMERO DE RECIBO", uid: "receiptNo", sortable: true},
   {name: "MONTO", uid: "amount", sortable: true},
   {name: "FECHA", uid: "date", sortable: true},
-  {name: "CIV", uid: "civ"},
-  {name: "CANTIDAD", uid: "quantity"},
+  {name: "CIV", uid: "civ", sortable: true},
+  {name: "CANTIDAD", uid: "quantity", sortable: true},
   {name: "ESTADO", uid: "status", sortable: true},
   {name: "ACCIONES", uid: "actions"},
 ];
@@ -22,11 +22,13 @@ const statusOptions = [
 ];
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
+  pending: "warning",
   approved: "success",
   rejected: "danger",
-  pending: "warning",
+  in_progress: "primary",
+  completed: "success",
+  canceled: "danger",
 };
-
 const filterColumns = [
   {name: "Número de Recibo", uid: "receiptNo"},
   {name: "Monto", uid: "amount"},

@@ -51,7 +51,7 @@ export default function PermissionTable({
   const { filterData } = useContext(FilterCtx);
   const [page, setPage] = useState(1);
   const [filterValue, setFilterValue] = useState("");
-  const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
+  const [visibleColumns] = React.useState<Selection>(
     new Set(PERMISSION_COLUMNS)
   );
   const [filterKey, setFilterKey] = useState<Selection | any>("all");
@@ -220,7 +220,7 @@ export default function PermissionTable({
             Total de permisos: {data?.length ?? 0}
           </span>
           <span className="text-default-400 text-small">
-            Filtro seleccionado:
+            Filtro seleccionado:{" "}
             {filterColumns.find((cols) => cols.uid === filterKey.currentKey)
               ?.name ?? "Cedula"}
           </span>
@@ -232,16 +232,20 @@ export default function PermissionTable({
   const renderCell = useCallback(
     (permission: Permission, columnKey: React.Key) => {
       const cellValue = permission[columnKey as keyof Permission];
-
       if (columnKey === "status") {
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[permission.status]}
+            color={statusColorMap[permission.status.toString().toLowerCase()]}
             size="sm"
             variant="flat"
           >
-            {permission.status}
+            {
+              statusOptions.find(
+                (item) =>
+                  item.uid === permission.status.toString().toLowerCase()
+              )?.name
+            }
           </Chip>
         );
       } else if (columnKey === "actions") {
@@ -265,7 +269,7 @@ export default function PermissionTable({
       } else if (columnKey === "date") {
         return format(cellValue.toString(), "dd/MM/yyyy");
       } else {
-        return cellValue;
+        return cellValue?.toString();
       }
     },
     []
@@ -276,6 +280,7 @@ export default function PermissionTable({
       <Table
         aria-label="Example table with client async pagination"
         topContent={topContent}
+        onSortChange={setSortDescriptor}
         bottomContent={
           pages > 0 ? (
             <div className="flex w-full justify-center">
@@ -294,12 +299,14 @@ export default function PermissionTable({
         {...data}
       >
         <TableHeader columns={headerColumns}>
-          {columns.map(({ name, uid }) => (
-            <TableColumn key={uid}>{name}</TableColumn>
+          {columns.map(({ name, uid, sortable }) => (
+            <TableColumn key={uid} allowsSorting={sortable}>
+              {name}
+            </TableColumn>
           ))}
         </TableHeader>
         <TableBody
-          emptyContent={"No se encontraron coinicencias"}
+          emptyContent={"No se encontraron coincidencias"}
           items={sortedItems}
           loadingContent={<Spinner />}
           loadingState={loadingState}
