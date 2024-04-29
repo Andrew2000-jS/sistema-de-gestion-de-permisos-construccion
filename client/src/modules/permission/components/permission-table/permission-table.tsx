@@ -31,6 +31,9 @@ import {
 } from "@/lib";
 import { Permission } from "../../permission.entity";
 import { statusColorMap, columns, statusOptions, filterColumns } from "./data";
+import PermissionDate from "./permission-date";
+import { format, parse } from "date-fns";
+import { FilterCtx } from "../../context";
 
 const PERMISSION_COLUMNS = [
   "receiptNo",
@@ -45,6 +48,7 @@ export default function PermissionTable({
   data,
   loading,
 }: ApiResponse<Permission[]>) {
+  const { filterData } = useContext(FilterCtx);
   const [page, setPage] = useState(1);
   const [filterValue, setFilterValue] = useState("");
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
@@ -84,11 +88,11 @@ export default function PermissionTable({
   }, []);
 
   const filteredItems = useMemo(() => {
-    let filteredData = data;
+    let filteredPermissions = data;
     const key = filterKey.currentKey ?? "ci";
 
     if (Boolean(filterValue)) {
-      filteredData = filteredData.filter((item) =>
+      filteredPermissions = filteredPermissions.filter((item) =>
         item[key]?.toString().toLowerCase().includes(filterValue.toLowerCase())
       );
     }
@@ -96,13 +100,23 @@ export default function PermissionTable({
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filteredData = filteredData.filter((user) =>
+      filteredPermissions = filteredPermissions.filter((user) =>
         Array.from(statusFilter).includes(user.status)
       );
     }
+    if (filterData) {
+      const { init_date, end_date } = filterData;
+      const initDate = parse(init_date, "d/M/yyyy", new Date());
+      const EndDate = parse(end_date, "d/M/yyyy", new Date());
 
-    return filteredData;
-  }, [data, filterValue, statusFilter, filterKey]);
+      filteredPermissions = filteredPermissions.filter(
+        (item) =>
+          new Date(item.date) >= initDate && new Date(item.date) <= EndDate
+      );
+    }
+
+    return filteredPermissions;
+  }, [data, filterValue, statusFilter, filterKey, filterData]);
 
   const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -194,9 +208,8 @@ export default function PermissionTable({
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button variant="flat" color="primary">
-              Buscar por fecha
-            </Button>
+            <PermissionDate />
+
             <Button color="primary" endContent={<PlusIcon />}>
               Crear permiso
             </Button>
@@ -249,6 +262,8 @@ export default function PermissionTable({
             </Dropdown>
           </div>
         );
+      } else if (columnKey === "date") {
+        return format(cellValue.toString(), "dd/MM/yyyy");
       } else {
         return cellValue;
       }

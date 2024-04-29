@@ -45,7 +45,7 @@ function Navigation() {
         </NavbarItem>
         <NavbarItem>
           <Link color="foreground" href="#">
-            Home
+            Inicio
           </Link>
         </NavbarItem>
       </NavbarContent>
