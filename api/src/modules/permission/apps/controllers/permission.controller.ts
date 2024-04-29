@@ -1,6 +1,7 @@
 import {
   PermissionCreator,
   PermissionDeleter,
+  PermissionGetter,
   PermissionUpdater
 } from '@src/permission/context/application'
 import { type PermissionPrimitives } from '@src/permission/context/domain'
@@ -11,6 +12,7 @@ import { inject } from 'inversify'
 import {
   controller,
   httpDelete,
+  httpGet,
   httpPatch,
   httpPost
 } from 'inversify-express-utils'
@@ -18,6 +20,8 @@ import {
 @controller('/permissions')
 export class PermissionController {
   constructor (
+    @inject(PermissionGetter)
+    private readonly permissionGetter: PermissionGetter,
     @inject(PermissionCreator)
     private readonly permissionCreator: PermissionCreator,
     @inject(PermissionDeleter)
@@ -27,6 +31,12 @@ export class PermissionController {
     @inject(Matcher)
     private readonly permissionMatcher: Matcher
   ) {}
+
+  @httpGet('/')
+  async getPermisions (_req: Request, res: Response): Promise<any> {
+    const repsonse = await this.permissionGetter.run()
+    return res.status(repsonse.statusCode).json(repsonse)
+  }
 
   @httpPost('/create')
   async createPermission (
@@ -38,10 +48,7 @@ export class PermissionController {
   }
 
   @httpDelete('/delete/:id')
-  async deletePermission (
-    req: Request,
-    res: Response
-  ): Promise<any> {
+  async deletePermission (req: Request, res: Response): Promise<any> {
     const { id } = req.params
     const response = await this.permissionDeleter.run({ id: Number(id) })
     return res.status(response.statusCode).json(response)
