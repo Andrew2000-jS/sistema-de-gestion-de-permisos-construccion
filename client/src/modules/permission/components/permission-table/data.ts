@@ -37,9 +37,17 @@ const filterColumns = [
   {name: "Cedula", uid: "cedula"},
 ];
 
+const PERMISSION_COLUMNS = [
+  "receiptNo",
+  "amount",
+  "date",
+  "civ",
+  "quantity",
+  "status",
+];
 
 export type StatusUid = typeof statusOptions[number]["uid"];
 export type ColumnsType = typeof columns[0]
 export type StatusOptionsType = typeof statusOptions[0]
 
-export {columns, statusOptions, statusColorMap, filterColumns};
+export {columns, statusOptions, statusColorMap, filterColumns, PERMISSION_COLUMNS};
