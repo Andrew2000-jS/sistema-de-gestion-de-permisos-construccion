@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useContext, useMemo, useState } from "react";
+import Link from "next/link";
 import {
   Table,
   TableHeader,
@@ -10,30 +11,19 @@ import {
   TableCell,
   Pagination,
   Spinner,
-  Chip,
-  Dropdown,
-  DropdownTrigger,
   Button,
-  DropdownMenu,
-  DropdownItem,
   Input,
   Selection,
   SortDescriptor,
 } from "@nextui-org/react";
-import {
-  ApiResponse,
-  ChevronDownIcon,
-  LoadingState,
-  PlusIcon,
-  SearchIcon,
-  VerticalDotsIcon,
-  capitalize,
-} from "@/lib";
+import { ApiResponse, LoadingState, PlusIcon, SearchIcon } from "@/lib";
 import { Permission } from "../../permission.entity";
-import { statusColorMap, columns, statusOptions, filterColumns } from "./data";
+import { columns, statusOptions, filterColumns } from "./data";
 import PermissionDate from "./permission-date";
 import { format, parse } from "date-fns";
 import { FilterCtx } from "../../context";
+import { ActionsDropdown, FilterDropdown, StatusDropdown } from "./dropdown";
+import StatusChip from "./status-chip";
 
 const PERMISSION_COLUMNS = [
   "receiptNo",
@@ -75,8 +65,7 @@ export default function PermissionTable({
     return data?.length ? Math.ceil(data.length / rowsPerPage) : 0;
   }, [data, rowsPerPage]);
 
-  const loadingState: LoadingState =
-    loading || data?.length === 0 ? "loading" : "idle";
+  const loadingState: LoadingState = loading ? "loading" : "idle";
 
   const onSearchChange = useCallback((value?: string) => {
     if (value) {
@@ -158,61 +147,17 @@ export default function PermissionTable({
             onValueChange={onSearchChange}
           />
           <div className="flex gap-3">
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={<ChevronDownIcon className="text-small" />}
-                  variant="flat"
-                  color="primary"
-                >
-                  Filtrar por
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Filter Key"
-                closeOnSelect={false}
-                selectedKeys={"ci"}
-                selectionMode="single"
-                onSelectionChange={setFilterKey}
-              >
-                {filterColumns.map((permission) => (
-                  <DropdownItem key={permission.uid} className="capitalize">
-                    {capitalize(permission.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={<ChevronDownIcon className="text-small" />}
-                  variant="flat"
-                  color="primary"
-                >
-                  Estado
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
+            <FilterDropdown setFilterKey={setFilterKey} />
+            <StatusDropdown
+              statusFilter={statusFilter}
+              setStatusFilter={setStatusFilter}
+            />
             <PermissionDate />
-
-            <Button color="primary" endContent={<PlusIcon />}>
-              Crear permiso
-            </Button>
+            <Link href={"/permissions/create"}>
+              <Button color="primary" endContent={<PlusIcon />}>
+                Crear permiso
+              </Button>
+            </Link>
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -233,39 +178,9 @@ export default function PermissionTable({
     (permission: Permission, columnKey: React.Key) => {
       const cellValue = permission[columnKey as keyof Permission];
       if (columnKey === "status") {
-        return (
-          <Chip
-            className="capitalize"
-            color={statusColorMap[permission.status.toString().toLowerCase()]}
-            size="sm"
-            variant="flat"
-          >
-            {
-              statusOptions.find(
-                (item) =>
-                  item.uid === permission.status.toString().toLowerCase()
-              )?.name
-            }
-          </Chip>
-        );
+        return <StatusChip permission={permission} />;
       } else if (columnKey === "actions") {
-        return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>Visualizar</DropdownItem>
-                <DropdownItem>Editar</DropdownItem>
-                <DropdownItem>Eliminar</DropdownItem>
-                <DropdownItem>Imprimir</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        );
+        return <ActionsDropdown permission={permission} />;
       } else if (columnKey === "date") {
         return format(cellValue.toString(), "dd/MM/yyyy");
       } else {
