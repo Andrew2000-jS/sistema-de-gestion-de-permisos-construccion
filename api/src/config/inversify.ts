@@ -14,7 +14,7 @@ import { type OwnerRepository } from '@src/owner/context/domain'
 import { MySQLOwnernRepository } from '@src/owner/context/infrastructure'
 import { TYPES as OwnerTypes } from '@src/owner/context/utils'
 import { PermissionController } from '@src/permission/apps/controllers'
-import { PermissionCreator, PermissionDeleter, PermissionUpdater } from '@src/permission/context/application'
+import { PermissionCreator, PermissionDeleter, PermissionGetter, PermissionUpdater } from '@src/permission/context/application'
 import { type PermissionRepository } from '@src/permission/context/domain'
 import { MySQLPermissionRepository } from '@src/permission/context/infrastructure/persistence'
 import { TYPES as PermissionTypes } from '@src/permission/context/utils'
@@ -39,6 +39,7 @@ container.bind<PermissionRepository>(PermissionTypes.PermissionRepository).to(My
 container.bind<PermissionCreator>(PermissionCreator).toSelf()
 container.bind<PermissionDeleter>(PermissionDeleter).toSelf()
 container.bind<PermissionUpdater>(PermissionUpdater).toSelf()
+container.bind<PermissionGetter>(PermissionGetter).toSelf()
 container.bind<PermissionController>(PermissionController).toSelf()
 
 // Construction dependency injection

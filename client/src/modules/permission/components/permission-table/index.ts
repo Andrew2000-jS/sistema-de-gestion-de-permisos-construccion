@@ -1,0 +1,1 @@
+export { default as PermissionTable } from './permission-table';

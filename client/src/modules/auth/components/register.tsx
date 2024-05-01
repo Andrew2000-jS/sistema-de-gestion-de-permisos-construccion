@@ -13,7 +13,7 @@ import {
   valuesAdapter,
 } from "../utils";
 import { useForm, Controller } from "react-hook-form";
-import { useSubmit } from "../hook";
+import { useSubmit } from "@/lib/common/hooks";
 import { AnimatedMessage, AlertMessage } from "@/lib";
 import { register } from "../services";
 import { useRouter } from "next/navigation";
