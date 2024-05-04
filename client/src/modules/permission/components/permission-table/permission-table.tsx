@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useCallback, useContext, useMemo } from "react";
-import Link from "next/link";
 import {
   Table,
   TableHeader,
@@ -11,18 +10,16 @@ import {
   TableCell,
   Pagination,
   Spinner,
-  Button,
-  Input,
 } from "@nextui-org/react";
-import { ApiResponse, PlusIcon, SearchIcon } from "@/lib";
+import { ApiResponse } from "@/lib";
 import { Permission } from "../../permission.entity";
 import { columns, filterColumns } from "./data";
-import PermissionDate from "./permission-date";
-import { format, parse } from "date-fns";
+import { format } from "date-fns";
 import { FilterCtx } from "../../context";
-import { ActionsDropdown, FilterDropdown, StatusDropdown } from "./dropdown";
+import { ActionsDropdown } from "./dropdown";
 import StatusChip from "./status-chip";
 import { usePagination } from "../../hook";
+import TopContent from "./top-content";
 
 export default function PermissionTable({
   data,
@@ -39,62 +36,38 @@ export default function PermissionTable({
     filterValue,
     setSortDescriptor,
     setStatusFilter,
-    sortedItems,
+    tableData,
     statusFilter,
     filterKey,
     page,
     setPage,
   } = usePagination({ data, loading, filterData });
 
-  const topContent = useMemo(() => {
-    return (
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
-          <Input
-            isClearable
-            className="w-full sm:max-w-[44%]"
-            placeholder="Buscar permisos"
-            startContent={<SearchIcon />}
-            value={filterValue}
-            onClear={() => onClear()}
-            onValueChange={onSearchChange}
-          />
-          <div className="flex gap-3">
-            <FilterDropdown setFilterKey={setFilterKey} />
-            <StatusDropdown
-              statusFilter={statusFilter}
-              setStatusFilter={setStatusFilter}
-            />
-            <PermissionDate />
-            <Link href={"/permissions/create"}>
-              <Button color="primary" endContent={<PlusIcon />}>
-                Crear permiso
-              </Button>
-            </Link>
-          </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">
-            Total de permisos: {data?.length ?? 0}
-          </span>
-          <span className="text-default-400 text-small">
-            Filtro seleccionado:{" "}
-            {filterColumns.find((cols) => cols.uid === filterKey.currentKey)
-              ?.name ?? "Cedula"}
-          </span>
-        </div>
-      </div>
-    );
-  }, [
-    filterValue,
-    onClear,
-    onSearchChange,
-    data,
-    statusFilter,
-    filterKey,
-    setFilterKey,
-    setStatusFilter,
-  ]);
+  const topContent = useMemo(
+    () => (
+      <TopContent
+        filterValue={filterValue}
+        data={tableData}
+        filterColumns={filterColumns}
+        filterKey={filterKey}
+        onClear={onClear}
+        onSearchChange={onSearchChange}
+        setFilterKey={setFilterKey}
+        setStatusFilter={setStatusFilter}
+        statusFilter={statusFilter}
+      />
+    ),
+    [
+      filterValue,
+      onClear,
+      onSearchChange,
+      tableData,
+      statusFilter,
+      filterKey,
+      setFilterKey,
+      setStatusFilter,
+    ]
+  );
 
   const renderCell = useCallback(
     (permission: Permission, columnKey: React.Key) => {
@@ -115,7 +88,7 @@ export default function PermissionTable({
   return (
     <>
       <Table
-        aria-label="Example table with client async pagination"
+        aria-label="Permission table"
         topContent={topContent}
         onSortChange={setSortDescriptor}
         bottomContent={
@@ -133,7 +106,7 @@ export default function PermissionTable({
             </div>
           ) : null
         }
-        {...data}
+        {...tableData}
       >
         <TableHeader columns={headerColumns}>
           {columns.map(({ name, uid, sortable }) => (
@@ -144,7 +117,7 @@ export default function PermissionTable({
         </TableHeader>
         <TableBody
           emptyContent={"No se encontraron coincidencias"}
-          items={sortedItems}
+          items={tableData}
           loadingContent={<Spinner />}
           loadingState={loadingState}
         >

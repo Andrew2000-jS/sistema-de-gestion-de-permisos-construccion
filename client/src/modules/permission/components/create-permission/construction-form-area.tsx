@@ -40,7 +40,7 @@ function ConstructionFormArea({ control }) {
           )}
         />
       </div>
-      <div className="pb-5">
+      <div className="flex justify-between pb-5 gap-2">
         <Controller
           name="CIV"
           control={control}
@@ -48,7 +48,22 @@ function ConstructionFormArea({ control }) {
             <Input
               isRequired
               type="text"
-              label="Area de construccion"
+              label="C.I.V"
+              className="w-full"
+              variant="bordered"
+              minLength={5}
+              {...field}
+            />
+          )}
+        />
+        <Controller
+          name="constructionCompany"
+          control={control}
+          render={({ field }) => (
+            <Input
+              isRequired
+              type="text"
+              label="Compañia de construccion"
               className="w-full"
               variant="bordered"
               minLength={5}

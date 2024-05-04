@@ -70,6 +70,7 @@ export class PermissionController {
     req: RequestType<Criteria>,
     res: Response
   ): Promise<any> {
+    console.log(req.body)
     const response = await this.permissionMatcher.run(req.body, 'permission')
     return res.status(response.statusCode).json(response)
   }

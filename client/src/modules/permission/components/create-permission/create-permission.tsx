@@ -6,13 +6,15 @@ import { useForm } from "react-hook-form";
 import OwnerForm from "./owner-form";
 import ConstructionForm from "./construction-form";
 import ConstructionFormArea from "./construction-form-area";
+import { permissionCreatorAdapter } from "./adapters";
 
 function CreatePermission() {
   const { control, handleSubmit } = useForm();
   const [step, setStep] = useState(1);
 
   const onSubmit = (data) => {
-    console.log(data);
+    const permissionInfo = permissionCreatorAdapter(data);
+    console.log(permissionInfo);
   };
 
   const nextStep = () => {

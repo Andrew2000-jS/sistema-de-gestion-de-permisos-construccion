@@ -8,10 +8,12 @@ import {
   Link,
   Button,
 } from "@nextui-org/react";
+import Image from "next/image";
 
 function Navigation() {
   return (
     <Navbar
+      style={{ background: "rgba(0, 0, 0, 0)" }}
       classNames={{
         item: [
           "flex",
@@ -30,17 +32,19 @@ function Navigation() {
       }}
     >
       <NavbarBrand>
-        <p className="font-bold text-inherit">ACME</p>
+        <Link href="/">
+          <Image
+            src={"/logo-alcaldia-2.png"}
+            alt="logo alcaldia"
+            height={100}
+            width={100}
+          />
+        </Link>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
-          <Link color="foreground" href="#">
+          <Link color="foreground" href="permissions">
             Permisos
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#" aria-current="page">
-            Propietarios
           </Link>
         </NavbarItem>
         <NavbarItem>

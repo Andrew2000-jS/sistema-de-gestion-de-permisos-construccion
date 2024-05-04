@@ -12,7 +12,7 @@ import { useState, useContext } from "react";
 import { FilterCtx } from "../../context";
 import CalendarIcon from "@/lib/common/Icons/calendar-icon";
 
-function PermissionDate() {
+function PermissionDateDialog() {
   const { isOpen, onOpenChange } = useDisclosure();
   const { setFilterData } = useContext(FilterCtx);
   const [formVals, setFormVals] = useState({
@@ -40,26 +40,6 @@ function PermissionDate() {
         backdrop="opaque"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        motionProps={{
-          variants: {
-            enter: {
-              y: 0,
-              opacity: 1,
-              transition: {
-                duration: 0.3,
-                ease: "easeOut",
-              },
-            },
-            exit: {
-              y: -20,
-              opacity: 0,
-              transition: {
-                duration: 0.2,
-                ease: "easeIn",
-              },
-            },
-          },
-        }}
       >
         <ModalContent>
           {(onClose) => (
@@ -117,4 +97,4 @@ function PermissionDate() {
   );
 }
 
-export default PermissionDate;
+export default PermissionDateDialog;
