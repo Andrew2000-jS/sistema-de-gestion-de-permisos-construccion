@@ -1,0 +1,32 @@
+export const permissionCreatorAdapter = (data) => ({
+  permission: {
+    date: data.date,
+    quantity: 1,
+    amount: Number(data.landAmount) + Number(data.workAmount) + Number(data.tax),
+    CIV: data.CIV,
+    observation: "",
+    receiptNo: data.receiptNo,
+    status: 'pending',
+  },
+  construction: {
+    population: data.population,
+    sanitaryPermit: data.sanitaryPermit,
+    address: data.constructionAddress,
+    type: data.constructionType,
+    constructionArea: data.constructionArea,
+    landArea: data.landArea,
+    destination: data.constructionDestination,
+    floorsNo: data.floorsNo,
+    manager: data.constructionConstructor,
+    engineer: data.calculatingEngineer,
+    constructionCompany: data.constructionCompany,
+    landAmount: data.landAmount,
+    workAmount: data.workAmount,
+    tax: data.tax,
+  },
+  owner: {
+    ci: data.ownerCi,
+    name: data.ownerName,
+    address: data.ownerAddress,
+  },
+});

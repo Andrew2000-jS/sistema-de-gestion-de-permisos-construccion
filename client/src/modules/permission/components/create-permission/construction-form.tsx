@@ -11,7 +11,7 @@ function ConstructionForm({ control }) {
       <h3 className="pb-5">Datos de la construccion</h3>
       <div className="flex justify-between pb-5 gap-2">
         <Controller
-          name="Population"
+          name="population"
           control={control}
           render={({ field }) => (
             <Input
@@ -27,7 +27,7 @@ function ConstructionForm({ control }) {
         />
 
         <Controller
-          name="SanitaryPermit"
+          name="sanitaryPermit"
           control={control}
           render={({ field }) => (
             <Input
@@ -44,7 +44,7 @@ function ConstructionForm({ control }) {
       </div>
       <div className="flex justify-between pb-5 gap-2">
         <Controller
-          name="ConstructionAddress"
+          name="constructionAddress"
           control={control}
           render={({ field }) => (
             <Input
@@ -59,7 +59,7 @@ function ConstructionForm({ control }) {
           )}
         />
         <Controller
-          name="ConstructionDestiny"
+          name="constructionDestination"
           control={control}
           render={({ field }) => (
             <Input
@@ -127,7 +127,7 @@ function ConstructionForm({ control }) {
           )}
         />
         <Controller
-          name="ConstructionConstructor"
+          name="constructionConstructor"
           control={control}
           render={({ field }) => (
             <Input
@@ -144,7 +144,7 @@ function ConstructionForm({ control }) {
       </div>
       <div className="pb-5">
         <Controller
-          name="constructionDate"
+          name="date"
           control={control}
           render={({ field }) => (
             <Input

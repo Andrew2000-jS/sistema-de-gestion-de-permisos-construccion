@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   PERMISSION_COLUMNS,
   columns,
@@ -10,6 +10,7 @@ import { parse } from "date-fns/parse";
 import { Permission } from "../permission.entity";
 
 function usePagination({ data, loading, filterData, rowsPerPage = 10 }) {
+  const [tableData, setTableData] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [filterValue, setFilterValue] = useState("");
   const [visibleColumns] = React.useState<Selection>(
@@ -31,8 +32,8 @@ function usePagination({ data, loading, filterData, rowsPerPage = 10 }) {
   }, [visibleColumns]);
 
   const pages = useMemo(() => {
-    return data?.length ? Math.ceil(data.length / rowsPerPage) : 0;
-  }, [data, rowsPerPage]);
+    return tableData?.length ? Math.ceil(tableData.length / rowsPerPage) : 0;
+  }, [tableData, rowsPerPage]);
 
   const loadingState: LoadingState = loading ? "loading" : "idle";
 
@@ -64,6 +65,8 @@ function usePagination({ data, loading, filterData, rowsPerPage = 10 }) {
     }
     if (filterData) {
       const { init_date, end_date } = filterData;
+      if (!init_date || !end_date) return filteredPermissions;
+
       const initDate = parse(init_date, "d/M/yyyy", new Date());
       const EndDate = parse(end_date, "d/M/yyyy", new Date());
 
@@ -102,6 +105,10 @@ function usePagination({ data, loading, filterData, rowsPerPage = 10 }) {
     setPage(1);
   }, []);
 
+  useEffect(() => {
+    setTableData(sortedItems);
+  }, [sortedItems]);
+
   return {
     headerColumns,
     setFilterKey,
@@ -112,7 +119,8 @@ function usePagination({ data, loading, filterData, rowsPerPage = 10 }) {
     page,
     loadingState,
     onSearchChange,
-    sortedItems,
+    tableData,
+    setTableData,
     onClear,
     filterValue,
     statusFilter,

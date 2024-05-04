@@ -10,7 +10,7 @@ function OwnerForm({ control }) {
       <h3 className="pb-5">Datos del propietario</h3>
       <div className="flex justify-between pb-5 gap-2">
         <Controller
-          name="OwnerCi"
+          name="ownerCi"
           control={control}
           render={({ field }) => (
             <Input

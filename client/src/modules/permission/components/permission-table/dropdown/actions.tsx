@@ -7,14 +7,20 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  useDisclosure,
 } from "@nextui-org/react";
 import { Permission } from "@/modules/permission/permission.entity";
 import ViewAction from "./actions/view-action";
 import EditAction from "./actions/edit-action";
-import DeleteAction from "./actions/delete-action";
 import PrintAction from "./actions/print-action";
+import DeleteDialog from "./actions/delete-dialog";
 
-function Actions({ permission }: { permission: Permission }) {
+export interface ActionsProps {
+  permission: Permission;
+}
+
+function Actions({ permission }: ActionsProps) {
+  const { onOpenChange, isOpen } = useDisclosure();
   return (
     <div className="relative flex justify-end items-center gap-2">
       <Dropdown>
@@ -31,13 +37,18 @@ function Actions({ permission }: { permission: Permission }) {
             <EditAction permission={permission} />
           </DropdownItem>
           <DropdownItem>
-            <DeleteAction permission={permission} />
+            <span onClick={onOpenChange}>Eliminar</span>
           </DropdownItem>
           <DropdownItem>
             <PrintAction permission={permission} />
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
+      <DeleteDialog
+        id={permission.id}
+        onOpenChange={onOpenChange}
+        isOpen={isOpen}
+      />
     </div>
   );
 }
