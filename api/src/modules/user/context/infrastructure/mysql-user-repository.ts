@@ -5,7 +5,7 @@ import { User, type UserWithoutId, type UserRepository } from '../domain'
 
 @injectable()
 export class MySQLUserRepository implements UserRepository {
-  async delete (id: number): Promise<void> {
+  async delete (id: string): Promise<void> {
     const prisma = new PrismaClient()
     try {
       await prisma.user.delete({
@@ -19,7 +19,7 @@ export class MySQLUserRepository implements UserRepository {
     }
   }
 
-  async findById (id: number): Promise<Nullable<User>> {
+  async findById (id: string): Promise<Nullable<User>> {
     const prisma = new PrismaClient()
     try {
       const foundUser = await prisma.user.findFirst({
@@ -36,7 +36,7 @@ export class MySQLUserRepository implements UserRepository {
     }
   }
 
-  async update (id: number, user: UserWithoutId): Promise<User> {
+  async update (id: string, user: UserWithoutId): Promise<User> {
     const prisma = new PrismaClient()
     try {
       const updatedUser = await prisma.user.update({

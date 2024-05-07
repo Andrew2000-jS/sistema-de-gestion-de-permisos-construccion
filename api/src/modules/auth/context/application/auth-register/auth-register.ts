@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid'
 import { type ApplicationResponse } from '@src/shared/modules'
 import { inject, injectable } from 'inversify'
 import {
@@ -37,7 +38,7 @@ export class AuthRegister {
       }
 
       const user = User.create(
-        new IdValueObject(0),
+        new IdValueObject(uuid()),
         new CiValueObject(params.ci),
         new NameValueObject(params.name),
         new NameValueObject(params.lastname),

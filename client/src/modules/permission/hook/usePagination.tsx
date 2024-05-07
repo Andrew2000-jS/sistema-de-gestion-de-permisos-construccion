@@ -7,7 +7,7 @@ import {
 import { SortDescriptor, Selection } from "@nextui-org/react";
 import { LoadingState } from "@/lib";
 import { parse } from "date-fns/parse";
-import { Permission } from "../permission.entity";
+import { Permission } from "../entities/permission.entity";
 
 function usePagination({ data, loading, filterData, rowsPerPage = 10 }) {
   const [tableData, setTableData] = useState<any[]>([]);
@@ -52,7 +52,15 @@ function usePagination({ data, loading, filterData, rowsPerPage = 10 }) {
 
     if (Boolean(filterValue)) {
       filteredPermissions = filteredPermissions.filter((item) =>
-        item[key]?.toString().toLowerCase().includes(filterValue.toLowerCase())
+        key === "ci"
+          ? item.owner.ci
+              ?.toString()
+              .toLowerCase()
+              .includes(filterValue.toLowerCase())
+          : item[key]
+              ?.toString()
+              .toLowerCase()
+              .includes(filterValue.toLowerCase())
       );
     }
     if (

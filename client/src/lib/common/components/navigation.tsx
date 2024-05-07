@@ -8,12 +8,20 @@ import {
   Link,
   Button,
 } from "@nextui-org/react";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 
 function Navigation() {
+  const pathname = usePathname();
+  const isHidden =
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/login/email" ||
+    pathname === "/login/verify";
+
   return (
     <Navbar
-      style={{ background: "rgba(0, 0, 0, 0)" }}
+      className={`${isHidden ? "hidden" : "flex"} py-5`}
       classNames={{
         item: [
           "flex",
@@ -36,30 +44,22 @@ function Navigation() {
           <Image
             src={"/logo-alcaldia-2.png"}
             alt="logo alcaldia"
-            height={100}
-            width={100}
+            height={200}
+            width={200}
           />
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
-          <Link color="foreground" href="permissions">
-            Permisos
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Inicio
+          <Link color="foreground" href="/">
+            Alguna opcion
           </Link>
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link href="#">Iniciar Sesion</Link>
-        </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Registrarse
+          <Button as={Link} color="danger" href="#" variant="flat">
+            Cerrar Sesion
           </Button>
         </NavbarItem>
       </NavbarContent>

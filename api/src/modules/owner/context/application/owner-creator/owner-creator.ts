@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid'
 import {
   Owner,
   type OwnerPrimitives,
@@ -27,9 +28,9 @@ export class OwnerCreator {
     private readonly shrdRepository: SharedRepository
   ) {}
 
-  async run (owner: OwnerPrimitives): Promise<ApplicationResponse<Owner>> {
+  async run (owner: OwnerPrimitives): Promise<ApplicationResponse<OwnerPrimitives>> {
     try {
-      const criteria = new Criteria({ id: owner.id })
+      const criteria = new Criteria({ ci: owner.ci })
       const isOwnerExist = await this.shrdRepository.match(criteria, 'owner')
       if (isOwnerExist.length > 0) {
         return {
@@ -40,7 +41,7 @@ export class OwnerCreator {
       }
 
       const newOwner = Owner.create(
-        new IdValueObject(0),
+        new IdValueObject(uuid()),
         new CiValueObject(owner.ci),
         new NameValueObject(owner.name),
         new StringValueObject(owner.address)
@@ -49,7 +50,7 @@ export class OwnerCreator {
       return {
         message: 'Propietario creado con exito!',
         statusCode: 200,
-        data: newOwner
+        data: newOwner.toPrimitives()
       }
     } catch (error) {
       console.log(error)

@@ -1,31 +1,35 @@
+import { Status } from "@/modules/permission/entities";
+import { ConstructionType } from "@/modules/permission/entities/construction.entity";
+import { parse } from "date-fns/parse";
+
 export const permissionCreatorAdapter = (data) => ({
   permission: {
-    date: data.date,
+    date: parse(data.date, 'yyyy-MM-dd', new Date()),
     quantity: 1,
     amount: Number(data.landAmount) + Number(data.workAmount) + Number(data.tax),
     CIV: data.CIV,
     observation: "",
     receiptNo: data.receiptNo,
-    status: 'pending',
+    status: Status.PENDING,
   },
   construction: {
-    population: data.population,
+    population: Number(data.population),
     sanitaryPermit: data.sanitaryPermit,
     address: data.constructionAddress,
-    type: data.constructionType,
+    type: ConstructionType.NEW,
     constructionArea: data.constructionArea,
     landArea: data.landArea,
     destination: data.constructionDestination,
-    floorsNo: data.floorsNo,
+    floorsNo: Number(data.floorsNo),
     manager: data.constructionConstructor,
     engineer: data.calculatingEngineer,
     constructionCompany: data.constructionCompany,
-    landAmount: data.landAmount,
-    workAmount: data.workAmount,
-    tax: data.tax,
+    landAmount: Number(data.landAmount),
+    workAmount: Number(data.workAmount),
+    tax: Number(data.tax),
   },
   owner: {
-    ci: data.ownerCi,
+    ci: Number(data.ownerCi),
     name: data.ownerName,
     address: data.ownerAddress,
   },

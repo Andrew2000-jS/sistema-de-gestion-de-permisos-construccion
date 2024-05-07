@@ -31,7 +31,7 @@ export class Owner {
     }
   }
 
-  static fromPrimitives (plainData: { id: number, ci: number, name: string, address: string }): Owner {
+  static fromPrimitives (plainData: { id: string, ci: number, name: string, address: string }): Owner {
     return new Owner(
       new IdValueObject(plainData.id),
       new CiValueObject(plainData.ci),
@@ -42,7 +42,7 @@ export class Owner {
 }
 
 export type OwnerPrimitives = {
-  id: number
+  id: string
   ci: number
   name: string
   address: string

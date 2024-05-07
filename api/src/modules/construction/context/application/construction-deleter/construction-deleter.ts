@@ -17,7 +17,7 @@ export class ConstructionDeleter {
     private readonly shrdRepository: SharedRepository
   ) {}
 
-  async run (params: { id: number }): Promise<ApplicationResponse<null>> {
+  async run (params: { id: string }): Promise<ApplicationResponse<null>> {
     try {
       const criteria = new Criteria({ id: params.id })
       const isConstructionExist = await this.shrdRepository.match(criteria, 'construction')

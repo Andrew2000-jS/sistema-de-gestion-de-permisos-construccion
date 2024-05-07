@@ -1,3 +1,3 @@
-import { ValueObject } from './value-object'
+import { Uuid } from './uuid-value-object'
 
-export class IdValueObject extends ValueObject<number> {}
+export class IdValueObject extends Uuid {}

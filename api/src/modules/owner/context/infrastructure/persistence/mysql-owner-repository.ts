@@ -11,6 +11,7 @@ export class MySQLOwnernRepository implements OwnerRepository {
 
       await prisma.owner.create({
         data: {
+          id: ownerPrimitives.id,
           address: ownerPrimitives.address,
           ci: ownerPrimitives.ci,
           name: ownerPrimitives.name
@@ -24,7 +25,7 @@ export class MySQLOwnernRepository implements OwnerRepository {
     }
   }
 
-  async delete (id: number): Promise<void> {
+  async delete (id: string): Promise<void> {
     const prisma = PrismaSingleton.getInstance()
     try {
       await prisma.owner.delete({
@@ -38,7 +39,7 @@ export class MySQLOwnernRepository implements OwnerRepository {
     }
   }
 
-  async update (id: number, data: OwnerPrimitives): Promise<void> {
+  async update (id: string, data: OwnerPrimitives): Promise<void> {
     const prisma = PrismaSingleton.getInstance()
 
     try {

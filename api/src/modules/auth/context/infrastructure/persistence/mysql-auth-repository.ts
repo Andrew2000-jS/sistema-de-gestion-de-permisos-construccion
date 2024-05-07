@@ -14,6 +14,7 @@ export class MySQLAuthRepository implements AuthRepository {
       const prisma = PrismaSingleton.getInstance()
       await prisma.user.create({
         data: {
+          id: userPrimitives.id,
           ci: userPrimitives.ci,
           name: userPrimitives.name,
           lastname: userPrimitives.lastname,

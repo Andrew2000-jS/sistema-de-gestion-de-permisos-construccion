@@ -9,7 +9,7 @@ import {
   DropdownTrigger,
   useDisclosure,
 } from "@nextui-org/react";
-import { Permission } from "@/modules/permission/permission.entity";
+import { Permission } from "@/modules/permission/entities/permission.entity";
 import ViewAction from "./actions/view-action";
 import EditAction from "./actions/edit-action";
 import PrintAction from "./actions/print-action";

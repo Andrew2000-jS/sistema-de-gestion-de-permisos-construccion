@@ -18,6 +18,7 @@ import {
   StringValueObject
 } from '@src/shared/modules/context/domain/value-object'
 import { Criteria } from '@src/shared/modules/context/domain/criteria'
+import { PermissionIdValueObject } from '../../domain/permission-id-value-object'
 
 @injectable()
 export class PermissionCreator {
@@ -30,7 +31,8 @@ export class PermissionCreator {
 
   async run (
     data: PermissionPrimitives
-  ): Promise<ApplicationResponse<Permission>> {
+  ): Promise<ApplicationResponse<PermissionPrimitives>> {
+    console.log('permission', data)
     try {
       const criteria = new Criteria({ receiptNo: data.receiptNo })
       const isPermissionExist = await this.shrdRepository.match(criteria, 'permission')
@@ -40,11 +42,11 @@ export class PermissionCreator {
       }
 
       const newPermission = Permission.create(
-        new IdValueObject(0),
+        new PermissionIdValueObject(0),
         data.date,
         new PositiveNumberValueObject(data.quantity),
         new PositiveNumberValueObject(data.amount),
-        data.CIV,
+        new StringValueObject(data.CIV),
         new StringValueObject(data.observation),
         new StringValueObject(data.receiptNo),
         new IdValueObject(data.constructionId),
@@ -55,7 +57,7 @@ export class PermissionCreator {
       return {
         message: 'Permiso generado con exito!',
         statusCode: 200,
-        data: null
+        data: newPermission.toPrimitives()
       }
     } catch (error) {
       console.log(error)

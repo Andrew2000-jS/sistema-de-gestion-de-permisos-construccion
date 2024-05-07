@@ -39,7 +39,7 @@ export class ConstructionController {
     res: Response
   ): Promise<any> {
     const { id } = req.params
-    const response = await this.constructionDeleter.run({ id: Number(id) })
+    const response = await this.constructionDeleter.run({ id })
     return res.status(response.statusCode).json(response)
   }
 
@@ -50,7 +50,7 @@ export class ConstructionController {
   ): Promise<any> {
     const { id } = req.params
     const { data } = req.body
-    const response = await this.constructionUpdater.run({ id: Number(id), data })
+    const response = await this.constructionUpdater.run({ id, data })
     return res.status(response.statusCode).json(response)
   }
 
