@@ -12,7 +12,7 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import { ApiResponse } from "@/lib";
-import { Permission } from "../../permission.entity";
+import { Permission } from "../../entities/permission.entity";
 import { columns, filterColumns } from "./data";
 import { format } from "date-fns";
 import { FilterCtx } from "../../context";
@@ -78,6 +78,8 @@ export default function PermissionTable({
         return <ActionsDropdown permission={permission} />;
       } else if (columnKey === "date") {
         return format(cellValue.toString(), "dd/MM/yyyy");
+      } else if (columnKey === "cedula") {
+        return permission.owner.ci.toString();
       } else {
         return cellValue?.toString();
       }

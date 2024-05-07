@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { getPermissions } from "../services";
 import { ApiResponse } from "@/lib";
-import { Permission as IPermission } from "../permission.entity";
+import { Permission as IPermission } from "../entities/permission.entity";
 import { PermissionTable } from "./permission-table";
 import { FilterCtxProvider } from "../context";
 

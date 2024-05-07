@@ -1,3 +1,6 @@
+import { Construction } from "./construction.entity";
+import { Owner } from "./owner.entity";
+
 export const enum Status {
   PENDING = "Pending",
   APPROVED = "Approved",
@@ -18,4 +21,6 @@ export type Permission = {
   status: Status;
   constructionId: number;
   ownerId: number;
+  owner: Owner;
+  construction: Construction
 };

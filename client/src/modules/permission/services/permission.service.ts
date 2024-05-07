@@ -1,6 +1,6 @@
 import { ApiResponse } from "@/lib";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { Permission } from "../permission.entity";
+import { Permission } from "../entities/permission.entity";
 
 export async function getPermissions(): Promise<ApiResponse<Permission>> {
   try {
@@ -23,7 +23,7 @@ export async function createPermission({
   status,
   constructionId,
   ownerId,
-}: Omit<Permission, "id">): Promise<ApiResponse<Permission>> {
+}: Omit<Permission, "id" | "owner" | "construction">): Promise<ApiResponse<Permission>> {
   try {
     const response: AxiosResponse<ApiResponse<Permission>> = await axios.post(
       "http://localhost:3001/permissions/create",

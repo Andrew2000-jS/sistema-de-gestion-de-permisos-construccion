@@ -19,7 +19,8 @@ function ConstructionFormArea({ control }) {
               label="Area de construccion"
               className="w-full"
               variant="bordered"
-              minLength={5}
+              minLength={1}
+              validate={positiveNumberRegex}
               {...field}
             />
           )}
@@ -33,8 +34,9 @@ function ConstructionFormArea({ control }) {
               type="text"
               label="Area del terreno"
               className="w-full"
+              validate={positiveNumberRegex}
               variant="bordered"
-              minLength={5}
+              minLength={1}
               {...field}
             />
           )}

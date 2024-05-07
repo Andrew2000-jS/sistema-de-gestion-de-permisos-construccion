@@ -7,14 +7,25 @@ import OwnerForm from "./owner-form";
 import ConstructionForm from "./construction-form";
 import ConstructionFormArea from "./construction-form-area";
 import { permissionCreatorAdapter } from "./adapters";
+import {
+  createConstruction,
+  createOwner,
+  createPermission,
+} from "../../services";
 
 function CreatePermission() {
   const { control, handleSubmit } = useForm();
   const [step, setStep] = useState(1);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const permissionInfo = permissionCreatorAdapter(data);
-    console.log(permissionInfo);
+    const construction = await createConstruction(permissionInfo.construction);
+    const owner = await createOwner(permissionInfo.owner);
+    await createPermission({
+      ...permissionInfo.permission,
+      constructionId: construction.data.id,
+      ownerId: owner.data.id,
+    });
   };
 
   const nextStep = () => {

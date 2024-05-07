@@ -1,5 +1,5 @@
 "use client";
-import { Permission } from "@/modules/permission/permission.entity";
+import { Permission } from "@/modules/permission/entities/permission.entity";
 import { filterPermissions } from "@/modules/permission/services";
 
 function ViewAction({ permission }: { permission: Permission }) {
