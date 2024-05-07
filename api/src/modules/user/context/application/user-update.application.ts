@@ -7,7 +7,7 @@ import { TYPES } from '../utils/constants'
 export class UserUpdater {
   constructor (@inject(TYPES.UserRepository) private readonly repository: UserRepository) {}
 
-  async run (id: number, params: { ci: number, name: string, lastname: string, email: string, password: string }): Promise<ApplicationResponse<User>> {
+  async run (id: string, params: { ci: number, name: string, lastname: string, email: string, password: string }): Promise<ApplicationResponse<User>> {
     try {
       const user = await this.isUserExist(id)
 
@@ -38,7 +38,7 @@ export class UserUpdater {
     }
   }
 
-  async isUserExist (id: number): Promise<Nullable<User>> {
+  async isUserExist (id: string): Promise<Nullable<User>> {
     try {
       const foundUser = await this.repository.findById(id)
       return foundUser

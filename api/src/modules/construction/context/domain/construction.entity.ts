@@ -1,10 +1,16 @@
-import { StringValueObject, IdValueObject, EnumValueObject, PositiveNumberValueObject, NameValueObject } from '@src/shared/modules/context/domain/value-object'
+import {
+  StringValueObject,
+  IdValueObject,
+  EnumValueObject,
+  PositiveNumberValueObject,
+  NameValueObject
+} from '@src/shared/modules/context/domain/value-object'
 
 export const enum ConstructionType {
   NEW = 'New',
   REMODELING = 'Remodeling',
   PERIMETER_FENCE = 'Perimeter Fence',
-  EXPANSION = 'Expansion'
+  EXPANSION = 'Expansion',
 }
 
 export class Construction {
@@ -21,6 +27,8 @@ export class Construction {
   private readonly landAmount: PositiveNumberValueObject
   private readonly workAmount: PositiveNumberValueObject
   private readonly tax: PositiveNumberValueObject
+  private readonly population: PositiveNumberValueObject
+  private readonly sanitaryPermit: StringValueObject
 
   constructor (
     id: IdValueObject,
@@ -35,7 +43,9 @@ export class Construction {
     constructionCompany: StringValueObject,
     landAmount: PositiveNumberValueObject,
     workAmount: PositiveNumberValueObject,
-    tax: PositiveNumberValueObject
+    tax: PositiveNumberValueObject,
+    population: PositiveNumberValueObject,
+    sanitaryPermit: StringValueObject
   ) {
     this.id = id
     this.address = address
@@ -50,6 +60,8 @@ export class Construction {
     this.landAmount = landAmount
     this.workAmount = workAmount
     this.tax = tax
+    this.population = population
+    this.sanitaryPermit = sanitaryPermit
   }
 
   static create (
@@ -65,7 +77,9 @@ export class Construction {
     constructionCompany: StringValueObject,
     landAmount: PositiveNumberValueObject,
     workAmount: PositiveNumberValueObject,
-    tax: PositiveNumberValueObject
+    tax: PositiveNumberValueObject,
+    population: PositiveNumberValueObject,
+    sanitaryPermit: StringValueObject
   ): Construction {
     return new Construction(
       id,
@@ -80,7 +94,9 @@ export class Construction {
       constructionCompany,
       landAmount,
       workAmount,
-      tax
+      tax,
+      population,
+      sanitaryPermit
     )
   }
 
@@ -98,12 +114,14 @@ export class Construction {
       landArea: this.landArea.getValue(),
       manager: this.manager.getValue(),
       tax: this.tax.getValue(),
-      workAmount: this.workAmount.getValue()
+      workAmount: this.workAmount.getValue(),
+      population: this.population.getValue(),
+      sanitaryPermit: this.sanitaryPermit.getValue()
     }
   }
 
   static fromPrimitives (plainData: {
-    id: number
+    id: string
     address: string
     type: ConstructionType
     constructionArea: string
@@ -115,11 +133,19 @@ export class Construction {
     constructionCompany: string
     landAmount: number
     workAmount: number
-    tax: number }): Construction {
+    population: number
+    sanitaryPermit: string
+    tax: number
+  }): Construction {
     return new Construction(
       new IdValueObject(plainData.id),
       new StringValueObject(plainData.address),
-      new EnumValueObject(plainData.type, [ConstructionType.NEW, ConstructionType.EXPANSION, ConstructionType.PERIMETER_FENCE, ConstructionType.REMODELING]),
+      new EnumValueObject(plainData.type, [
+        ConstructionType.NEW,
+        ConstructionType.EXPANSION,
+        ConstructionType.PERIMETER_FENCE,
+        ConstructionType.REMODELING
+      ]),
       new StringValueObject(plainData.constructionArea),
       new StringValueObject(plainData.landArea),
       new StringValueObject(plainData.destination),
@@ -129,13 +155,15 @@ export class Construction {
       new StringValueObject(plainData.constructionCompany),
       new PositiveNumberValueObject(plainData.landAmount),
       new PositiveNumberValueObject(plainData.workAmount),
-      new PositiveNumberValueObject(plainData.tax)
+      new PositiveNumberValueObject(plainData.tax),
+      new PositiveNumberValueObject(plainData.population),
+      new StringValueObject(plainData.sanitaryPermit)
     )
   }
 }
 
 export type ConstructionPrimitives = {
-  id: number
+  id: string
   address: string
   type: ConstructionType
   constructionArea: string
@@ -148,4 +176,6 @@ export type ConstructionPrimitives = {
   landAmount: number
   workAmount: number
   tax: number
+  population: number
+  sanitaryPermit: string
 }

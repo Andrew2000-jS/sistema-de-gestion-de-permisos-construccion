@@ -39,7 +39,7 @@ export class OwnerController {
     res: Response
   ): Promise<any> {
     const { id } = req.params
-    const response = await this.ownerDeleter.run(Number(id))
+    const response = await this.ownerDeleter.run(id)
     return res.status(response.statusCode).json(response)
   }
 
@@ -50,7 +50,7 @@ export class OwnerController {
   ): Promise<any> {
     const { id } = req.params
     const { data } = req.body
-    const response = await this.ownerUpdater.run(Number(id), data)
+    const response = await this.ownerUpdater.run(id, data)
     return res.status(response.statusCode).json(response)
   }
 

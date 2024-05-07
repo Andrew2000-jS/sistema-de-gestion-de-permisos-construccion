@@ -22,7 +22,7 @@ export class OwnerUpdater {
   ) {}
 
   async run (
-    id: number,
+    id: string,
     data: OwnerPrimitives
   ): Promise<ApplicationResponse<null>> {
     try {

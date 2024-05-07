@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid'
 import { Construction, type ConstructionPrimitives, ConstructioRepository, ConstructionType } from '@src/construction/context/domain'
 import { TYPES } from '@src/construction/context/utils'
 import { type ApplicationResponse } from '@src/shared/modules'
@@ -8,10 +9,11 @@ import { inject, injectable } from 'inversify'
 export class ConstructionCreator {
   constructor (@inject(TYPES.ConstructioRepository) private readonly repository: ConstructioRepository) {}
 
-  async run (construction: ConstructionPrimitives): Promise<ApplicationResponse<Construction>> {
+  async run (construction: ConstructionPrimitives): Promise<ApplicationResponse<ConstructionPrimitives>> {
+    console.log('construction', construction)
     try {
       const newConstruction = Construction.create(
-        new IdValueObject(0),
+        new IdValueObject(uuid()),
         new StringValueObject(construction.address),
         new EnumValueObject(construction.type, [ConstructionType.NEW, ConstructionType.EXPANSION, ConstructionType.PERIMETER_FENCE, ConstructionType.REMODELING]),
         new StringValueObject(construction.constructionArea),
@@ -23,11 +25,13 @@ export class ConstructionCreator {
         new StringValueObject(construction.constructionCompany),
         new PositiveNumberValueObject(construction.landAmount),
         new PositiveNumberValueObject(construction.workAmount),
-        new PositiveNumberValueObject(construction.tax)
+        new PositiveNumberValueObject(construction.tax),
+        new PositiveNumberValueObject(construction.population),
+        new StringValueObject(construction.sanitaryPermit)
       )
 
       await this.repository.save(newConstruction)
-      return { message: 'Construccion creada con exito!', statusCode: 200, data: null }
+      return { message: 'Construccion creada con exito!', statusCode: 200, data: newConstruction.toPrimitives() }
     } catch (error) {
       console.log(error)
       return { message: 'No se ha podido crear la construnccion', statusCode: 500, data: null }

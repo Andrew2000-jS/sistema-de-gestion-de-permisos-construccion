@@ -18,7 +18,7 @@ export class OwnerDeleter {
     private readonly shrdRepository: SharedRepository
   ) {}
 
-  async run (id: number): Promise<ApplicationResponse<null>> {
+  async run (id: string): Promise<ApplicationResponse<null>> {
     try {
       const criteria = new Criteria({ id })
       const isOwnerExist = await this.shrdRepository.match(criteria, 'owner')

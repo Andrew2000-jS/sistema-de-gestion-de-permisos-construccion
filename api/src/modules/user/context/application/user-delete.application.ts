@@ -7,7 +7,7 @@ import { TYPES } from '../utils/constants'
 export class UserDeleter {
   constructor (@inject(TYPES.UserRepository) private readonly repository: UserRepository) {}
 
-  async run (id: number): Promise<ApplicationResponse<User>> {
+  async run (id: string): Promise<ApplicationResponse<User>> {
     try {
       const user = await this.isUserExist(id)
       if (!user) {
@@ -31,7 +31,7 @@ export class UserDeleter {
     }
   }
 
-  async isUserExist (id: number): Promise<Nullable<User>> {
+  async isUserExist (id: string): Promise<Nullable<User>> {
     try {
       const foundUser = await this.repository.findById(id)
       return foundUser

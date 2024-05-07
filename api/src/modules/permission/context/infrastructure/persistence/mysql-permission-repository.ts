@@ -20,10 +20,6 @@ export class MySQLPermissionRepository implements PermissionRepository {
           status: permissionPrimitives.status,
           constructionId: permissionPrimitives.constructionId,
           ownerId: permissionPrimitives.ownerId
-        },
-        include: {
-          construction: true,
-          owner: true
         }
       })
     } catch (error) {

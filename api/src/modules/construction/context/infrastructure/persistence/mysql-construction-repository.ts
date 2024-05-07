@@ -26,6 +26,7 @@ export class MySQLConstructionRepository implements ConstructioRepository {
 
       await prisma.construction.create({
         data: {
+          id: constructionPrimitives.id,
           address: constructionPrimitives.address,
           type: constructionPrimitives.type,
           company: constructionPrimitives.constructionCompany,
@@ -33,7 +34,9 @@ export class MySQLConstructionRepository implements ConstructioRepository {
           floorsNo: constructionPrimitives.floorsNo,
           manager: constructionPrimitives.manager,
           amountId: amount.id,
-          areaId: area.id
+          areaId: area.id,
+          population: constructionPrimitives.population,
+          sanitaryPermit: constructionPrimitives.sanitaryPermit
         }
       })
     } catch (error) {
@@ -44,7 +47,7 @@ export class MySQLConstructionRepository implements ConstructioRepository {
     }
   }
 
-  async delete (id: number): Promise<void> {
+  async delete (id: string): Promise<void> {
     const prisma = PrismaSingleton.getInstance()
     try {
       await prisma.construction.delete({
@@ -58,7 +61,7 @@ export class MySQLConstructionRepository implements ConstructioRepository {
     }
   }
 
-  async update (id: number, data: ConstructionPrimitives): Promise<void> {
+  async update (id: string, data: ConstructionPrimitives): Promise<void> {
     const prisma = PrismaSingleton.getInstance()
 
     try {

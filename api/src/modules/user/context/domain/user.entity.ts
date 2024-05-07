@@ -34,7 +34,7 @@ export class User {
     }
   }
 
-  static fromPrimitives (plainData: { id: number, ci: number, name: string, lastname: string, email: string, password: string }): User {
+  static fromPrimitives (plainData: { id: string, ci: number, name: string, lastname: string, email: string, password: string }): User {
     return new User(
       new IdValueObject(plainData.id),
       new CiValueObject(plainData.ci),
@@ -47,7 +47,7 @@ export class User {
 }
 
 export type UserPrimitives = {
-  id: number
+  id: string
   ci: number
   name: string
   lastname: string

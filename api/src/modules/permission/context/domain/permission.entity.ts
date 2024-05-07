@@ -1,4 +1,5 @@
 import { StringValueObject, IdValueObject, EnumValueObject, PositiveNumberValueObject } from '@src/shared/modules/context/domain/value-object'
+import { PermissionIdValueObject } from './permission-id-value-object'
 
 export const enum Status {
   PENDING = 'Pending',
@@ -10,11 +11,11 @@ export const enum Status {
 }
 
 export class Permission {
-  private readonly id: IdValueObject
+  private readonly id: PermissionIdValueObject
   private readonly date: Date
   private readonly quantity: PositiveNumberValueObject
   private readonly amount: PositiveNumberValueObject
-  private readonly CIV: number
+  private readonly CIV: StringValueObject
   private readonly observation: StringValueObject
   private readonly receiptNo: StringValueObject
   private readonly status: EnumValueObject<Status>
@@ -22,11 +23,11 @@ export class Permission {
   private readonly ownerId: IdValueObject
 
   constructor (
-    id: IdValueObject,
+    id: PermissionIdValueObject,
     date: Date,
     quantity: PositiveNumberValueObject,
     amount: PositiveNumberValueObject,
-    CIV: number,
+    CIV: StringValueObject,
     observation: StringValueObject,
     receiptNo: StringValueObject,
     constructionId: IdValueObject,
@@ -46,11 +47,11 @@ export class Permission {
   }
 
   static create (
-    id: IdValueObject,
+    id: PermissionIdValueObject,
     date: Date,
     quantity: PositiveNumberValueObject,
     amount: PositiveNumberValueObject,
-    CIV: number,
+    CIV: StringValueObject,
     observation: StringValueObject,
     receiptNo: StringValueObject,
     constructionId: IdValueObject,
@@ -77,7 +78,7 @@ export class Permission {
       date: this.date,
       quantity: this.quantity.getValue(),
       amount: this.amount.getValue(),
-      CIV: this.CIV,
+      CIV: this.CIV.getValue(),
       observation: this.observation.getValue(),
       receiptNo: this.receiptNo.getValue(),
       status: this.status.getValue(),
@@ -90,18 +91,18 @@ export class Permission {
     date: Date
     quantity: number
     amount: number
-    CIV: number
+    CIV: string
     observation: string
     receiptNo: string
     status: Status
-    constructionId: number
-    ownerId: number }): Permission {
+    constructionId: string
+    ownerId: string }): Permission {
     return new Permission(
-      new IdValueObject(plainData.id),
+      new PermissionIdValueObject(plainData.id),
       plainData.date,
       new PositiveNumberValueObject(plainData.quantity),
       new PositiveNumberValueObject(plainData.amount),
-      plainData.CIV,
+      new StringValueObject(plainData.CIV),
       new StringValueObject(plainData.observation),
       new StringValueObject(plainData.receiptNo),
       new IdValueObject(plainData.constructionId),
@@ -116,10 +117,10 @@ export type PermissionPrimitives = {
   date: Date
   quantity: number
   amount: number
-  CIV: number
+  CIV: string
   observation: string
   receiptNo: string
   status: Status
-  constructionId: number
-  ownerId: number
+  constructionId: string
+  ownerId: string
 }

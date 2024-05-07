@@ -21,7 +21,7 @@ export class ConstructionUpdater {
   ) {}
 
   async run (params: {
-    id: number
+    id: string
     data: ConstructionPrimitives
   }): Promise<ApplicationResponse<null>> {
     try {
