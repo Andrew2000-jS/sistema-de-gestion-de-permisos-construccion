@@ -1,27 +1,29 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ApiResponse } from "../interfaces";
 
-function useActions(callback) {
-  const [data, setData] = useState(null);
+function useRequest<T>(callback) {
+  const [requestData, setRequestData] = useState<ApiResponse<T>>({
+    data: [],
+    message: null,
+    statusCode: null,
+    loading: true,
+  });
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    (async function () {
+    (async () => {
       try {
-        setLoading(true);
-        callback()
-          .then((res) => setData(res))
-          .catch((err) => setError(err));
-      } catch (err) {
-      } finally {
-        setLoading(false);
+        const res = await callback();
+        setRequestData(res);
+      } catch (err: any) {
+        setError(err);
       }
     })();
   }, [callback]);
 
-  return { data, error, loading };
+  return { requestData, error };
 }
 
-export default useActions;
+export default useRequest;

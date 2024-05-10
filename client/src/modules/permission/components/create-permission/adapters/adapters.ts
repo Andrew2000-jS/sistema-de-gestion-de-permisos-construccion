@@ -1,5 +1,4 @@
 import { Status } from "@/modules/permission/entities";
-import { ConstructionType } from "@/modules/permission/entities/construction.entity";
 import { parse } from "date-fns/parse";
 
 export const permissionCreatorAdapter = (data) => ({
@@ -16,7 +15,7 @@ export const permissionCreatorAdapter = (data) => ({
     population: Number(data.population),
     sanitaryPermit: data.sanitaryPermit,
     address: data.constructionAddress,
-    type: ConstructionType.NEW,
+    type: data.constructionType,
     constructionArea: data.constructionArea,
     landArea: data.landArea,
     destination: data.constructionDestination,

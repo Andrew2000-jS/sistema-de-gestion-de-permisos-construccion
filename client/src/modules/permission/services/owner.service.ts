@@ -21,3 +21,14 @@ export async function createOwner({
     return (error as AxiosError<ApiResponse<Owner>>).response!.data;
   }
 }
+
+export async function getOwners(): Promise<ApiResponse<Owner>> {
+  try {
+    const response: AxiosResponse<ApiResponse<Owner>> = await axios.get(
+      "http://localhost:3001/owner/"
+    );
+    return response.data;
+  } catch (error: any) {
+    return (error as AxiosError<ApiResponse<Owner>>).response!.data;
+  }
+}

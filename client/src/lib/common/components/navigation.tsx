@@ -7,9 +7,15 @@ import {
   NavbarItem,
   Link,
   Button,
+  Avatar,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
 } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { ChevronDownIcon } from "../Icons";
 
 function Navigation() {
   const pathname = usePathname();
@@ -21,6 +27,7 @@ function Navigation() {
 
   return (
     <Navbar
+      maxWidth="full"
       className={`${isHidden ? "hidden" : "flex"} py-5`}
       classNames={{
         item: [
@@ -39,29 +46,50 @@ function Navigation() {
         ],
       }}
     >
-      <NavbarBrand>
+      <NavbarBrand className="pl-20">
         <Link href="/">
           <Image
             src={"/logo-alcaldia-2.png"}
             alt="logo alcaldia"
-            height={200}
-            width={200}
+            height={130}
+            width={130}
           />
         </Link>
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      <NavbarContent className="hidden sm:flex gap-8 pr-20" justify="center">
         <NavbarItem>
           <Link color="foreground" href="/">
-            Alguna opcion
+            Permisos
           </Link>
         </NavbarItem>
-      </NavbarContent>
-      <NavbarContent justify="end">
         <NavbarItem>
-          <Button as={Link} color="danger" href="#" variant="flat">
-            Cerrar Sesion
-          </Button>
+          <Link color="foreground" href="/">
+            Propietarios
+          </Link>
         </NavbarItem>
+        <Dropdown>
+          <NavbarItem className="flex items-center">
+            <DropdownTrigger>
+              <Button
+                startContent={
+                  <Avatar src="https://images.unsplash.com/broken" />
+                }
+                disableRipple
+                className="p-0 bg-transparent data-[hover=true]:bg-transparent"
+                endContent={<ChevronDownIcon />}
+                radius="sm"
+                variant="light"
+              >
+                Jhon Doe
+              </Button>
+            </DropdownTrigger>
+          </NavbarItem>
+          <DropdownMenu>
+            <DropdownItem></DropdownItem>
+
+            <DropdownItem>Cerrar Sesion</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       </NavbarContent>
     </Navbar>
   );
