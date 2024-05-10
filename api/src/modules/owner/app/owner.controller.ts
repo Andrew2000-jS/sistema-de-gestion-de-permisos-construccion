@@ -5,15 +5,23 @@ import { inject } from 'inversify'
 import {
   controller,
   httpDelete,
+  httpGet,
   httpPatch,
   httpPost
 } from 'inversify-express-utils'
-import { OwnerCreator, OwnerDeleter, OwnerUpdater } from '../context/application'
+import {
+  OwnerCreator,
+  OwnerDeleter,
+  OwnerUpdater
+} from '../context/application'
 import { type OwnerPrimitives } from '../context/domain'
+import { OwnernGetter } from '../context/application/owner-getter'
 
 @controller('/owner')
 export class OwnerController {
   constructor (
+    @inject(OwnernGetter)
+    private readonly ownerGetter: OwnernGetter,
     @inject(OwnerCreator)
     private readonly ownerCreator: OwnerCreator,
     @inject(OwnerDeleter)
@@ -23,6 +31,15 @@ export class OwnerController {
     @inject(Matcher)
     private readonly ownerMatcher: Matcher
   ) {}
+
+  @httpGet('/')
+  async getOwners (
+    _req: Request,
+    res: Response
+  ): Promise<any> {
+    const response = await this.ownerGetter.run()
+    return res.status(response.statusCode).json(response)
+  }
 
   @httpPost('/create')
   async createOwner (
@@ -34,10 +51,7 @@ export class OwnerController {
   }
 
   @httpDelete('/delete/:id')
-  async deleteOwner (
-    req: Request,
-    res: Response
-  ): Promise<any> {
+  async deleteOwner (req: Request, res: Response): Promise<any> {
     const { id } = req.params
     const response = await this.ownerDeleter.run(id)
     return res.status(response.statusCode).json(response)
@@ -55,10 +69,7 @@ export class OwnerController {
   }
 
   @httpPost('/filter')
-  async matchOwner (
-    req: RequestType<Criteria>,
-    res: Response
-  ): Promise<any> {
+  async matchOwner (req: RequestType<Criteria>, res: Response): Promise<any> {
     const response = await this.ownerMatcher.run(req.body, 'owner')
     return res.status(response.statusCode).json(response)
   }
