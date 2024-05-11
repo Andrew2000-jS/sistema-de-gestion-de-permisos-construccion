@@ -1,8 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Card, CardBody, CardHeader } from "@nextui-org/react";
-import { useForm } from "react-hook-form";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Textarea,
+} from "@nextui-org/react";
+import { Controller, useForm, useFormState } from "react-hook-form";
 import OwnerForm from "./owner-form";
 import ConstructionForm from "./construction-form";
 import ConstructionFormArea from "./construction-form-area";
@@ -12,20 +18,50 @@ import {
   createOwner,
   createPermission,
 } from "../../services";
+import { AlertMessage, AnimatedMessage } from "@/lib";
 
 function CreatePermission() {
-  const { control, handleSubmit } = useForm();
+  const [formData, setFormData] = useState<any>({
+    message: null,
+    loading: false,
+    status: null,
+    disabled: false,
+  });
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm({
+    mode: "onChange",
+  });
+
   const [step, setStep] = useState(1);
 
   const onSubmit = async (data) => {
     const permissionInfo = permissionCreatorAdapter(data);
     const construction = await createConstruction(permissionInfo.construction);
-    const owner = await createOwner(permissionInfo.owner);
-    await createPermission({
+    const owner =
+      data.ownerId ?? (await createOwner(permissionInfo.owner)).data.id;
+
+    const permission = await createPermission({
       ...permissionInfo.permission,
       constructionId: construction.data.id,
-      ownerId: owner.data.id,
+      ownerId: owner,
     });
+
+    setFormData((prev) => ({
+      ...prev,
+      status: permission.statusCode,
+      message: permission.message,
+    }));
+
+    if (permission.statusCode === 200) {
+      setFormData((prev) => ({
+        ...prev,
+        disabled: true,
+      }));
+      setTimeout(() => window.location.replace("/permissions"), 3000);
+    }
   };
 
   const nextStep = () => {
@@ -37,25 +73,66 @@ function CreatePermission() {
   };
 
   return (
-    <Card className="p-5 w-[30em] h-full">
-      <CardHeader className="text-xl bold">Crear Permiso</CardHeader>
-      <CardBody>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {step === 1 && <OwnerForm control={control} />}
-          {step === 2 && <ConstructionForm control={control} />}
-          {step === 3 && <ConstructionFormArea control={control} />}
-          <div className="flex justify-between">
-            {step != 1 && <Button onClick={prevStep}>Anterior</Button>}
-            {step < 3 && <Button onClick={nextStep}>Siguiente</Button>}
-            {step === 3 && (
-              <Button type="submit" color="primary">
-                Crear permiso
-              </Button>
+    <div className="relative">
+      <Card className="p-5 w-[30em] h-full">
+        <CardHeader className="text-xl bold">Crear Permiso</CardHeader>
+        <CardBody>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {step === 1 && <OwnerForm control={control} />}
+            {step === 2 && <ConstructionForm control={control} />}
+            {step === 3 && <ConstructionFormArea control={control} />}
+            {step === 4 && (
+              <div>
+                <h3 className="pb-5">Datos de la construccion</h3>
+                <Controller
+                  name="observation"
+                  control={control}
+                  render={({ field }) => (
+                    <Textarea
+                      label="Observación"
+                      placeholder="Ingrese aquí alguna observación relacionada con el permiso"
+                      description="Este campo es opcional"
+                      className="w-full pb-5"
+                      {...field}
+                    />
+                  )}
+                />
+              </div>
             )}
-          </div>
-        </form>
-      </CardBody>
-    </Card>
+            <div className="flex justify-between">
+              {step != 1 && <Button onClick={prevStep}>Anterior</Button>}
+              {step < 4 && <Button onClick={nextStep}>Siguiente</Button>}
+              {step === 4 && (
+                <Button
+                  type="submit"
+                  color="primary"
+                  isDisabled={formData.disabled || !isValid}
+                >
+                  Crear permiso
+                </Button>
+              )}
+            </div>
+          </form>
+        </CardBody>
+      </Card>
+      <AnimatedMessage
+        position={["absolute", "top-2", "right-0"]}
+        isVisible={formData.message}
+      >
+        <AlertMessage
+          description={
+            formData.status === 200
+              ? "Permiso creado con exito!"
+              : "Algo ha salido mal"
+          }
+          styles={
+            formData.status !== 200
+              ? ["text-red-800", "bg-red-50"]
+              : ["text-green-800", "bg-green-50"]
+          }
+        />
+      </AnimatedMessage>
+    </div>
   );
 }
 

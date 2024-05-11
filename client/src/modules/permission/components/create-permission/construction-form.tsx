@@ -13,6 +13,7 @@ function ConstructionForm({ control }) {
         <Controller
           name="population"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired
@@ -29,6 +30,7 @@ function ConstructionForm({ control }) {
         <Controller
           name="sanitaryPermit"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired
@@ -46,6 +48,7 @@ function ConstructionForm({ control }) {
         <Controller
           name="constructionAddress"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired
@@ -61,6 +64,7 @@ function ConstructionForm({ control }) {
         <Controller
           name="constructionDestination"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired
@@ -78,6 +82,7 @@ function ConstructionForm({ control }) {
         <Controller
           name="floorsNo"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired
@@ -93,6 +98,7 @@ function ConstructionForm({ control }) {
         <Controller
           name="constructionType"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Select
               isRequired
@@ -114,6 +120,7 @@ function ConstructionForm({ control }) {
         <Controller
           name="calculatingEngineer"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired
@@ -129,6 +136,7 @@ function ConstructionForm({ control }) {
         <Controller
           name="constructionConstructor"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired
@@ -146,6 +154,7 @@ function ConstructionForm({ control }) {
         <Controller
           name="date"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired

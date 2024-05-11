@@ -10,6 +10,7 @@ import { MySQLConstructionRepository } from '@src/construction/context/infrastru
 import { TYPES as ConstructionTypes } from '@src/construction/context/utils'
 import { OwnerController } from '@src/owner/app'
 import { OwnerCreator, OwnerDeleter, OwnerUpdater } from '@src/owner/context/application'
+import { OwnernGetter } from '@src/owner/context/application/owner-getter'
 import { type OwnerRepository } from '@src/owner/context/domain'
 import { MySQLOwnernRepository } from '@src/owner/context/infrastructure'
 import { TYPES as OwnerTypes } from '@src/owner/context/utils'
@@ -54,6 +55,7 @@ container.bind<OwnerRepository>(OwnerTypes.OwnerRepository).to(MySQLOwnernReposi
 container.bind<OwnerCreator>(OwnerCreator).toSelf()
 container.bind<OwnerDeleter>(OwnerDeleter).toSelf()
 container.bind<OwnerUpdater>(OwnerUpdater).toSelf()
+container.bind<OwnernGetter>(OwnernGetter).toSelf()
 container.bind<OwnerController>(OwnerController).toSelf()
 
 // Shared dependency injection

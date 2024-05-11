@@ -32,7 +32,6 @@ export class PermissionCreator {
   async run (
     data: PermissionPrimitives
   ): Promise<ApplicationResponse<PermissionPrimitives>> {
-    console.log('permission', data)
     try {
       const criteria = new Criteria({ receiptNo: data.receiptNo })
       const isPermissionExist = await this.shrdRepository.match(criteria, 'permission')

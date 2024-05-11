@@ -1,31 +1,27 @@
 "use client";
 
 import React, { useCallback, useContext, useMemo } from "react";
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Pagination,
-  Spinner,
-} from "@nextui-org/react";
-import { ApiResponse } from "@/lib";
+import { ApiResponse, CustomeTable } from "@/lib";
 import { Permission } from "../../entities/permission.entity";
-import { columns, filterColumns } from "./data";
+import {
+  columns,
+  filterColumns,
+  PERMISSION_COLUMNS,
+  statusOptions,
+} from "./data";
 import { format } from "date-fns";
 import { FilterCtx } from "../../context";
 import { ActionsDropdown } from "./dropdown";
 import StatusChip from "./status-chip";
-import { usePagination } from "../../hook";
 import TopContent from "./top-content";
+import { usePagination } from "@/lib/common/hooks";
 
 export default function PermissionTable({
   data,
   loading,
 }: ApiResponse<Permission[]>) {
   const { filterData } = useContext(FilterCtx);
+
   const {
     headerColumns,
     loadingState,
@@ -41,7 +37,14 @@ export default function PermissionTable({
     filterKey,
     page,
     setPage,
-  } = usePagination({ data, loading, filterData });
+  } = usePagination<Permission>({
+    data,
+    loading,
+    filterData,
+    columns,
+    statusOptions,
+    TYPE_COLUMNS: PERMISSION_COLUMNS,
+  });
 
   const topContent = useMemo(
     () => (
@@ -88,50 +91,18 @@ export default function PermissionTable({
   );
 
   return (
-    <>
-      <Table
-        aria-label="Permission table"
-        topContent={topContent}
-        onSortChange={setSortDescriptor}
-        bottomContent={
-          pages > 0 ? (
-            <div className="flex w-full justify-center">
-              <Pagination
-                isCompact
-                showControls
-                showShadow
-                color="primary"
-                page={page}
-                total={pages}
-                onChange={(page) => setPage(page)}
-              />
-            </div>
-          ) : null
-        }
-        {...tableData}
-      >
-        <TableHeader columns={headerColumns}>
-          {columns.map(({ name, uid, sortable }) => (
-            <TableColumn key={uid} allowsSorting={sortable}>
-              {name}
-            </TableColumn>
-          ))}
-        </TableHeader>
-        <TableBody
-          emptyContent={"No se encontraron coincidencias"}
-          items={tableData}
-          loadingContent={<Spinner />}
-          loadingState={loadingState}
-        >
-          {(item: Permission) => (
-            <TableRow key={data?.id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </>
+    <CustomeTable
+      columns={columns}
+      data={data}
+      headerColumns={headerColumns}
+      loadingState={loadingState}
+      page={page}
+      pages={pages}
+      renderCell={renderCell}
+      setPage={setPage}
+      setSortDescriptor={setSortDescriptor}
+      tableData={tableData}
+      topContent={topContent}
+    />
   );
 }
