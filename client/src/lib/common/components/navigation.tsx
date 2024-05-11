@@ -85,8 +85,7 @@ function Navigation() {
             </DropdownTrigger>
           </NavbarItem>
           <DropdownMenu>
-            <DropdownItem></DropdownItem>
-
+            <DropdownItem>Configuracion</DropdownItem>
             <DropdownItem>Cerrar Sesion</DropdownItem>
           </DropdownMenu>
         </Dropdown>

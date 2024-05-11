@@ -17,8 +17,9 @@ function OwnerForm({ control }) {
       {isOwnerExist ? (
         <div className="pb-5">
           <Controller
-            name="constructionType"
+            name="ownerId"
             control={control}
+            rules={{ required: true }}
             render={({ field }) => (
               <Select
                 isRequired
@@ -28,7 +29,7 @@ function OwnerForm({ control }) {
                 {...field}
               >
                 {requestData.data.map((item) => (
-                  <SelectItem key={item.ci} value={item.name}>
+                  <SelectItem key={item.id} value={item.name}>
                     {item.name}
                   </SelectItem>
                 ))}
@@ -42,6 +43,7 @@ function OwnerForm({ control }) {
             <Controller
               name="ownerCi"
               control={control}
+              rules={{ required: true }}
               render={({ field }) => (
                 <Input
                   isRequired
@@ -60,6 +62,7 @@ function OwnerForm({ control }) {
             <Controller
               name="ownerName"
               control={control}
+              rules={{ required: true }}
               render={({ field }) => (
                 <Input
                   isRequired
@@ -78,6 +81,7 @@ function OwnerForm({ control }) {
             <Controller
               name="ownerAddress"
               control={control}
+              rules={{ required: true }}
               render={({ field }) => (
                 <Input
                   isRequired

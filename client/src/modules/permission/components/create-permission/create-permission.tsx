@@ -1,8 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Card, CardBody, CardHeader } from "@nextui-org/react";
-import { useForm } from "react-hook-form";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Textarea,
+} from "@nextui-org/react";
+import { Controller, useForm, useFormState } from "react-hook-form";
 import OwnerForm from "./owner-form";
 import ConstructionForm from "./construction-form";
 import ConstructionFormArea from "./construction-form-area";
@@ -21,17 +27,26 @@ function CreatePermission() {
     status: null,
     disabled: false,
   });
-  const { control, handleSubmit } = useForm();
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm({
+    mode: "onChange",
+  });
+
   const [step, setStep] = useState(1);
 
   const onSubmit = async (data) => {
     const permissionInfo = permissionCreatorAdapter(data);
     const construction = await createConstruction(permissionInfo.construction);
-    const owner = await createOwner(permissionInfo.owner);
+    const owner =
+      data.ownerId ?? (await createOwner(permissionInfo.owner)).data.id;
+
     const permission = await createPermission({
       ...permissionInfo.permission,
       constructionId: construction.data.id,
-      ownerId: owner.data.id,
+      ownerId: owner,
     });
 
     setFormData((prev) => ({
@@ -66,14 +81,32 @@ function CreatePermission() {
             {step === 1 && <OwnerForm control={control} />}
             {step === 2 && <ConstructionForm control={control} />}
             {step === 3 && <ConstructionFormArea control={control} />}
+            {step === 4 && (
+              <div>
+                <h3 className="pb-5">Datos de la construccion</h3>
+                <Controller
+                  name="observation"
+                  control={control}
+                  render={({ field }) => (
+                    <Textarea
+                      label="Observación"
+                      placeholder="Ingrese aquí alguna observación relacionada con el permiso"
+                      description="Este campo es opcional"
+                      className="w-full pb-5"
+                      {...field}
+                    />
+                  )}
+                />
+              </div>
+            )}
             <div className="flex justify-between">
               {step != 1 && <Button onClick={prevStep}>Anterior</Button>}
-              {step < 3 && <Button onClick={nextStep}>Siguiente</Button>}
-              {step === 3 && (
+              {step < 4 && <Button onClick={nextStep}>Siguiente</Button>}
+              {step === 4 && (
                 <Button
                   type="submit"
                   color="primary"
-                  isDisabled={formData.disabled}
+                  isDisabled={formData.disabled || !isValid}
                 >
                   Crear permiso
                 </Button>

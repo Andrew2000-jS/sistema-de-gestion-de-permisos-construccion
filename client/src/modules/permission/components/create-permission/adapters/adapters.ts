@@ -7,7 +7,7 @@ export const permissionCreatorAdapter = (data) => ({
     quantity: 1,
     amount: Number(data.landAmount) + Number(data.workAmount) + Number(data.tax),
     CIV: data.CIV,
-    observation: "",
+    observation: data.observation ?? "",
     receiptNo: data.receiptNo,
     status: Status.PENDING,
   },

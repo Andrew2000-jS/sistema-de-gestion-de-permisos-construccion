@@ -12,6 +12,7 @@ function ConstructionFormArea({ control }) {
         <Controller
           name="constructionArea"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired
@@ -20,6 +21,7 @@ function ConstructionFormArea({ control }) {
               className="w-full"
               variant="bordered"
               minLength={1}
+              description={"En m²2"}
               validate={positiveNumberRegex}
               {...field}
             />
@@ -28,6 +30,7 @@ function ConstructionFormArea({ control }) {
         <Controller
           name="landArea"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired
@@ -35,6 +38,7 @@ function ConstructionFormArea({ control }) {
               label="Area del terreno"
               className="w-full"
               validate={positiveNumberRegex}
+              description={"En m²2"}
               variant="bordered"
               minLength={1}
               {...field}
@@ -46,6 +50,7 @@ function ConstructionFormArea({ control }) {
         <Controller
           name="CIV"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired
@@ -61,6 +66,7 @@ function ConstructionFormArea({ control }) {
         <Controller
           name="constructionCompany"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired
@@ -78,6 +84,7 @@ function ConstructionFormArea({ control }) {
         <Controller
           name="workAmount"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired
@@ -93,6 +100,7 @@ function ConstructionFormArea({ control }) {
         <Controller
           name="landAmount"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired
@@ -110,6 +118,7 @@ function ConstructionFormArea({ control }) {
         <Controller
           name="tax"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired
@@ -125,6 +134,7 @@ function ConstructionFormArea({ control }) {
         <Controller
           name="engineer"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired
@@ -142,6 +152,7 @@ function ConstructionFormArea({ control }) {
         <Controller
           name="receiptNo"
           control={control}
+          rules={{ required: true }}
           render={({ field }) => (
             <Input
               isRequired
