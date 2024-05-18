@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { ApiResponse } from "../interfaces";
 
-function useRequest<T>(callback) {
+function useRequest<T>(callback, params?) {
   const [requestData, setRequestData] = useState<ApiResponse<T>>({
     data: [],
     message: null,
@@ -15,7 +15,7 @@ function useRequest<T>(callback) {
   useEffect(() => {
     (async () => {
       try {
-        const res = await callback();
+        const res = params ? await callback(params) : await callback();
         setRequestData(res);
       } catch (err: any) {
         setError(err);

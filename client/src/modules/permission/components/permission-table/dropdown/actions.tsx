@@ -10,8 +10,6 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { Permission } from "@/modules/permission/entities/permission.entity";
-import ViewAction from "./actions/view-action";
-import EditAction from "./actions/edit-action";
 import PrintAction from "./actions/print-action";
 import DeleteDialog from "./actions/delete-dialog";
 
@@ -31,10 +29,13 @@ function Actions({ permission }: ActionsProps) {
         </DropdownTrigger>
         <DropdownMenu>
           <DropdownItem>
-            <ViewAction permission={permission} />
-          </DropdownItem>
-          <DropdownItem>
-            <EditAction permission={permission} />
+            <span
+              onClick={() =>
+                window.location.replace(`/permissions/${permission.id}`)
+              }
+            >
+              Visualizar
+            </span>
           </DropdownItem>
           <DropdownItem>
             <span onClick={onOpenChange}>Eliminar</span>
