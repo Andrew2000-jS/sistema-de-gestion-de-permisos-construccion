@@ -35,6 +35,7 @@ export class MySQLConstructionRepository implements ConstructioRepository {
           manager: constructionPrimitives.manager,
           amountId: amount.id,
           areaId: area.id,
+          destination: constructionPrimitives.destination,
           population: constructionPrimitives.population,
           sanitaryPermit: constructionPrimitives.sanitaryPermit
         }

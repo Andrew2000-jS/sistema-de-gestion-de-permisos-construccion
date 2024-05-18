@@ -36,13 +36,14 @@ model Permission {
 }
 
 model Construction {
-  id       String @unique
-  address  String
-  type     String
-  floorsNo Int
-  manager  String
-  engineer String
-  company  String
+  id          String @unique
+  address     String
+  type        String
+  floorsNo    Int
+  manager     String
+  engineer    String
+  company     String
+  destination String
 
   areaId         Int         @unique
   area           Area        @relation(fields: [areaId], references: [id])
