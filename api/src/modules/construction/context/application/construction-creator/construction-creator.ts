@@ -10,14 +10,13 @@ export class ConstructionCreator {
   constructor (@inject(TYPES.ConstructioRepository) private readonly repository: ConstructioRepository) {}
 
   async run (construction: ConstructionPrimitives): Promise<ApplicationResponse<ConstructionPrimitives>> {
-    console.log('construction', construction)
     try {
       const newConstruction = Construction.create(
         new IdValueObject(uuid()),
         new StringValueObject(construction.address),
         new EnumValueObject(construction.type, [ConstructionType.NEW, ConstructionType.EXPANSION, ConstructionType.PERIMETER_FENCE, ConstructionType.REMODELING]),
-        new StringValueObject(construction.constructionArea),
-        new StringValueObject(construction.landArea),
+        new PositiveNumberValueObject(construction.constructionArea),
+        new PositiveNumberValueObject(construction.landArea),
         new StringValueObject(construction.destination),
         new PositiveNumberValueObject(construction.floorsNo),
         new NameValueObject(construction.manager),

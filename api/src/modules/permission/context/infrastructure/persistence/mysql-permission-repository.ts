@@ -55,6 +55,7 @@ export class MySQLPermissionRepository implements PermissionRepository {
       await prisma.permission.update({
         where: { id },
         data: {
+          receiptNo: data.receiptNo,
           amount: data.amount,
           civ: data.CIV,
           date: data.date,

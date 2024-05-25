@@ -17,8 +17,8 @@ export class Construction {
   private readonly id: IdValueObject
   private readonly address: StringValueObject
   private readonly type: EnumValueObject<ConstructionType>
-  private readonly constructionArea: StringValueObject
-  private readonly landArea: StringValueObject
+  private readonly constructionArea: PositiveNumberValueObject
+  private readonly landArea: PositiveNumberValueObject
   private readonly destination: StringValueObject
   private readonly floorsNo: PositiveNumberValueObject
   private readonly manager: NameValueObject
@@ -34,8 +34,8 @@ export class Construction {
     id: IdValueObject,
     address: StringValueObject,
     type: EnumValueObject<ConstructionType>,
-    constructionArea: StringValueObject,
-    landArea: StringValueObject,
+    constructionArea: PositiveNumberValueObject,
+    landArea: PositiveNumberValueObject,
     destination: StringValueObject,
     floorsNo: PositiveNumberValueObject,
     manager: NameValueObject,
@@ -68,8 +68,8 @@ export class Construction {
     id: IdValueObject,
     address: StringValueObject,
     type: EnumValueObject<ConstructionType>,
-    constructionArea: StringValueObject,
-    landArea: StringValueObject,
+    constructionArea: PositiveNumberValueObject,
+    landArea: PositiveNumberValueObject,
     destination: StringValueObject,
     floorsNo: PositiveNumberValueObject,
     manager: NameValueObject,
@@ -124,8 +124,8 @@ export class Construction {
     id: string
     address: string
     type: ConstructionType
-    constructionArea: string
-    landArea: string
+    constructionArea: number
+    landArea: number
     destination: string
     floorsNo: number
     manager: string
@@ -146,8 +146,8 @@ export class Construction {
         ConstructionType.PERIMETER_FENCE,
         ConstructionType.REMODELING
       ]),
-      new StringValueObject(plainData.constructionArea),
-      new StringValueObject(plainData.landArea),
+      new PositiveNumberValueObject(plainData.constructionArea),
+      new PositiveNumberValueObject(plainData.landArea),
       new StringValueObject(plainData.destination),
       new PositiveNumberValueObject(plainData.floorsNo),
       new NameValueObject(plainData.manager),
@@ -166,8 +166,8 @@ export type ConstructionPrimitives = {
   id: string
   address: string
   type: ConstructionType
-  constructionArea: string
-  landArea: string
+  constructionArea: number
+  landArea: number
   destination: string
   floorsNo: number
   manager: string
