@@ -8,25 +8,22 @@ import {
   CardHeader,
   Textarea,
 } from "@nextui-org/react";
-import { Controller, useForm, useFormState } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import OwnerForm from "./owner-form";
 import ConstructionForm from "./construction-form";
 import ConstructionFormArea from "./construction-form-area";
-import { permissionCreatorAdapter } from "./adapters";
+import { permissionCreatorAdapter } from "../../adapters";
 import {
   createConstruction,
   createOwner,
   createPermission,
+  deleteConstruction,
+  deleteOwner,
 } from "../../services";
 import { AlertMessage, AnimatedMessage } from "@/lib";
+import { useSubmit } from "@/lib/common/hooks";
 
 function CreatePermission() {
-  const [formData, setFormData] = useState<any>({
-    message: null,
-    loading: false,
-    status: null,
-    disabled: false,
-  });
   const {
     control,
     handleSubmit,
@@ -35,34 +32,33 @@ function CreatePermission() {
     mode: "onChange",
   });
 
-  const [step, setStep] = useState(1);
+  const { formState, isVisible, onSubmit } = useSubmit({
+    callback: async (data) => {
+      const permissionInfo = permissionCreatorAdapter(data);
+      const construction = await createConstruction(
+        permissionInfo.construction
+      );
+      const owner =
+        data.ownerId ?? (await createOwner(permissionInfo.owner)).data.id;
 
-  const onSubmit = async (data) => {
-    const permissionInfo = permissionCreatorAdapter(data);
-    const construction = await createConstruction(permissionInfo.construction);
-    const owner =
-      data.ownerId ?? (await createOwner(permissionInfo.owner)).data.id;
+      const permission = await createPermission({
+        ...permissionInfo.permission,
+        constructionId: construction.data.id,
+        ownerId: owner,
+      });
 
-    const permission = await createPermission({
-      ...permissionInfo.permission,
-      constructionId: construction.data.id,
-      ownerId: owner,
-    });
+      if (permission.statusCode !== 200) {
+        await deleteOwner(owner);
+        await deleteConstruction(construction.data.id);
+      }
 
-    setFormData((prev) => ({
-      ...prev,
-      status: permission.statusCode,
-      message: permission.message,
-    }));
-
-    if (permission.statusCode === 200) {
-      setFormData((prev) => ({
-        ...prev,
-        disabled: true,
-      }));
       setTimeout(() => window.location.replace("/permissions"), 3000);
-    }
-  };
+
+      return permission;
+    },
+  });
+
+  const [step, setStep] = useState(1);
 
   const nextStep = () => {
     setStep(step + 1);
@@ -106,7 +102,7 @@ function CreatePermission() {
                 <Button
                   type="submit"
                   color="primary"
-                  isDisabled={formData.disabled || !isValid}
+                  isDisabled={formState.response.statusCode === 200 || !isValid}
                 >
                   Crear permiso
                 </Button>
@@ -117,16 +113,16 @@ function CreatePermission() {
       </Card>
       <AnimatedMessage
         position={["absolute", "top-2", "right-0"]}
-        isVisible={formData.message}
+        isVisible={isVisible}
       >
         <AlertMessage
           description={
-            formData.status === 200
+            formState.response.statusCode === 200
               ? "Permiso creado con exito!"
               : "Algo ha salido mal"
           }
           styles={
-            formData.status !== 200
+            formState.response.statusCode !== 200
               ? ["text-red-800", "bg-red-50"]
               : ["text-green-800", "bg-green-50"]
           }

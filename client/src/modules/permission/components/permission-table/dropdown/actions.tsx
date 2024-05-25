@@ -30,11 +30,12 @@ function Actions({ permission }: ActionsProps) {
         <DropdownMenu>
           <DropdownItem>
             <span
+              className="w-full"
               onClick={() =>
                 window.location.replace(`/permissions/${permission.id}`)
               }
             >
-              Visualizar
+              Ver
             </span>
           </DropdownItem>
           <DropdownItem>

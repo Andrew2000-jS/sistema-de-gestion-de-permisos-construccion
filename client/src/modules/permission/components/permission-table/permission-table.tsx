@@ -83,6 +83,8 @@ export default function PermissionTable({
         return format(cellValue.toString(), "dd/MM/yyyy");
       } else if (columnKey === "cedula") {
         return permission.owner.ci.toString();
+      } else if (columnKey === "amount") {
+        return permission.amount.toFixed(2);
       } else {
         return cellValue?.toString();
       }

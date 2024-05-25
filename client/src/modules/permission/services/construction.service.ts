@@ -16,7 +16,7 @@ export async function createConstruction({
   sanitaryPermit,
   tax,
   type,
-  workAmount
+  workAmount,
 }: Omit<Construction, "id">): Promise<ApiResponse<Construction>> {
   try {
     const response: AxiosResponse<ApiResponse<Construction>> = await axios.post(
@@ -35,12 +35,40 @@ export async function createConstruction({
         sanitaryPermit,
         tax,
         type,
-        workAmount
+        workAmount,
       }
     );
     return response.data;
   } catch (error: any) {
-    console.log(error)
+    console.log(error);
+    return (error as AxiosError<ApiResponse<Construction>>).response!.data;
+  }
+}
+
+export async function updateConstruction(
+  id: string,
+  updatedData: Omit<Construction, "id">
+): Promise<ApiResponse<Construction>> {
+  try {
+    console.log(updatedData)
+    const response: AxiosResponse<ApiResponse<Construction>> =
+      await axios.patch(`http://localhost:3001/constructions/update/${id}`, {
+        data: updatedData,
+      });
+    return response.data;
+  } catch (error: any) {
+    console.log(error);
+    return (error as AxiosError<ApiResponse<Construction>>).response!.data;
+  }
+}
+
+export async function deleteConstruction(id: string): Promise<ApiResponse<Construction>> {
+  try {
+    const response: AxiosResponse<ApiResponse<Construction>> = await axios.delete(
+      `http://localhost:3001/constructions/delete/${id}`
+    );
+    return response.data;
+  } catch (error: any) {
     return (error as AxiosError<ApiResponse<Construction>>).response!.data;
   }
 }

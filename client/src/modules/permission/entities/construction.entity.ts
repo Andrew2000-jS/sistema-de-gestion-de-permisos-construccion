@@ -9,8 +9,8 @@ export type Construction = {
   id: string;
   address: string;
   type: ConstructionType;
-  constructionArea: string;
-  landArea: string;
+  constructionArea: number;
+  landArea: number;
   destination: string;
   floorsNo: number;
   manager: string;

@@ -58,12 +58,18 @@ function Navigation() {
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-8 pr-20" justify="center">
         <NavbarItem>
-          <Link color="foreground" href="/">
+          <Link
+            color={`${pathname === "/permissions" ? "primary" : "foreground"}`}
+            href="/permissions"
+          >
             Permisos
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="/">
+          <Link
+            color={`${pathname === "/owners" ? "primary" : "foreground"}`}
+            href="/owners"
+          >
             Propietarios
           </Link>
         </NavbarItem>
@@ -71,9 +77,7 @@ function Navigation() {
           <NavbarItem className="flex items-center">
             <DropdownTrigger>
               <Button
-                startContent={
-                  <Avatar src="https://images.unsplash.com/broken" />
-                }
+                startContent={<Avatar src="/avatar-image.png" size="sm" />}
                 disableRipple
                 className="p-0 bg-transparent data-[hover=true]:bg-transparent"
                 endContent={<ChevronDownIcon />}

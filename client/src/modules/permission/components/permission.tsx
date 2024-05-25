@@ -2,9 +2,14 @@
 
 import Link from "next/link";
 import { format } from "date-fns";
-import { useRequest } from "@/lib/common/hooks";
+import { useRequest, useSubmit } from "@/lib/common/hooks";
 import { useParams } from "next/navigation";
-import { filterPermissions, getOwners } from "../services";
+import {
+  filterPermissions,
+  getOwners,
+  updateConstruction,
+  updatePermissions,
+} from "../services";
 import { Permission as IPermission } from "../entities";
 import {
   Card,
@@ -22,25 +27,36 @@ import { permissionStatusObj } from "./data";
 import { Owner } from "../entities/owner.entity";
 import { Controller, useForm } from "react-hook-form";
 import { constructionTypeColumns } from "./create-permission/data";
+import { permissionCreatorAdapter } from "../adapters";
+import { AlertMessage, AnimatedMessage } from "@/lib";
 
 function Permission() {
   const { id } = useParams();
   const { requestData } = useRequest<IPermission>(filterPermissions, {
     id: Number(id),
   });
+  const initialValues = requestData.data[0];
+
   const { requestData: ownerRequestData } = useRequest<Owner[]>(getOwners);
   const { control, handleSubmit } = useForm({
     defaultValues: requestData.data,
   });
 
-  const initialValues = requestData.data[0];
+  const { formState, onSubmit, isVisible } = useSubmit({
+    callback: async (data) => {
+      const { construction, permission } = permissionCreatorAdapter(data);
 
-  const onSubmit = (data) => {
-    console.log(data);
-  };
+      await updateConstruction(initialValues.constructionId, construction);
+
+      return await updatePermissions(initialValues.id, {
+        ...permission,
+        ownerId: data.ownerId,
+      });
+    },
+  });
 
   return (
-    <Card shadow="sm" className="w-[30em] h-[520px]">
+    <Card shadow="sm" className="w-[30em] h-[450px]">
       {requestData.loading ? (
         <div className="h-full w-full flex flex-col items-center justify-center">
           <Spinner size="md" />
@@ -50,7 +66,24 @@ function Permission() {
           <CardHeader>
             <h1>Permiso de construcción</h1>
           </CardHeader>
-          <CardBody className="max-h-[400px] overflow-y-auto">
+          <AnimatedMessage
+            position={["absolute", "top-2", "right-0"]}
+            isVisible={isVisible}
+          >
+            <AlertMessage
+              description={
+                formState.response.statusCode === 200
+                  ? "Permiso actualizado con exito!"
+                  : "Algo ha salido mal"
+              }
+              styles={
+                formState.response.statusCode !== 200
+                  ? ["text-red-800", "bg-red-50"]
+                  : ["text-green-800", "bg-green-50"]
+              }
+            />
+          </AnimatedMessage>
+          <CardBody className="max-h-[350px] overflow-y-auto">
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-2 pb-5">
                 <Controller
@@ -120,7 +153,7 @@ function Permission() {
               </div>
               <div className="col-span-2 pb-5">
                 <Controller
-                  name="address"
+                  name="constructionAddress"
                   control={control}
                   defaultValue={initialValues.construction.address}
                   render={({ field }) => (
@@ -130,7 +163,7 @@ function Permission() {
               </div>
               <div className="col-span-2 pb-5">
                 <Controller
-                  name="destination"
+                  name="constructionDestination"
                   control={control}
                   defaultValue={initialValues.construction.destination}
                   render={({ field }) => (
@@ -140,7 +173,7 @@ function Permission() {
               </div>
               <div className="col-span-1 pb-5">
                 <Controller
-                  name="manager"
+                  name="constructionConstructor"
                   control={control}
                   defaultValue={initialValues.construction.manager}
                   render={({ field }) => (
@@ -150,21 +183,51 @@ function Permission() {
               </div>
               <div className="col-span-1 pb-5">
                 <Controller
-                  name="engineer"
+                  name="calculatingEngineer"
                   control={control}
                   defaultValue={initialValues.construction.engineer}
                   render={({ field }) => (
-                    <Input description="Ingeniero responsable" {...field} />
+                    <Input description="Ingeniero calculista" {...field} />
                   )}
                 />
               </div>
               <div className="col-span-1 pb-5">
                 <Controller
-                  name="civ"
+                  name="CIV"
                   control={control}
                   defaultValue={initialValues.civ}
                   render={({ field }) => (
                     <Input description="C.I.V" {...field} />
+                  )}
+                />
+              </div>
+              <div className="col-span-1 pb-5">
+                <Controller
+                  name="constructionArea"
+                  control={control}
+                  defaultValue={
+                    initialValues.construction.area.constructionArea
+                  }
+                  render={({ field }) => (
+                    <Input
+                      type="number"
+                      description="Area de construcción (m²2)"
+                      {...field}
+                    />
+                  )}
+                />
+              </div>
+              <div className="col-span-1 pb-5">
+                <Controller
+                  name="landArea"
+                  control={control}
+                  defaultValue={initialValues.construction.area.landArea}
+                  render={({ field }) => (
+                    <Input
+                      description="Area del terreno (m²2)"
+                      type="number"
+                      {...field}
+                    />
                   )}
                 />
               </div>
@@ -194,7 +257,11 @@ function Permission() {
                   control={control}
                   defaultValue={initialValues.construction.amount.landAmount}
                   render={({ field }) => (
-                    <Input description="Costo del terreno" {...field} />
+                    <Input
+                      description="Costo del terreno"
+                      type="number"
+                      {...field}
+                    />
                   )}
                 />
               </div>
@@ -204,7 +271,11 @@ function Permission() {
                   control={control}
                   defaultValue={initialValues.construction.amount.workAmount}
                   render={({ field }) => (
-                    <Input description="Costo del trabajo" {...field} />
+                    <Input
+                      description="Costo del trabajo"
+                      type="number"
+                      {...field}
+                    />
                   )}
                 />
               </div>
@@ -220,7 +291,7 @@ function Permission() {
               </div>
               <div className="col-span-1 pb-5">
                 <Controller
-                  name="company"
+                  name="constructionCompany"
                   control={control}
                   defaultValue={initialValues.construction.company}
                   render={({ field }) => (
@@ -234,13 +305,17 @@ function Permission() {
                   control={control}
                   defaultValue={initialValues.construction.amount.tax}
                   render={({ field }) => (
-                    <Input description="Impuesto municipal" {...field} />
+                    <Input
+                      description="Impuesto municipal"
+                      type="number"
+                      {...field}
+                    />
                   )}
                 />
               </div>
               <div className="col-span-2 pb-5">
                 <Controller
-                  name="type"
+                  name="constructionType"
                   control={control}
                   defaultValue={initialValues.construction.type}
                   render={({ field }) => (
@@ -278,11 +353,6 @@ function Permission() {
             </div>
           </CardBody>
           <CardFooter className="flex justify-end">
-            <Link href={"/permissions"}>
-              <Button color="danger" className="mr-2">
-                Cancelar
-              </Button>
-            </Link>
             <Button color="primary" type="submit">
               Guardar
             </Button>
