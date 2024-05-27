@@ -45,7 +45,7 @@ export class PermissionCreator {
         data.date,
         new PositiveNumberValueObject(data.quantity),
         new PositiveNumberValueObject(data.amount),
-        new StringValueObject(data.CIV),
+        new StringValueObject(data.civ),
         new StringValueObject(data.observation),
         new StringValueObject(data.receiptNo),
         new IdValueObject(data.constructionId),
