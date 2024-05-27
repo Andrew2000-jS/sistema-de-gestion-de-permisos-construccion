@@ -16,7 +16,7 @@ function ConstructionFormArea({ control }) {
           render={({ field }) => (
             <Input
               isRequired
-              type="text"
+              type="number"
               label="Area de construccion"
               className="w-full"
               variant="bordered"
@@ -34,7 +34,7 @@ function ConstructionFormArea({ control }) {
           render={({ field }) => (
             <Input
               isRequired
-              type="text"
+              type="number"
               label="Area del terreno"
               className="w-full"
               validate={positiveNumberRegex}
@@ -48,7 +48,7 @@ function ConstructionFormArea({ control }) {
       </div>
       <div className="flex justify-between pb-5 gap-2">
         <Controller
-          name="CIV"
+          name="civ"
           control={control}
           rules={{ required: true }}
           render={({ field }) => (
@@ -88,7 +88,7 @@ function ConstructionFormArea({ control }) {
           render={({ field }) => (
             <Input
               isRequired
-              type="text"
+              type="number"
               label="Costo de la obra"
               className="w-full"
               variant="bordered"
@@ -104,7 +104,7 @@ function ConstructionFormArea({ control }) {
           render={({ field }) => (
             <Input
               isRequired
-              type="text"
+              type="number"
               label="Costo del terreno"
               className="w-full"
               variant="bordered"
@@ -122,7 +122,7 @@ function ConstructionFormArea({ control }) {
           render={({ field }) => (
             <Input
               isRequired
-              type="text"
+              type="number"
               label="Impuesto municipal"
               className="w-full"
               variant="bordered"

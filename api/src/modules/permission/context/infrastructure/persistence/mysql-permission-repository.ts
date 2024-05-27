@@ -12,7 +12,7 @@ export class MySQLPermissionRepository implements PermissionRepository {
       await prisma.permission.create({
         data: {
           amount: permissionPrimitives.amount,
-          civ: permissionPrimitives.CIV,
+          civ: permissionPrimitives.civ,
           date: permissionPrimitives.date,
           observation: permissionPrimitives.observation,
           quantity: permissionPrimitives.quantity,
@@ -55,8 +55,9 @@ export class MySQLPermissionRepository implements PermissionRepository {
       await prisma.permission.update({
         where: { id },
         data: {
+          receiptNo: data.receiptNo,
           amount: data.amount,
-          civ: data.CIV,
+          civ: data.civ,
           date: data.date,
           status: data.status,
           quantity: data.quantity,

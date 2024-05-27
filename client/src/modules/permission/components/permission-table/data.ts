@@ -13,7 +13,7 @@ const columns = [
 
 const statusOptions = [
   {name: "Pendiente", uid: "pending"},
-  {name: "Aprovado", uid: "approved"},
+  {name: "Aprobado", uid: "approved"},
   {name: "Rechazado", uid: "rejected"},
   {name: "En Proceso", uid: "in_progress"},
   {name: "Completado", uid: "completed"},

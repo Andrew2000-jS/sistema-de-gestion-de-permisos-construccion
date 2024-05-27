@@ -30,6 +30,9 @@ function TopContent({
           onValueChange={onSearchChange}
         />
         <div className="flex gap-3">
+          <Button color="primary" variant="flat">
+            Limpiar filtros
+          </Button>
           <FilterDropdown setFilterKey={setFilterKey} />
           <StatusDropdown
             statusFilter={statusFilter}

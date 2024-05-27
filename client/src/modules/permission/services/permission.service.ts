@@ -13,31 +13,13 @@ export async function getPermissions(): Promise<ApiResponse<Permission>> {
   }
 }
 
-export async function createPermission({
-  CIV,
-  amount,
-  date,
-  observation,
-  quantity,
-  receiptNo,
-  status,
-  constructionId,
-  ownerId,
-}: Omit<Permission, "id" | "owner" | "construction">): Promise<ApiResponse<Permission>> {
+export async function createPermission(
+  permission: Omit<Permission, "id" | "owner" | "construction">
+): Promise<ApiResponse<Permission>> {
   try {
     const response: AxiosResponse<ApiResponse<Permission>> = await axios.post(
       "http://localhost:3001/permissions/create",
-      {
-        CIV,
-        amount,
-        date,
-        observation,
-        quantity,
-        receiptNo,
-        status,
-        constructionId,
-        ownerId,
-      }
+      permission
     );
     return response.data;
   } catch (error: any) {
@@ -67,6 +49,24 @@ export async function deletePermissions(
   try {
     const response: AxiosResponse<ApiResponse<Permission>> = await axios.delete(
       `http://localhost:3001/permissions/delete/${id}`
+    );
+    return response.data;
+  } catch (error: any) {
+    return (error as AxiosError<ApiResponse<Permission>>).response!.data;
+  }
+}
+
+export async function updatePermissions(
+  id: number,
+  updatedData: Omit<
+    Permission,
+    "id" | "construction" | "owner" | "constructionId"
+  >
+): Promise<ApiResponse<Permission>> {
+  try {
+    const response: AxiosResponse<ApiResponse<Permission>> = await axios.patch(
+      `http://localhost:3001/permissions/update/${id}`,
+      { data: updatedData }
     );
     return response.data;
   } catch (error: any) {

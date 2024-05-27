@@ -32,3 +32,31 @@ export async function getOwners(): Promise<ApiResponse<Owner>> {
     return (error as AxiosError<ApiResponse<Owner>>).response!.data;
   }
 }
+
+export async function updateOwner(
+  id: string,
+  data: Omit<Owner, "id">
+): Promise<ApiResponse<Owner>> {
+  try {
+    const response: AxiosResponse<ApiResponse<Owner>> = await axios.patch(
+      `http://localhost:3001/owner/update/${id}`,
+      {
+        data,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return (error as AxiosError<ApiResponse<Owner>>).response!.data;
+  }
+}
+
+export async function deleteOwner(id: string): Promise<ApiResponse<Owner>> {
+  try {
+    const response: AxiosResponse<ApiResponse<Owner>> = await axios.delete(
+      `http://localhost:3001/owner/delete/${id}`
+    );
+    return response.data;
+  } catch (error: any) {
+    return (error as AxiosError<ApiResponse<Owner>>).response!.data;
+  }
+}

@@ -15,7 +15,7 @@ export class Permission {
   private readonly date: Date
   private readonly quantity: PositiveNumberValueObject
   private readonly amount: PositiveNumberValueObject
-  private readonly CIV: StringValueObject
+  private readonly civ: StringValueObject
   private readonly observation: StringValueObject
   private readonly receiptNo: StringValueObject
   private readonly status: EnumValueObject<Status>
@@ -27,7 +27,7 @@ export class Permission {
     date: Date,
     quantity: PositiveNumberValueObject,
     amount: PositiveNumberValueObject,
-    CIV: StringValueObject,
+    civ: StringValueObject,
     observation: StringValueObject,
     receiptNo: StringValueObject,
     constructionId: IdValueObject,
@@ -38,7 +38,7 @@ export class Permission {
     this.date = date
     this.quantity = quantity
     this.amount = amount
-    this.CIV = CIV
+    this.civ = civ
     this.observation = observation
     this.receiptNo = receiptNo
     this.constructionId = constructionId
@@ -51,7 +51,7 @@ export class Permission {
     date: Date,
     quantity: PositiveNumberValueObject,
     amount: PositiveNumberValueObject,
-    CIV: StringValueObject,
+    civ: StringValueObject,
     observation: StringValueObject,
     receiptNo: StringValueObject,
     constructionId: IdValueObject,
@@ -63,7 +63,7 @@ export class Permission {
       date,
       quantity,
       amount,
-      CIV,
+      civ,
       observation,
       receiptNo,
       constructionId,
@@ -78,7 +78,7 @@ export class Permission {
       date: this.date,
       quantity: this.quantity.getValue(),
       amount: this.amount.getValue(),
-      CIV: this.CIV.getValue(),
+      civ: this.civ.getValue(),
       observation: this.observation.getValue(),
       receiptNo: this.receiptNo.getValue(),
       status: this.status.getValue(),
@@ -91,7 +91,7 @@ export class Permission {
     date: Date
     quantity: number
     amount: number
-    CIV: string
+    civ: string
     observation: string
     receiptNo: string
     status: Status
@@ -102,7 +102,7 @@ export class Permission {
       plainData.date,
       new PositiveNumberValueObject(plainData.quantity),
       new PositiveNumberValueObject(plainData.amount),
-      new StringValueObject(plainData.CIV),
+      new StringValueObject(plainData.civ),
       new StringValueObject(plainData.observation),
       new StringValueObject(plainData.receiptNo),
       new IdValueObject(plainData.constructionId),
@@ -117,7 +117,7 @@ export type PermissionPrimitives = {
   date: Date
   quantity: number
   amount: number
-  CIV: string
+  civ: string
   observation: string
   receiptNo: string
   status: Status

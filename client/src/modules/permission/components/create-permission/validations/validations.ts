@@ -1,5 +1,5 @@
 export const positiveNumberRegex = (value: string) =>
-  /[` !@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/.test(value) ||
+  /[` !@#$%^&*()_+\-=[\]{};':"\\|<>/?~]/.test(value) ||
   /[a-zA-Z]+/.test(value) ||
   Number(value) < 0
     ? "El campo contiene caracteres invalidos"

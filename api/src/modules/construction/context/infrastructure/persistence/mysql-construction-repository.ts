@@ -35,6 +35,7 @@ export class MySQLConstructionRepository implements ConstructioRepository {
           manager: constructionPrimitives.manager,
           amountId: amount.id,
           areaId: area.id,
+          destination: constructionPrimitives.destination,
           population: constructionPrimitives.population,
           sanitaryPermit: constructionPrimitives.sanitaryPermit
         }
@@ -73,7 +74,23 @@ export class MySQLConstructionRepository implements ConstructioRepository {
           company: data.constructionCompany,
           engineer: data.engineer,
           floorsNo: data.floorsNo,
-          manager: data.manager
+          manager: data.manager,
+          destination: data.destination,
+          population: data.population,
+          sanitaryPermit: data.sanitaryPermit,
+          amount: {
+            update: {
+              tax: data.tax,
+              landAmount: data.landAmount,
+              workAmount: data.workAmount
+            }
+          },
+          area: {
+            update: {
+              constructionArea: data.constructionArea,
+              landArea: data.landAmount
+            }
+          }
         },
         include: {
           amount: true,
