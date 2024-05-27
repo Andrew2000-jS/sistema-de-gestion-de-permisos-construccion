@@ -10,65 +10,11 @@ import {
 } from "@react-pdf/renderer";
 import { format } from "date-fns";
 
-const styles = StyleSheet.create({
-  page: {
-    padding: 30,
-    fontSize: 12,
-    fontFamily: "Helvetica",
-  },
-  logo: {
-    width: "200px",
-    height: "100px",
-  },
-  header: {
-    textAlign: "center",
-    lineHeight: 1.5,
-  },
-  section: {
-    marginBottom: 10,
-  },
-  title: {
-    fontSize: 14,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 20,
-  },
-  bodyText: {
-    marginBottom: 5,
-    textAlign: "justify",
-    fontSize: "10px",
-  },
-  articleText: {
-    marginBottom: 5,
-    textAlign: "justify",
-    fontSize: "10px",
-    lineHeight: 1.5,
-  },
-  footer: {
-    display: "flex",
-    flexDirection: "row",
-    width: "100%",
-    fontSize: 10,
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  name: {
-    textDecoration: "underline",
-  },
-});
-
 function PermissionReport({ permission }: { permission: Permission }) {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <View style={styles.headerWrapper}>
           <Image src="/logo-veneco.png" style={styles.logo} />
           <View style={styles.header}>
             <Text style={styles.title}>
@@ -91,14 +37,7 @@ function PermissionReport({ permission }: { permission: Permission }) {
               {permission.owner.name.toUpperCase()}
             </Text>
           </Text>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
+          <View style={styles.flexBodyText}>
             <Text style={styles.bodyText}>
               NOMBRE DEL PROFESIONAL RESPONSABLE:
               <Text style={styles.name}>{permission.construction.manager}</Text>
@@ -126,14 +65,7 @@ function PermissionReport({ permission }: { permission: Permission }) {
               {permission.construction.address.toUpperCase()}
             </Text>
           </Text>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
+          <View style={styles.flexBodyText}>
             <Text style={styles.bodyText}>
               PERMISO DE INGENIERIA SANITARIA:
               <Text style={styles.name}>
@@ -226,4 +158,62 @@ function PermissionReport({ permission }: { permission: Permission }) {
   );
 }
 
+const styles = StyleSheet.create({
+  page: {
+    padding: 30,
+    fontSize: 12,
+    fontFamily: "Helvetica",
+  },
+  logo: {
+    width: "200px",
+    height: "100px",
+  },
+  headerWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  header: {
+    textAlign: "center",
+    lineHeight: 1.5,
+  },
+  section: {
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 14,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  bodyText: {
+    marginBottom: 5,
+    textAlign: "justify",
+    fontSize: "10px",
+  },
+  flexBodyText: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  articleText: {
+    marginBottom: 5,
+    textAlign: "justify",
+    fontSize: "10px",
+    lineHeight: 1.5,
+  },
+  footer: {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+    fontSize: 10,
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  name: {
+    textDecoration: "underline",
+  },
+});
 export default PermissionReport;
