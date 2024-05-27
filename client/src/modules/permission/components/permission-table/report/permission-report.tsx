@@ -1,11 +1,24 @@
 "use client";
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { Permission } from "@/modules/permission/entities";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+} from "@react-pdf/renderer";
+import { format } from "date-fns";
 
 const styles = StyleSheet.create({
   page: {
     padding: 30,
     fontSize: 12,
     fontFamily: "Helvetica",
+  },
+  logo: {
+    width: "200px",
+    height: "100px",
   },
   header: {
     textAlign: "center",
@@ -44,24 +57,39 @@ const styles = StyleSheet.create({
   },
 });
 
-function PermissionReport() {
+function PermissionReport({ permission }: { permission: Permission }) {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <View style={styles.header}>
-          <Text style={styles.title}>
-            REPUBLICA BOLIVARIANA DE VENEZUELA {"\n"}
-            ALCALDIA DEL MUNICIPIO CARIRUBANA {"\n"}
-            DIRECCION SECTORIAL DE DESARROLLO LOCAL {"\n"}
-            OFICINA DE PLANIFICACION URBANA Y RURAL
-          </Text>
-          <Text style={styles.title}>PERMISO DE CONSTRUCCIÓN N°. 2023-042</Text>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Image src="/logo-veneco.png" style={styles.logo} />
+          <View style={styles.header}>
+            <Text style={styles.title}>
+              REPÚBLICA BOLIVARIANA DE VENEZUELA {"\n"}
+              ALCALDÍA DEL MUNICIPIO CARIRUBANA {"\n"}
+              DIRECCIÓN SECTORIAL DE DESARROLLO LOCAL {"\n"}
+              OFICINA DE PLANIFICACIÓN URBANA Y RURAL
+            </Text>
+            <Text style={styles.title}>
+              PERMISO DE CONSTRUCCIÓN N°. {format(new Date(), "yyyy")}-0
+              {permission.id}
+            </Text>
+          </View>
         </View>
 
         <View style={styles.section}>
           <Text style={styles.bodyText}>
             NOMBRE DEL PROPIETARIO:
-            <Text style={styles.name}>Nombre del propietario</Text>
+            <Text style={styles.name}>
+              {permission.owner.name.toUpperCase()}
+            </Text>
           </Text>
           <View
             style={{
@@ -73,22 +101,30 @@ function PermissionReport() {
           >
             <Text style={styles.bodyText}>
               NOMBRE DEL PROFESIONAL RESPONSABLE:
-              <Text style={styles.name}>
-                Nombre del profesional responsable
-              </Text>
+              <Text style={styles.name}>{permission.construction.manager}</Text>
             </Text>
             <Text style={styles.bodyText}>
               C.I.V:
-              <Text style={styles.name}>CIV....</Text>
+              <Text style={{ ...styles.name, marginRight: "10px" }}>
+                {permission.civ}
+              </Text>
             </Text>
           </View>
           <Text style={styles.bodyText}>
+            NOMBRE DEL CONSTRUCTOR:
+            <Text style={styles.name}>{permission.construction.manager}</Text>
+          </Text>
+          <Text style={styles.bodyText}>
             CLASE DE CONSTRUCCION:
-            <Text style={styles.name}>CLASE DE CONSTRUCCION</Text>
+            <Text style={styles.name}>
+              {permission.construction.type.toUpperCase()}
+            </Text>
           </Text>
           <Text style={styles.bodyText}>
             UBICACION DE LA OBRA:
-            <Text style={styles.name}>DIRECCION XYZ</Text>
+            <Text style={styles.name}>
+              {permission.construction.address.toUpperCase()}
+            </Text>
           </Text>
           <View
             style={{
@@ -100,11 +136,15 @@ function PermissionReport() {
           >
             <Text style={styles.bodyText}>
               PERMISO DE INGENIERIA SANITARIA:
-              <Text style={styles.name}>PERMISO XYZ</Text>
+              <Text style={styles.name}>
+                {permission.construction.sanitaryPermit.toUpperCase()}
+              </Text>
             </Text>
             <Text style={styles.bodyText}>
               FECHA:
-              <Text style={styles.name}>fecha XYZ</Text>
+              <Text style={styles.name}>
+                {format(permission.date, "d/mM/yyyy")}
+              </Text>
             </Text>
           </View>
         </View>

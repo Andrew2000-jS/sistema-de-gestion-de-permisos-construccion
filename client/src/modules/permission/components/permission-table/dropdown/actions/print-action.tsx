@@ -6,7 +6,7 @@ import PermissionReport from "../../report/permission-report";
 function PrintAction({ permission }: { permission: Permission }) {
   return (
     <PDFDownloadLink
-      document={<PermissionReport />}
+      document={<PermissionReport permission={permission} />}
       fileName="permission_report.pdf"
     >
       {({ loading }) =>

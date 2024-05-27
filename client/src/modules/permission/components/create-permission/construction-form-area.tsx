@@ -48,7 +48,7 @@ function ConstructionFormArea({ control }) {
       </div>
       <div className="flex justify-between pb-5 gap-2">
         <Controller
-          name="CIV"
+          name="civ"
           control={control}
           rules={{ required: true }}
           render={({ field }) => (

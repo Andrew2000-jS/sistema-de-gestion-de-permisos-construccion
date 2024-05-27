@@ -15,7 +15,7 @@ export type Permission = {
   date: Date;
   quantity: number;
   amount: number;
-  CIV: number;
+  civ: number;
   observation: string;
   receiptNo: string;
   status: Status;

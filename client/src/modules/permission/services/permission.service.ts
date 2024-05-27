@@ -13,33 +13,13 @@ export async function getPermissions(): Promise<ApiResponse<Permission>> {
   }
 }
 
-export async function createPermission({
-  CIV,
-  amount,
-  date,
-  observation,
-  quantity,
-  receiptNo,
-  status,
-  constructionId,
-  ownerId,
-}: Omit<Permission, "id" | "owner" | "construction">): Promise<
-  ApiResponse<Permission>
-> {
+export async function createPermission(
+  permission: Omit<Permission, "id" | "owner" | "construction">
+): Promise<ApiResponse<Permission>> {
   try {
     const response: AxiosResponse<ApiResponse<Permission>> = await axios.post(
       "http://localhost:3001/permissions/create",
-      {
-        CIV,
-        amount,
-        date,
-        observation,
-        quantity,
-        receiptNo,
-        status,
-        constructionId,
-        ownerId,
-      }
+      permission
     );
     return response.data;
   } catch (error: any) {

@@ -50,7 +50,6 @@ export async function updateConstruction(
   updatedData: Omit<Construction, "id">
 ): Promise<ApiResponse<Construction>> {
   try {
-    console.log(updatedData)
     const response: AxiosResponse<ApiResponse<Construction>> =
       await axios.patch(`http://localhost:3001/constructions/update/${id}`, {
         data: updatedData,

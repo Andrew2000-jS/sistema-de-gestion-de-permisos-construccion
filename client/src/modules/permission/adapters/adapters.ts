@@ -6,7 +6,7 @@ export const permissionCreatorAdapter = (data) => ({
     date: parse(data.date, 'yyyy-MM-dd', new Date()),
     quantity: 1,
     amount: Number(data.landAmount) + Number(data.workAmount) + Number(data.tax),
-    CIV: data.CIV,
+    civ: data.civ,
     observation: data.observation ?? "",
     receiptNo: data.receiptNo,
     status: data.status ?? Status.PENDING,
