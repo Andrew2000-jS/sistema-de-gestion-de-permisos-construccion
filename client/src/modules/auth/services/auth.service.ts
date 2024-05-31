@@ -64,7 +64,7 @@ export async function register({
 
 export async function sendEmailToRecoverPassword({ email }: { email: string }) {
   try {
-    const response: AxiosResponse<ApiResponse<Auth>> = await axios.post(
+    const response: AxiosResponse<{sessionCode: string, statusCode: number, message: string}> = await axios.post(
       "http://localhost:3001/auth/login/send-email",
       {
         email,
@@ -72,7 +72,7 @@ export async function sendEmailToRecoverPassword({ email }: { email: string }) {
     );
     return response.data;
   } catch (error) {
-    return (error as AxiosError<ApiResponse<Auth>>).response!.data;
+    return (error as AxiosError<{sessionCode: string, statusCode: number, message: string}>).response!.data;
   }
 }
 

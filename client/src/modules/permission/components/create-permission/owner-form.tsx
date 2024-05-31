@@ -2,11 +2,10 @@
 
 import { Checkbox, Input, Select, SelectItem } from "@nextui-org/react";
 import { Controller } from "react-hook-form";
-import { nameRegex, positiveNumberRegex } from "./validations";
+import { nameRegex, positiveNumberRegex } from "@/lib";
 import { useState } from "react";
 import { useRequest } from "@/lib/common/hooks";
-import { getOwners } from "../../services";
-import { Owner } from "../../entities/owner.entity";
+import { Owner, getOwners } from "@/modules/owners";
 
 function OwnerForm({ control }) {
   const [isOwnerExist, setIsOwnerExist] = useState(false);

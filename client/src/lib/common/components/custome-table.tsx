@@ -23,10 +23,12 @@ export default function CustomeTable<T>({
   loadingState,
   renderCell,
   data,
+  className = "",
 }) {
   return (
     <>
       <Table
+        className={className}
         aria-label="Table"
         topContent={topContent}
         onSortChange={setSortDescriptor}

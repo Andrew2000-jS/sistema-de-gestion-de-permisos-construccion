@@ -15,15 +15,16 @@ import ConstructionFormArea from "./construction-form-area";
 import { permissionCreatorAdapter } from "../../adapters";
 import {
   createConstruction,
-  createOwner,
   createPermission,
   deleteConstruction,
-  deleteOwner,
 } from "../../services";
 import { AlertMessage, AnimatedMessage } from "@/lib";
 import { useSubmit } from "@/lib/common/hooks";
+import { useRouter } from "next/navigation";
+import { createOwner, deleteOwner } from "@/modules/owners";
 
 function CreatePermission() {
+  const router = useRouter();
   const {
     control,
     handleSubmit,
@@ -32,7 +33,7 @@ function CreatePermission() {
     mode: "onChange",
   });
 
-  const { formState, isVisible, onSubmit } = useSubmit({
+  const { formState, onSubmit } = useSubmit({
     callback: async (data) => {
       const permissionInfo = permissionCreatorAdapter(data);
       const construction = await createConstruction(
@@ -52,7 +53,7 @@ function CreatePermission() {
         await deleteConstruction(construction.data.id);
       }
 
-      setTimeout(() => window.location.replace("/permissions"), 3000);
+      setTimeout(() => router.replace("/permissions"), 3000);
 
       return permission;
     },
@@ -113,7 +114,7 @@ function CreatePermission() {
       </Card>
       <AnimatedMessage
         position={["absolute", "top-2", "right-0"]}
-        isVisible={isVisible}
+        isVisible={formState.isVisible}
       >
         <AlertMessage
           description={

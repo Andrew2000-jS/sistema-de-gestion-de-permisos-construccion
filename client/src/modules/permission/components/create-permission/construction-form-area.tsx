@@ -2,7 +2,7 @@
 
 import { Input } from "@nextui-org/react";
 import { Controller } from "react-hook-form";
-import { nameRegex, positiveNumberRegex } from "./validations";
+import { nameRegex, positiveNumberRegex } from "@/lib";
 
 function ConstructionFormArea({ control }) {
   return (

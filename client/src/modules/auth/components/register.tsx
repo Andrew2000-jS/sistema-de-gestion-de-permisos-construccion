@@ -29,10 +29,9 @@ interface IFormInput {
 
 function Register() {
   const router = useRouter();
-  const { formState, isVisible, setFormState, onSubmit } =
-    useSubmit<IFormInput>({
-      callback: (data) => register(data),
-    });
+  const { formState, setFormState, onSubmit } = useSubmit<IFormInput>({
+    callback: (data) => register(data),
+  });
 
   const {
     control,
@@ -82,7 +81,7 @@ function Register() {
       {formState.response.message && (
         <AnimatedMessage
           position={["absolute", "top-2", "right-0"]}
-          isVisible={isVisible}
+          isVisible={formState.isVisible}
         >
           <AlertMessage
             description={formState.response.message}
@@ -273,7 +272,7 @@ function Register() {
               color={
                 formState.response.statusCode === 201 ? "success" : "primary"
               }
-              isLoading={formState.response.loading}
+              isLoading={formState.isLoading}
               isDisabled={formState.response.statusCode === 201}
               type="submit"
             >

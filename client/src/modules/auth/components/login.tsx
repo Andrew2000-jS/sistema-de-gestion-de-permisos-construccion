@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 function Login() {
   const router = useRouter();
   const [_, setCookie] = useCookies(["session-data"]);
-  const { formState, isVisible, setFormState, onSubmit } = useSubmit<{
+  const { formState, setFormState, onSubmit } = useSubmit<{
     ci: string;
     password: string;
   }>({
@@ -41,7 +41,7 @@ function Login() {
     if (formState.response.statusCode === 200) {
       const token = formState.response.data;
       setCookie("session-data", { token, ctx: "login_digest" }, { path: "/" });
-      router.push("/home");
+      router.push("/permissions");
     }
   }, [
     formState.response.data,
@@ -68,7 +68,7 @@ function Login() {
       {formState.response.message && (
         <AnimatedMessage
           position={["absolute", "top-2", "right-0"]}
-          isVisible={isVisible}
+          isVisible={formState.isVisible}
         >
           <AlertMessage
             description={formState.response.message}
@@ -163,7 +163,7 @@ function Login() {
                 formState.response.statusCode === 200 ? "primary" : "primary"
               }
               type="submit"
-              isLoading={formState.response.loading}
+              isLoading={formState.isLoading}
               isDisabled={formState.response.statusCode === 200}
             >
               Inicia Sesión

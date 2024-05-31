@@ -1,6 +1,6 @@
 import { ApiResponse } from "@/lib";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { Owner } from "../entities/owner.entity";
+import { Owner } from "../owner.entity";
 
 export async function createOwner({
   address,
@@ -35,7 +35,7 @@ export async function getOwners(): Promise<ApiResponse<Owner>> {
 
 export async function updateOwner(
   id: string,
-  data: Omit<Owner, "id">
+  data: Omit<Owner, "id" | "permission">
 ): Promise<ApiResponse<Owner>> {
   try {
     const response: AxiosResponse<ApiResponse<Owner>> = await axios.patch(
@@ -54,6 +54,20 @@ export async function deleteOwner(id: string): Promise<ApiResponse<Owner>> {
   try {
     const response: AxiosResponse<ApiResponse<Owner>> = await axios.delete(
       `http://localhost:3001/owner/delete/${id}`
+    );
+    return response.data;
+  } catch (error: any) {
+    return (error as AxiosError<ApiResponse<Owner>>).response!.data;
+  }
+}
+
+export async function filterOwner(
+  filters: Partial<Owner>
+): Promise<ApiResponse<Owner>> {
+  try {
+    const response: AxiosResponse<ApiResponse<Owner>> = await axios.post(
+      `http://localhost:3001/owner/filter`,
+      { filters }
     );
     return response.data;
   } catch (error: any) {

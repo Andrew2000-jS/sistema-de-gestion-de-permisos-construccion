@@ -12,12 +12,14 @@ import {
 import { Permission } from "@/modules/permission/entities/permission.entity";
 import PrintAction from "./actions/print-action";
 import DeleteDialog from "./actions/delete-dialog";
+import { useRouter } from "next/navigation";
 
 export interface ActionsProps {
   permission: Permission;
 }
 
-function Actions({ permission }: ActionsProps) {
+function ActionsDropDown({ permission }: ActionsProps) {
+  const router = useRouter();
   const { onOpenChange, isOpen } = useDisclosure();
   return (
     <div className="relative flex justify-end items-center gap-2">
@@ -28,19 +30,12 @@ function Actions({ permission }: ActionsProps) {
           </Button>
         </DropdownTrigger>
         <DropdownMenu>
-          <DropdownItem>
-            <span
-              className="w-full"
-              onClick={() =>
-                window.location.replace(`/permissions/${permission.id}`)
-              }
-            >
-              Ver
-            </span>
+          <DropdownItem
+            onClick={() => router.replace(`/permissions/${permission.id}`)}
+          >
+            Ver
           </DropdownItem>
-          <DropdownItem>
-            <span onClick={onOpenChange}>Eliminar</span>
-          </DropdownItem>
+          <DropdownItem onClick={onOpenChange}>Eliminar</DropdownItem>
           <DropdownItem>
             <PrintAction permission={permission} />
           </DropdownItem>
@@ -55,4 +50,4 @@ function Actions({ permission }: ActionsProps) {
   );
 }
 
-export default Actions;
+export default ActionsDropDown;

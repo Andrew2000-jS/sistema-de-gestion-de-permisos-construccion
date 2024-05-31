@@ -7,9 +7,8 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/react";
-import { filterColumns } from "../data";
 
-function Filter({ setFilterKey }) {
+function FilterDropdown({ setFilterKey, filterColumns }) {
   return (
     <Dropdown>
       <DropdownTrigger className="hidden sm:flex">
@@ -29,9 +28,9 @@ function Filter({ setFilterKey }) {
         selectionMode="single"
         onSelectionChange={setFilterKey}
       >
-        {filterColumns.map((permission) => (
-          <DropdownItem key={permission.uid} className="capitalize">
-            {capitalize(permission.name)}
+        {filterColumns.map((col) => (
+          <DropdownItem key={col.uid} className="capitalize">
+            {capitalize(col.name)}
           </DropdownItem>
         ))}
       </DropdownMenu>
@@ -39,4 +38,4 @@ function Filter({ setFilterKey }) {
   );
 }
 
-export default Filter;
+export default FilterDropdown;

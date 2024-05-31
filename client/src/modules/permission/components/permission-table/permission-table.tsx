@@ -44,6 +44,7 @@ export default function PermissionTable({
     columns,
     statusOptions,
     TYPE_COLUMNS: PERMISSION_COLUMNS,
+    ctx: "permission",
   });
 
   const topContent = useMemo(

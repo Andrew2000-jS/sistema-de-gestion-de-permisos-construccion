@@ -3,7 +3,7 @@
 import { Input, Select, SelectItem } from "@nextui-org/react";
 import { Controller } from "react-hook-form";
 import { constructionTypeColumns } from "./data";
-import { positiveNumberRegex } from "./validations";
+import { positiveNumberRegex } from "../../../../lib/common/utils/validations";
 
 function ConstructionForm({ control }) {
   return (

@@ -12,14 +12,10 @@ import { useCookies } from "react-cookie";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-type DataType = {
-  sessionCode: string;
-};
-
 function LoginEmail() {
   const router = useRouter();
   const [_, setCookie] = useCookies(["session-data"]);
-  const { formState, isVisible, onSubmit } = useSubmit<{
+  const { formState, onSubmit } = useSubmit<{
     email: string;
   }>({
     callback: (data) => emailAuth(data),
@@ -36,7 +32,8 @@ function LoginEmail() {
 
   useEffect(() => {
     if (formState.response.statusCode === 200) {
-      const data = formState.response.data as DataType;
+      const data = formState.response.data;
+      console.log("data", data);
       setCookie(
         "session-data",
         {
@@ -77,7 +74,7 @@ function LoginEmail() {
           {formState.response.message && (
             <AnimatedMessage
               position={["absolute", "top-2", "right-0"]}
-              isVisible={isVisible}
+              isVisible={formState.isVisible}
             >
               <AlertMessage
                 description={formState.response.message}
@@ -123,7 +120,7 @@ function LoginEmail() {
                 }
                 type="submit"
                 className="w-full"
-                isLoading={formState.response.loading}
+                isLoading={formState.isLoading}
                 isDisabled={formState.response.statusCode === 200}
               >
                 Enviar codigo

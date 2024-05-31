@@ -27,7 +27,7 @@ function ResetPassword() {
     }
   }, [cookies]);
 
-  const { formState, isVisible, setFormState, onSubmit } = useSubmit<{
+  const { formState, setFormState, onSubmit } = useSubmit<{
     password: string;
     validatePassword: string;
     email: string;
@@ -82,7 +82,7 @@ function ResetPassword() {
       {formState.response.message && (
         <AnimatedMessage
           position={["absolute", "top-2", "right-0"]}
-          isVisible={isVisible}
+          isVisible={formState.isVisible}
         >
           <AlertMessage
             description={formState.response.message}
@@ -176,7 +176,7 @@ function ResetPassword() {
               color={
                 formState.response.statusCode === 200 ? "success" : "primary"
               }
-              isLoading={formState.response.loading}
+              isLoading={formState.isLoading}
               isDisabled={formState.response.statusCode === 200}
               type="submit"
             >
