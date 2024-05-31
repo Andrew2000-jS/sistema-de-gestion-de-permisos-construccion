@@ -64,7 +64,7 @@ export class AuthController {
     `
 
     const response = await this.emailNotification.run({ email: req.body.email, html, subject: 'Recuperación de clave', type: 'user' })
-    return res.status(response.statusCode).json(response)
+    return res.status(response.statusCode).json({ ...response, sessionCode })
   }
 
   @httpPatch('/login/reset-password')
