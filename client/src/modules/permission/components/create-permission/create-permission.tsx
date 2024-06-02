@@ -53,7 +53,8 @@ function CreatePermission() {
         await deleteConstruction(construction.data.id);
       }
 
-      setTimeout(() => router.replace("/permissions"), 3000);
+      permission.statusCode === 200 &&
+        setTimeout(() => router.replace("/permissions"), 3000);
 
       return permission;
     },
@@ -117,11 +118,7 @@ function CreatePermission() {
         isVisible={formState.isVisible}
       >
         <AlertMessage
-          description={
-            formState.response.statusCode === 200
-              ? "Permiso creado con exito!"
-              : "Algo ha salido mal"
-          }
+          description={formState.response.message as string}
           styles={
             formState.response.statusCode !== 200
               ? ["text-red-800", "bg-red-50"]

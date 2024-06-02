@@ -7,7 +7,6 @@ import Image from "next/image";
 import { useCookies } from "react-cookie";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { generateToken } from "../utils";
 
 function VerifyCode() {
   const [state, setState] = useState({
@@ -15,25 +14,22 @@ function VerifyCode() {
     message: "",
     status: 0,
   });
+
   const [cookies, setCookies] = useCookies(["session-data"]);
   const router = useRouter();
 
   const { sessionCode, ctx, email } = useMemo(() => {
-    if (cookies["session-data"]) {
-      return {
-        sessionCode: cookies["session-data"].sessionCode,
-        ctx: cookies["session-data"].ctx,
-        email: cookies["session-data"].email,
-      };
-    }
-    return { sessionCode: null, ctx: null, email: null };
+    if (!cookies["session-data"])
+      return { sessionCode: null, ctx: null, email: null };
+
+    return {
+      sessionCode: cookies["session-data"].sessionCode,
+      ctx: cookies["session-data"].ctx,
+      email: cookies["session-data"].email,
+    };
   }, [cookies]);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: {
       code: "",
       ctx,
@@ -50,7 +46,7 @@ function VerifyCode() {
     } else {
       const newCookies =
         ctx === "login_email"
-          ? { token: generateToken({ email }) }
+          ? { token: cookies["session-data"].data }
           : { access: true, email };
 
       setCookies("session-data", newCookies, { path: "/" });

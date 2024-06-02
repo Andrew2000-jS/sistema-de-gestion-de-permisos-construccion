@@ -54,7 +54,7 @@ export class PermissionCreator {
       )
       await this.repository.save(newPermission)
       return {
-        message: 'Permiso generado con exito!',
+        message: 'Permiso creado con exito!',
         statusCode: 200,
         data: newPermission.toPrimitives()
       }

@@ -3,13 +3,12 @@
 import { Button, Card, Input } from "@nextui-org/react";
 import Link from "next/link";
 import { useForm, Controller } from "react-hook-form";
-import { messageAdapter, validationEmailDict, valuesAdapter } from "../utils";
+import { validateEmail } from "../utils";
 import { emailAuth } from "../services";
 import { useSubmit } from "@/lib/common/hooks";
 import { AnimatedMessage, AlertMessage } from "@/lib";
 import Image from "next/image";
 import { useCookies } from "react-cookie";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 function LoginEmail() {
@@ -18,41 +17,28 @@ function LoginEmail() {
   const { formState, onSubmit } = useSubmit<{
     email: string;
   }>({
-    callback: (data) => emailAuth(data),
+    callback: async (data) => {
+      const response = await emailAuth(data);
+      if (response.statusCode === 200) {
+        setCookie(
+          "session-data",
+          {
+            sessionCode: response.data.sessionCode,
+            data: response.data.token,
+            ctx: "login_email",
+          },
+          { path: "/" }
+        );
+        router.push("/login/verify");
+      }
+      return response;
+    },
   });
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: {
       email: "",
     },
   });
-
-  useEffect(() => {
-    if (formState.response.statusCode === 200) {
-      const data = formState.response.data;
-      console.log("data", data);
-      setCookie(
-        "session-data",
-        {
-          sessionCode: data.sessionCode,
-          ctx: "login_email",
-        },
-        { path: "/" }
-      );
-      router.push("/login/verify");
-    }
-  }, [
-    formState.response.statusCode,
-    formState.response.data,
-    setCookie,
-    router,
-  ]);
-
-  const errorMessageEmail =
-    messageAdapter(validationEmailDict)[errors.email?.type ?? ""];
 
   return (
     <Card className="p-5 w-[25em]">
@@ -92,9 +78,6 @@ function LoginEmail() {
             <Controller
               name="email"
               control={control}
-              rules={{
-                validate: valuesAdapter(validationEmailDict),
-              }}
               render={({ field }) => (
                 <Input
                   isRequired
@@ -102,14 +85,11 @@ function LoginEmail() {
                   label="Email"
                   className="w-full"
                   variant="bordered"
-                  color={errors.email ? "danger" : "default"}
+                  validate={validateEmail}
                   {...field}
                 />
               )}
             />
-            {errorMessageEmail && (
-              <p className="text-sm text-red-600">{errorMessageEmail}</p>
-            )}
           </div>
 
           <div className="pt-3">

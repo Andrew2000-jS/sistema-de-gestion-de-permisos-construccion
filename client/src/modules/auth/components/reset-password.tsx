@@ -6,11 +6,7 @@ import { EyeFilledIcon, EyeSlashFilledIcon } from "@/lib";
 import Image from "next/image";
 import { AnimatedMessage, AlertMessage } from "@/lib";
 import { useSubmit } from "@/lib/common/hooks";
-import {
-  messageAdapter,
-  validationPasswordDict,
-  valuesAdapter,
-} from "../utils";
+import { validatePassword } from "../utils";
 import { resetPassword } from "../services";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -32,12 +28,19 @@ function ResetPassword() {
     validatePassword: string;
     email: string;
   }>({
-    callback: (data) =>
-      resetPassword({
+    callback: async (data) => {
+      const response = await resetPassword({
         validatePassword: data.validatePassword,
         password: data.password,
         email: userEmail,
-      }),
+      });
+
+      if (response.statusCode === 200) {
+        router.push("/login");
+      }
+
+      return response;
+    },
   });
 
   const {
@@ -53,18 +56,8 @@ function ResetPassword() {
     },
   });
 
-  useEffect(() => {
-    if (formState.response.statusCode === 200) {
-      router.push("/login");
-    }
-  }, [router, formState]);
-
   const validatePasswordConfirmation = (value: string) =>
     value === watch("password") || "Las contraseñas no coinciden";
-
-  const errorMessagePassword = messageAdapter(validationPasswordDict)[
-    errors.password?.type ?? ""
-  ];
 
   return (
     <Card className="p-5 w-[30em] h-full">
@@ -103,16 +96,13 @@ function ResetPassword() {
                 <Controller
                   name="password"
                   control={control}
-                  rules={{
-                    validate: valuesAdapter(validationPasswordDict),
-                  }}
                   render={({ field }) => (
                     <Input
                       isRequired
                       label="Contraseña"
                       className="w-full"
                       variant="bordered"
-                      color={errors.password ? "danger" : "default"}
+                      validate={validatePassword}
                       endContent={
                         <button
                           className="focus:outline-none"
@@ -136,9 +126,6 @@ function ResetPassword() {
                     />
                   )}
                 />
-                {errorMessagePassword && (
-                  <p className="text-sm text-red-600">{errorMessagePassword}</p>
-                )}
               </div>
               <Spacer y={7} />
 

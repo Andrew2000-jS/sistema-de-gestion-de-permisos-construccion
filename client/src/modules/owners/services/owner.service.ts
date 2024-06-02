@@ -6,7 +6,7 @@ export async function createOwner({
   address,
   ci,
   name,
-}: Omit<Owner, "id">): Promise<ApiResponse<Owner>> {
+}: Omit<Owner, "id" | "permission">): Promise<ApiResponse<Owner>> {
   try {
     const response: AxiosResponse<ApiResponse<Owner>> = await axios.post(
       "http://localhost:3001/owner/create",

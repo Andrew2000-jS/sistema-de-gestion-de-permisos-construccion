@@ -27,9 +27,11 @@ function Navigation() {
   const [userName, setUserName] = useState("Cargando...");
 
   useEffect(() => {
-    const decodedToken = decodeToken(cookie["session-data"]?.token);
-    if (decodedToken) {
-      setUserName(decodedToken.userName);
+    if (cookie["session-data"]) {
+      const decodedToken = decodeToken(cookie["session-data"]?.token);
+      if (decodedToken) {
+        setUserName(decodedToken.userName);
+      }
     }
   }, [cookie]);
 

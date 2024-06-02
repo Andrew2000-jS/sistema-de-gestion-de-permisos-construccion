@@ -6,8 +6,7 @@ export function capitalize(str: string) {
 
 export function decodeToken(token): any  {
   try {
-    const decoded = jwt.verify(token, "3g8rgz4G7NH4");
-    return decoded;
+    return jwt.verify(token, "3g8rgz4G7NH4");
   } catch (error) {
     console.log("Error decoding token:", error);
     return null;

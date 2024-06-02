@@ -69,11 +69,7 @@ function Permission() {
             isVisible={formState.isVisible}
           >
             <AlertMessage
-              description={
-                formState.response.statusCode === 200
-                  ? "Permiso actualizado con exito!"
-                  : "Algo ha salido mal"
-              }
+              description={formState.response.message as string}
               styles={
                 formState.response.statusCode !== 200
                   ? ["text-red-800", "bg-red-50"]

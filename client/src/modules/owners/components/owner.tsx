@@ -31,13 +31,8 @@ function Owner() {
   });
 
   const { formState, onSubmit } = useSubmit({
-    callback: async (data) => {
-      const adapter = {
-        name: data.name,
-        address: data.address,
-        ci: Number(data.ci),
-      };
-      return await updateOwner(initialValues.id, adapter);
+    callback: async ({ name, address, ci }) => {
+      return await updateOwner(initialValues.id, { name, address, ci });
     },
   });
 

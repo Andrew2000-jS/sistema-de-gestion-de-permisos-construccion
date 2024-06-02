@@ -1,17 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { EyeFilledIcon, EyeSlashFilledIcon } from "@/lib";
+import { EyeFilledIcon, EyeSlashFilledIcon, nameRegex } from "@/lib";
 import { Card, Button, Input, Spacer } from "@nextui-org/react";
-import {
-  messageAdapter,
-  validationCiDict,
-  validationEmailDict,
-  validationLastNameDict,
-  validationNameDict,
-  validationPasswordDict,
-  valuesAdapter,
-} from "../utils";
+import { validateCi, validatePassword, validateEmail } from "../utils";
 import { useForm, Controller } from "react-hook-form";
 import { useSubmit } from "@/lib/common/hooks";
 import { AnimatedMessage, AlertMessage } from "@/lib";
@@ -30,7 +22,11 @@ interface IFormInput {
 function Register() {
   const router = useRouter();
   const { formState, setFormState, onSubmit } = useSubmit<IFormInput>({
-    callback: (data) => register(data),
+    callback: async (data) => {
+      const response = await register(data);
+      if (response.statusCode === 201) router.push("/login");
+      return response;
+    },
   });
 
   const {
@@ -52,26 +48,6 @@ function Register() {
   const validatePasswordConfirmation = (value: string) =>
     value === watch("password") || "Las contraseñas no coinciden";
 
-  const errorMessageCi =
-    messageAdapter(validationCiDict)[errors.ci?.type ?? ""];
-
-  const errorMessagePassword = messageAdapter(validationPasswordDict)[
-    errors.password?.type ?? ""
-  ];
-
-  const errorMessageEmail =
-    messageAdapter(validationEmailDict)[errors.email?.type ?? ""];
-
-  const errorMessageName =
-    messageAdapter(validationNameDict)[errors.name?.type ?? ""];
-
-  const errorMessageLastName = messageAdapter(validationLastNameDict)[
-    errors.lastname?.type ?? ""
-  ];
-
-  if (formState.response.statusCode === 201) {
-    router.push("/login");
-  }
   return (
     <Card className="p-5 w-[30em] h-full">
       <div>
@@ -100,9 +76,6 @@ function Register() {
             <Controller
               name="email"
               control={control}
-              rules={{
-                validate: valuesAdapter(validationEmailDict),
-              }}
               render={({ field }) => (
                 <Input
                   isRequired
@@ -110,14 +83,11 @@ function Register() {
                   label="Email"
                   className="w-full"
                   variant="bordered"
-                  color={errors.email ? "danger" : "default"}
+                  validate={validateEmail}
                   {...field}
                 />
               )}
             />
-            {errorMessageEmail && (
-              <p className="text-sm text-red-600">{errorMessageEmail}</p>
-            )}
           </div>
           <Spacer y={7} />
           <div className="flex justify-between">
@@ -125,9 +95,6 @@ function Register() {
               <Controller
                 name="name"
                 control={control}
-                rules={{
-                  validate: valuesAdapter(validationLastNameDict),
-                }}
                 render={({ field }) => (
                   <Input
                     isRequired
@@ -135,14 +102,11 @@ function Register() {
                     label="Nombre"
                     className="w-full"
                     variant="bordered"
-                    color={errors.name ? "danger" : "default"}
+                    validate={nameRegex}
                     {...field}
                   />
                 )}
               />
-              {errorMessageName && (
-                <p className="text-sm text-red-600">{errorMessageName}</p>
-              )}
             </div>
 
             <Spacer x={2} />
@@ -150,9 +114,6 @@ function Register() {
               <Controller
                 name="lastname"
                 control={control}
-                rules={{
-                  validate: valuesAdapter(validationLastNameDict),
-                }}
                 render={({ field }) => (
                   <Input
                     isRequired
@@ -160,14 +121,11 @@ function Register() {
                     label="Apellido"
                     className="w-full"
                     variant="bordered"
-                    color={errors.lastname ? "danger" : "default"}
+                    validate={nameRegex}
                     {...field}
                   />
                 )}
               />
-              {errorMessageLastName && (
-                <p className="text-sm text-red-600">{errorMessageLastName}</p>
-              )}
             </div>
           </div>
           <Spacer y={7} />
@@ -175,9 +133,6 @@ function Register() {
             <Controller
               name="ci"
               control={control}
-              rules={{
-                validate: valuesAdapter(validationCiDict),
-              }}
               render={({ field }) => (
                 <Input
                   isRequired
@@ -185,14 +140,11 @@ function Register() {
                   label="Cedula"
                   className="w-full"
                   variant="bordered"
-                  color={errors.ci ? "danger" : "default"}
+                  validate={validateCi}
                   {...field}
                 />
               )}
             />
-            {errorMessageCi && (
-              <p className="text-sm text-red-600">{errorMessageCi}</p>
-            )}
           </div>
           <Spacer y={7} />
           <div className="flex justify-between">
@@ -200,16 +152,13 @@ function Register() {
               <Controller
                 name="password"
                 control={control}
-                rules={{
-                  validate: valuesAdapter(validationPasswordDict),
-                }}
                 render={({ field }) => (
                   <Input
                     isRequired
                     label="Contraseña"
                     className="w-full"
                     variant="bordered"
-                    color={errors.password ? "danger" : "default"}
+                    validate={validatePassword}
                     endContent={
                       <button
                         className="focus:outline-none"
@@ -233,9 +182,6 @@ function Register() {
                   />
                 )}
               />
-              {errorMessagePassword && (
-                <p className="text-sm text-red-600">{errorMessagePassword}</p>
-              )}
             </div>
             <Spacer y={7} />
 
@@ -269,9 +215,7 @@ function Register() {
 
           <div className="flex justify-around">
             <Button
-              color={
-                formState.response.statusCode === 201 ? "success" : "primary"
-              }
+              color="primary"
               isLoading={formState.isLoading}
               isDisabled={formState.response.statusCode === 201}
               type="submit"
