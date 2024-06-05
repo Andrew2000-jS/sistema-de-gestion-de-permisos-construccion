@@ -16,6 +16,7 @@ function TopContent({
   setStatusFilter,
   filterColumns,
   filterKey,
+  onClearFilters,
 }) {
   return (
     <div className="flex flex-col gap-4">
@@ -30,7 +31,7 @@ function TopContent({
           onValueChange={onSearchChange}
         />
         <div className="flex gap-3">
-          <Button color="primary" variant="flat">
+          <Button color="primary" variant="flat" onClick={onClearFilters}>
             Limpiar filtros
           </Button>
           <FilterDropdown

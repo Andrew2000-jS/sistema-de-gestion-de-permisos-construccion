@@ -11,6 +11,7 @@ function usePagination<T>({
   statusOptions,
   TYPE_COLUMNS,
   rowsPerPage = 10,
+  setFilterData,
   ctx,
 }) {
   const [tableData, setTableData] = useState<any[]>([]);
@@ -122,6 +123,15 @@ function usePagination<T>({
     setPage(1);
   }, []);
 
+  const onClearAllFilters = useCallback(() => {
+    setFilterValue("");
+    setFilterKey("all");
+    setStatusFilter("all");
+    setPage(1);
+    setFilterData(null);
+    setSortDescriptor({ column: "date", direction: "ascending" });
+  }, [setFilterData]);
+
   useEffect(() => {
     setTableData(sortedItems);
   }, [sortedItems]);
@@ -143,6 +153,7 @@ function usePagination<T>({
     statusFilter,
     filterKey,
     setPage,
+    onClearAllFilters,
   };
 }
 

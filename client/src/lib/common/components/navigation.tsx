@@ -28,7 +28,7 @@ function Navigation() {
 
   useEffect(() => {
     if (cookie["session-data"]) {
-      const decodedToken = decodeToken(cookie["session-data"]?.token);
+      const decodedToken = decodeToken(cookie["session-data"].token);
       if (decodedToken) {
         setUserName(decodedToken.userName);
       }
@@ -36,8 +36,11 @@ function Navigation() {
   }, [cookie]);
 
   const handleDeleteCookie = () => {
-    removeCookie("session-data");
-    router.replace("/");
+    removeCookie("session-data", { path: "/" });
+    // Esperar un momento para asegurarse de que la cookie se elimine correctamente
+    setTimeout(() => {
+      router.replace("/");
+    }, 100); // Puedes ajustar el tiempo según sea necesario
   };
 
   const pathname = usePathname();

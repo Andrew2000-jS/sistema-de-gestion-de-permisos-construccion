@@ -51,7 +51,7 @@ function VerifyCode() {
 
       setCookies("session-data", newCookies, { path: "/" });
       setState({ isVisible: true, message: "Seras redirigido", status: 200 });
-      router.push(url);
+      window.location.replace(url);
     }
 
     setTimeout(

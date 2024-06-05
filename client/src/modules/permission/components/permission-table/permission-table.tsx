@@ -20,8 +20,7 @@ export default function PermissionTable({
   data,
   loading,
 }: ApiResponse<Permission[]>) {
-  const { filterData } = useContext(FilterCtx);
-
+  const { filterData, setFilterData } = useContext(FilterCtx);
   const {
     headerColumns,
     loadingState,
@@ -37,10 +36,12 @@ export default function PermissionTable({
     filterKey,
     page,
     setPage,
+    onClearAllFilters,
   } = usePagination<Permission>({
     data,
     loading,
     filterData,
+    setFilterData,
     columns,
     statusOptions,
     TYPE_COLUMNS: PERMISSION_COLUMNS,
@@ -59,6 +60,7 @@ export default function PermissionTable({
         setFilterKey={setFilterKey}
         setStatusFilter={setStatusFilter}
         statusFilter={statusFilter}
+        onClearFilters={onClearAllFilters}
       />
     ),
     [
@@ -70,6 +72,7 @@ export default function PermissionTable({
       filterKey,
       setFilterKey,
       setStatusFilter,
+      onClearAllFilters,
     ]
   );
 

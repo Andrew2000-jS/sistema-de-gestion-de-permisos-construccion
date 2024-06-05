@@ -33,6 +33,7 @@ function Login() {
     },
   });
   const { control, handleSubmit } = useForm({
+    mode: "onChange",
     defaultValues: {
       ci: "",
       password: "",
