@@ -5,28 +5,24 @@ import { useForm, Controller } from "react-hook-form";
 import Image from "next/image";
 import { AnimatedMessage, AlertMessage } from "@/lib";
 import { sendEmailToRecoverPassword } from "../services";
-import { useSubmit } from "@/lib/common/hooks";
-import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
-
-type DataType = {
-  sessionCode: string;
-};
+import { useState } from "react";
 
 function ForgotPassword() {
   const router = useRouter();
-  const [_, setCookie] = useCookies(["session-data"]);
-
-  const { formState, isVisible, onSubmit } = useSubmit<{
-    email: string;
-  }>({
-    callback: (data) => sendEmailToRecoverPassword(data),
+  const [state, setState] = useState({
+    isVisible: false,
+    loading: false,
+    message: "",
+    statusCode: 0,
+    isDisabled: false,
   });
+  const [, setCookies] = useCookies(["session-data"]);
+
   const {
     control,
     handleSubmit,
-    getValues,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -34,23 +30,41 @@ function ForgotPassword() {
     },
   });
 
-  useEffect(() => {
-    if (formState.response.statusCode === 200) {
-      const data = formState.response.data as DataType;
-      setCookie("session-data", {
-        sessionCode: data.sessionCode,
+  const onSubmit = async (data) => {
+    setState((prevState) => ({
+      ...prevState,
+      isVisible: true,
+      isDisabled: true,
+      loading: true,
+    }));
+    try {
+      const response = await sendEmailToRecoverPassword({ email: data.email });
+      setState((prevState) => ({
+        ...prevState,
+        statusCode: response.statusCode,
+        message: response.message,
+        loading: false,
+      }));
+      setCookies("session-data", {
+        sessionCode: response.sessionCode,
         ctx: "recovery_password",
-        email: getValues("email"),
+        email: data.email,
       });
       router.push("/login/verify");
+    } catch (error) {
+      setState((prevState) => ({
+        ...prevState,
+        statusCode: 500,
+        message: "Algo ha salido mal",
+        loading: false,
+      }));
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        setState((prevState) => ({ ...prevState, isVisible: false }));
+      }, 4000);
     }
-  }, [
-    formState.response.statusCode,
-    formState.response.data,
-    setCookie,
-    router,
-    getValues,
-  ]);
+  };
 
   return (
     <Card className="p-5 w-[25em]">
@@ -83,15 +97,15 @@ function ForgotPassword() {
                 />
               )}
             />
-            {formState.response.message && (
+            {state.message && (
               <AnimatedMessage
                 position={["absolute", "top-2", "right-0"]}
-                isVisible={isVisible}
+                isVisible={state.isVisible}
               >
                 <AlertMessage
-                  description={formState.response.message}
+                  description={state.message}
                   styles={
-                    formState.response.statusCode !== 200
+                    state.statusCode !== 200
                       ? ["text-red-800", "bg-red-50"]
                       : ["text-green-800", "bg-green-50"]
                   }
@@ -105,8 +119,8 @@ function ForgotPassword() {
                 color="primary"
                 type="submit"
                 className="w-full"
-                isLoading={formState.response.loading}
-                isDisabled={formState.response.statusCode === 200}
+                isLoading={state.loading}
+                isDisabled={state.isDisabled}
               >
                 Enviar codigo
               </Button>

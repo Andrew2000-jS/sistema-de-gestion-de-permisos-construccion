@@ -10,7 +10,16 @@ export class EmailStrategy implements EmailAuthStrategy {
   async execute (user: UserPrimitives): Promise<ApplicationResponse<any>> {
     try {
       const sessionCode = v4().substring(0, 6)
-      const token = generateToken({ userCi: user.ci, userEmail: user.email, ctx: 'login' }, '3g8rgz4G7NH4', '24h')
+      const token = generateToken(
+        {
+          userCi: user.ci,
+          userEmail: user.email,
+          userName: `${user.name} ${user.lastname}`,
+          ctx: 'login'
+        },
+        '3g8rgz4G7NH4',
+        '24h'
+      )
       const data = { sessionCode, token }
       const html = `
       <!DOCTYPE html>
@@ -30,7 +39,13 @@ export class EmailStrategy implements EmailAuthStrategy {
         pass: 'snza gbhs aval rovd'
       }
 
-      await sendGmail({ to: this.email, subject: 'Inicio de Sesion', html, auth, from: 'alcaldiacarirubanabot@gmail.com' })
+      await sendGmail({
+        to: this.email,
+        subject: 'Inicio de Sesion',
+        html,
+        auth,
+        from: 'alcaldiacarirubanabot@gmail.com'
+      })
 
       return { message: 'Correo enviado', statusCode: 200, data }
     } catch (error) {

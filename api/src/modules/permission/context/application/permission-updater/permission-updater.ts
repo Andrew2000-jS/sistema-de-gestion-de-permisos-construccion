@@ -39,7 +39,7 @@ export class PermissionUpdater {
     } catch (error) {
       console.log(error)
       return {
-        message: 'Algo ha salido mal, intente mas tarde' as string,
+        message: 'Algo ha salido mal' as string,
         statusCode: 500,
         data: null
       }

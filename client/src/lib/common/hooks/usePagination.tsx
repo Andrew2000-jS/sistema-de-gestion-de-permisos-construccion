@@ -11,6 +11,8 @@ function usePagination<T>({
   statusOptions,
   TYPE_COLUMNS,
   rowsPerPage = 10,
+  setFilterData,
+  ctx,
 }) {
   const [tableData, setTableData] = useState<any[]>([]);
   const [page, setPage] = useState(1);
@@ -53,7 +55,7 @@ function usePagination<T>({
     if (Boolean(filterValue)) {
       filteredInfo = filteredInfo.filter((item) =>
         key === "ci"
-          ? item.owner.ci
+          ? (ctx === "permission" ? item.owner.ci : item.ci)
               ?.toString()
               .toLowerCase()
               .includes(filterValue.toLowerCase())
@@ -85,7 +87,15 @@ function usePagination<T>({
     }
 
     return filteredInfo;
-  }, [data, filterValue, statusFilter, filterKey, filterData, statusOptions]);
+  }, [
+    data,
+    filterValue,
+    statusFilter,
+    filterKey,
+    filterData,
+    statusOptions,
+    ctx,
+  ]);
 
   const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -113,6 +123,15 @@ function usePagination<T>({
     setPage(1);
   }, []);
 
+  const onClearAllFilters = useCallback(() => {
+    setFilterValue("");
+    setFilterKey("all");
+    setStatusFilter("all");
+    setPage(1);
+    setFilterData(null);
+    setSortDescriptor({ column: "date", direction: "ascending" });
+  }, [setFilterData]);
+
   useEffect(() => {
     setTableData(sortedItems);
   }, [sortedItems]);
@@ -134,6 +153,7 @@ function usePagination<T>({
     statusFilter,
     filterKey,
     setPage,
+    onClearAllFilters,
   };
 }
 

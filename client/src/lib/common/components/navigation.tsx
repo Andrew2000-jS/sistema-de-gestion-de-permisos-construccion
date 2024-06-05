@@ -5,7 +5,6 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Link,
   Button,
   Avatar,
   Dropdown,
@@ -14,16 +13,40 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
+import { useCookies } from "react-cookie";
 import Image from "next/image";
 import { ChevronDownIcon } from "../Icons";
+import { decodeToken } from "../utils";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 function Navigation() {
+  const router = useRouter();
+  const [cookie, , removeCookie] = useCookies(["session-data"]);
+  const [userName, setUserName] = useState("Cargando...");
+
+  useEffect(() => {
+    if (cookie["session-data"]) {
+      const decodedToken = decodeToken(cookie["session-data"].token);
+      if (decodedToken) {
+        setUserName(decodedToken.userName);
+      }
+    }
+  }, [cookie]);
+
+  const handleDeleteCookie = () => {
+    removeCookie("session-data", { path: "/" });
+    // Esperar un momento para asegurarse de que la cookie se elimine correctamente
+    setTimeout(() => {
+      router.replace("/");
+    }, 100); // Puedes ajustar el tiempo según sea necesario
+  };
+
   const pathname = usePathname();
   const isHidden =
-    pathname === "/login" ||
-    pathname === "/register" ||
-    pathname === "/login/email" ||
-    pathname === "/login/verify";
+    !/^\/permissions(\/.*)?$/.test(pathname) &&
+    !/^\/owners(\/.*)?$/.test(pathname);
 
   return (
     <Navbar
@@ -59,7 +82,11 @@ function Navigation() {
       <NavbarContent className="hidden sm:flex gap-8 pr-20" justify="center">
         <NavbarItem>
           <Link
-            color={`${pathname === "/permissions" ? "primary" : "foreground"}`}
+            className={`${
+              pathname === "/permissions"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-900"
+            } pb-1`}
             href="/permissions"
           >
             Permisos
@@ -67,7 +94,11 @@ function Navigation() {
         </NavbarItem>
         <NavbarItem>
           <Link
-            color={`${pathname === "/owners" ? "primary" : "foreground"}`}
+            className={`${
+              pathname === "/owners"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-900"
+            } pb-1`}
             href="/owners"
           >
             Propietarios
@@ -84,13 +115,15 @@ function Navigation() {
                 radius="sm"
                 variant="light"
               >
-                Jhon Doe
+                {userName}
               </Button>
             </DropdownTrigger>
           </NavbarItem>
           <DropdownMenu>
             <DropdownItem>Configuracion</DropdownItem>
-            <DropdownItem>Cerrar Sesion</DropdownItem>
+            <DropdownItem onClick={handleDeleteCookie}>
+              Cerrar Sesion
+            </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>

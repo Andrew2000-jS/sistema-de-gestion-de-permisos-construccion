@@ -1,3 +1,2 @@
-export { default as ActionsDropdown } from './actions';
-export { default as FilterDropdown } from './filter';
+export { default as ActionsDropdown } from './actions-dropdown';
 export { default as StatusDropdown } from './status';

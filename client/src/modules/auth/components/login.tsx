@@ -4,58 +4,41 @@ import { EyeFilledIcon, EyeSlashFilledIcon } from "@/lib";
 import { Button, Card, Input, Spacer } from "@nextui-org/react";
 import Link from "next/link";
 import { useForm, Controller } from "react-hook-form";
-import {
-  messageAdapter,
-  validationCiDict,
-  validationPasswordDict,
-  valuesAdapter,
-} from "../utils";
+import { validateCi, validatePassword } from "../utils";
 import { digestAuth } from "../services";
 import { AnimatedMessage, AlertMessage } from "@/lib";
 import { useSubmit } from "@/lib/common/hooks";
 import { useCookies } from "react-cookie";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 function Login() {
   const router = useRouter();
   const [_, setCookie] = useCookies(["session-data"]);
-  const { formState, isVisible, setFormState, onSubmit } = useSubmit<{
+  const { formState, setFormState, onSubmit } = useSubmit<{
     ci: string;
     password: string;
   }>({
-    callback: (data) => digestAuth(data),
+    callback: async (data) => {
+      const response = await digestAuth(data);
+
+      if (response.statusCode === 200) {
+        setCookie(
+          "session-data",
+          { token: response.data, ctx: "login_digest" },
+          { path: "/" }
+        );
+        router.push("/permissions");
+      }
+      return response;
+    },
   });
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit } = useForm({
+    mode: "onChange",
     defaultValues: {
       ci: "",
       password: "",
     },
   });
-
-  useEffect(() => {
-    if (formState.response.statusCode === 200) {
-      const token = formState.response.data;
-      setCookie("session-data", { token, ctx: "login_digest" }, { path: "/" });
-      router.push("/home");
-    }
-  }, [
-    formState.response.data,
-    formState.response.statusCode,
-    setCookie,
-    router,
-  ]);
-
-  const errorMessageCi =
-    messageAdapter(validationCiDict)[errors.ci?.type ?? ""];
-
-  const errorMessagePassword = messageAdapter(validationPasswordDict)[
-    errors.password?.type ?? ""
-  ];
 
   return (
     <Card className="p-5 w-[30em] h-full">
@@ -68,7 +51,7 @@ function Login() {
       {formState.response.message && (
         <AnimatedMessage
           position={["absolute", "top-2", "right-0"]}
-          isVisible={isVisible}
+          isVisible={formState.isVisible}
         >
           <AlertMessage
             description={formState.response.message}
@@ -86,38 +69,30 @@ function Login() {
             <Controller
               name="ci"
               control={control}
-              rules={{
-                validate: valuesAdapter(validationCiDict),
-              }}
               render={({ field }) => (
                 <Input
                   isRequired
-                  type="text"
+                  type="number"
                   label="Cedula"
                   className="w-full"
                   variant="bordered"
-                  color={errors.ci ? "danger" : "default"}
+                  validate={validateCi}
                   {...field}
                 />
               )}
             />
-            {errorMessageCi && (
-              <p className="text-sm text-red-600">{errorMessageCi}</p>
-            )}
             <Spacer y={5} />
             <Controller
               name="password"
               control={control}
-              rules={{
-                validate: valuesAdapter(validationPasswordDict),
-              }}
               render={({ field }) => (
                 <Input
                   isRequired
                   label="Contraseña"
                   className="w-full"
                   variant="bordered"
-                  color={errors.password ? "danger" : "default"}
+                  validate={validatePassword}
+                  min={5}
                   endContent={
                     <button
                       className="focus:outline-none"
@@ -141,9 +116,6 @@ function Login() {
                 />
               )}
             />
-            {errorMessagePassword && (
-              <p className="text-sm text-red-600">{errorMessagePassword}</p>
-            )}
           </div>
           <div className="flex justify-between items-center mt-7">
             <Link
@@ -159,11 +131,9 @@ function Login() {
               <Button color="default">Regístrate</Button>
             </Link>
             <Button
-              color={
-                formState.response.statusCode === 200 ? "primary" : "primary"
-              }
+              color="primary"
               type="submit"
-              isLoading={formState.response.loading}
+              isLoading={formState.isLoading}
               isDisabled={formState.response.statusCode === 200}
             >
               Inicia Sesión

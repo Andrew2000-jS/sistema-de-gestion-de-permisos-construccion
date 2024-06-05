@@ -8,3 +8,4 @@ export * from './search-icon';
 export * from './vertical-dot.icon';
 export * from './calendar-icon'
 export * from './avatar-icon'
+export * from './delete-icon'

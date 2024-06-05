@@ -1,5 +1,5 @@
+import { Owner } from "@/modules/owners";
 import { Construction } from "./construction.entity";
-import { Owner } from "./owner.entity";
 
 export const enum Status {
   PENDING = "Pending",

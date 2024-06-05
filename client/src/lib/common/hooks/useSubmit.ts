@@ -13,19 +13,27 @@ function useSubmit<T extends FieldValues>({
     response: ApiResponse<T>;
     showPassword: boolean;
     errors: {};
+    isVisible: boolean;
+    isLoading: boolean;
   }>({
-    response: { message: null, statusCode: null, data: null, loading: false },
+    response: { message: null, statusCode: null, data: null},
     showPassword: false,
     errors: {},
+    isVisible: false,
+    isLoading: false
   });
   const [isVisible, setIsVisible] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const onSubmit: SubmitHandler<T> = async (data) => {
     setFormState((prevState) => ({
       ...prevState,
-      response: { message: null, statusCode: null, data: null, loading: true },
+      response: { message: null, statusCode: null, data: null },
+      isLoading: true,
+      isVisible: true
     }));
     try {
+      setLoading(false)
       const res = await callback(data);
       setFormState((prevState) => ({
         ...prevState,
@@ -33,10 +41,9 @@ function useSubmit<T extends FieldValues>({
           message: res?.message,
           statusCode: res?.statusCode,
           data: res?.data,
-          loading: false,
         },
+        isLoading: false,
       }));
-      setIsVisible(true);
 
     } catch (error) {
       setFormState((prevState) => ({
@@ -45,16 +52,15 @@ function useSubmit<T extends FieldValues>({
           message: (error as Record<string, string>).message ?? null,
           statusCode: (error as Record<string, number>).statusCode ?? null,
           data: (error as Record<string, number>).data ?? null,
-          loading: false,
         },
+        isLoading: false
       }));
-      setIsVisible(true);
     } finally {
-      setTimeout(() => setIsVisible(false), 4000);
+      setTimeout(() => setFormState((prevState) => ({ ...prevState, isVisible: false })), 3000);
     }
   };
 
-  return { formState, isVisible, setFormState, onSubmit };
+  return { formState, isVisible, setFormState, loading, onSubmit };
 }
 
 export default useSubmit;

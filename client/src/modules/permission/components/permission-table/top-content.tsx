@@ -1,7 +1,7 @@
 "use client";
 
-import { PlusIcon, SearchIcon } from "@/lib";
-import { FilterDropdown, StatusDropdown } from "./dropdown";
+import { FilterDropdown, PlusIcon, SearchIcon } from "@/lib";
+import { StatusDropdown } from "./dropdown";
 import PermissionDateDialog from "./permission-date-dialog";
 import Link from "next/link";
 import { Button, Input } from "@nextui-org/react";
@@ -16,6 +16,7 @@ function TopContent({
   setStatusFilter,
   filterColumns,
   filterKey,
+  onClearFilters,
 }) {
   return (
     <div className="flex flex-col gap-4">
@@ -30,10 +31,13 @@ function TopContent({
           onValueChange={onSearchChange}
         />
         <div className="flex gap-3">
-          <Button color="primary" variant="flat">
+          <Button color="primary" variant="flat" onClick={onClearFilters}>
             Limpiar filtros
           </Button>
-          <FilterDropdown setFilterKey={setFilterKey} />
+          <FilterDropdown
+            setFilterKey={setFilterKey}
+            filterColumns={filterColumns}
+          />
           <StatusDropdown
             statusFilter={statusFilter}
             setStatusFilter={setStatusFilter}

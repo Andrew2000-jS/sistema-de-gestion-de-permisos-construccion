@@ -1,12 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { format } from "date-fns";
 import { useRequest, useSubmit } from "@/lib/common/hooks";
 import { useParams } from "next/navigation";
 import {
   filterPermissions,
-  getOwners,
   updateConstruction,
   updatePermissions,
 } from "../services";
@@ -24,11 +22,11 @@ import {
   Button,
 } from "@nextui-org/react";
 import { permissionStatusObj } from "./data";
-import { Owner } from "../entities/owner.entity";
 import { Controller, useForm } from "react-hook-form";
 import { constructionTypeColumns } from "./create-permission/data";
 import { permissionCreatorAdapter } from "../adapters";
 import { AlertMessage, AnimatedMessage } from "@/lib";
+import { Owner, getOwners } from "@/modules/owners";
 
 function Permission() {
   const { id } = useParams();
@@ -42,7 +40,7 @@ function Permission() {
     defaultValues: requestData.data,
   });
 
-  const { formState, onSubmit, isVisible } = useSubmit({
+  const { formState, onSubmit } = useSubmit({
     callback: async (data) => {
       const { construction, permission } = permissionCreatorAdapter(data);
 
@@ -68,14 +66,10 @@ function Permission() {
           </CardHeader>
           <AnimatedMessage
             position={["absolute", "top-2", "right-0"]}
-            isVisible={isVisible}
+            isVisible={formState.isVisible}
           >
             <AlertMessage
-              description={
-                formState.response.statusCode === 200
-                  ? "Permiso actualizado con exito!"
-                  : "Algo ha salido mal"
-              }
+              description={formState.response.message as string}
               styles={
                 formState.response.statusCode !== 200
                   ? ["text-red-800", "bg-red-50"]

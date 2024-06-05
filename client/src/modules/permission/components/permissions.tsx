@@ -11,12 +11,7 @@ function Permissions() {
 
   return (
     <FilterCtxProvider>
-      <PermissionTable
-        data={requestData.data}
-        message={requestData.message}
-        loading={requestData.loading}
-        statusCode={requestData.statusCode}
-      />
+      <PermissionTable {...requestData} />
     </FilterCtxProvider>
   );
 }
