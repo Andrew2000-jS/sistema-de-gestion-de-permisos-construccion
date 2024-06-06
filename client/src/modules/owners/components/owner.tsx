@@ -19,6 +19,7 @@ import { Controller, useForm } from "react-hook-form";
 import { AlertMessage, AnimatedMessage, nameRegex } from "@/lib";
 import { format } from "date-fns";
 import Link from "next/link";
+import { statusTypeAdapter } from "@/modules/permission/adapters";
 
 function Owner() {
   const { id } = useParams();
@@ -129,7 +130,9 @@ function Owner() {
                           {permission.receiptNo}
                         </span>
                         <span>{format(permission.date, "yyyy-MM-dd")}</span>
-                        <span className="pr-2">{permission.status}</span>
+                        <span className="pr-2">
+                          {statusTypeAdapter(permission.status).translatedType}
+                        </span>
                       </Link>
                     </div>
                   </ListboxItem>
