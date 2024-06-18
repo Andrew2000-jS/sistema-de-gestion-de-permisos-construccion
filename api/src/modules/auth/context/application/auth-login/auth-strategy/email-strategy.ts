@@ -13,6 +13,7 @@ export class EmailStrategy implements EmailAuthStrategy {
       const token = generateToken(
         {
           userCi: user.ci,
+          userId: user.id,
           userEmail: user.email,
           userName: `${user.name} ${user.lastname}`,
           ctx: 'login'

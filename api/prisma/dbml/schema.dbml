@@ -1,0 +1,81 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [unique, not null]
+  name String [not null]
+  ci Int [unique, not null]
+  lastname String [not null]
+  email String [unique, not null]
+  password String [not null]
+  permission Permission [not null]
+}
+
+Table Permission {
+  id Int [pk, increment]
+  date DateTime [not null]
+  quantity Int [not null]
+  amount Float [not null]
+  civ String [not null]
+  observation String [not null]
+  receiptNo String [not null]
+  status String [not null]
+  ownerId String [unique, not null]
+  constructionId String [unique, not null]
+  userId String [unique, not null]
+  owner Owner
+  construction Construction
+  user User
+}
+
+Table Construction {
+  id String [unique, not null]
+  address String [not null]
+  type String [not null]
+  floorsNo Int [not null]
+  manager String [not null]
+  engineer String [not null]
+  company String [not null]
+  destination String [not null]
+  areaId Int [unique, not null]
+  area Area [not null]
+  amountId Int [unique, not null]
+  amount Amount [not null]
+  population Int [not null]
+  sanitaryPermit String [not null]
+  Permission Permission
+}
+
+Table Area {
+  id Int [pk, increment]
+  landArea Float [not null]
+  constructionArea Float [not null]
+  Construction Construction
+}
+
+Table Amount {
+  id Int [pk, increment]
+  landAmount Float [not null]
+  workAmount Float [not null]
+  tax Float [not null]
+  Construction Construction
+}
+
+Table Owner {
+  id String [unique, not null]
+  ci Int [unique, not null]
+  name String [not null]
+  address String [not null]
+  permission Permission [not null]
+}
+
+Ref: Permission.ownerId > Owner.id
+
+Ref: Permission.constructionId - Construction.id
+
+Ref: Permission.userId > User.id
+
+Ref: Construction.areaId - Area.id
+
+Ref: Construction.amountId - Amount.id

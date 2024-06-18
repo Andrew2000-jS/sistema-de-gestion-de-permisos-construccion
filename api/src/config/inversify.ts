@@ -23,6 +23,11 @@ import { Matcher, type SharedRepository } from '@src/shared/modules'
 import { EmailNotification } from '@src/shared/modules/context/application/notfications'
 import { MySQLSharedRepository } from '@src/shared/modules/context/infrastructure/persistence'
 import { TYPES as SharedTypes } from '@src/shared/modules/context/utils'
+import { UserController } from '@src/user/app/controllers'
+import { UserDeleter, UserUpdater } from '@src/user/context/application'
+import { type UserRepository } from '@src/user/context/domain'
+import { MySQLUserRepository } from '@src/user/context/infrastructure'
+import { TYPES as UserTypes } from '@src/user/context/utils/constants'
 import { Container } from 'inversify'
 
 const container = new Container()
@@ -57,6 +62,12 @@ container.bind<OwnerDeleter>(OwnerDeleter).toSelf()
 container.bind<OwnerUpdater>(OwnerUpdater).toSelf()
 container.bind<OwnernGetter>(OwnernGetter).toSelf()
 container.bind<OwnerController>(OwnerController).toSelf()
+
+// User dependency injection
+container.bind<UserRepository>(UserTypes.UserRepository).to(MySQLUserRepository)
+container.bind<UserDeleter>(UserDeleter).toSelf()
+container.bind<UserUpdater>(UserUpdater).toSelf()
+container.bind<UserController>(UserController).toSelf()
 
 // Shared dependency injection
 container.bind<SharedRepository>(SharedTypes.SharedRepository).to(MySQLSharedRepository)

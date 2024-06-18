@@ -1,6 +1,10 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,12 +15,13 @@ datasource db {
 }
 
 model User {
-  id       String @unique
-  name     String
-  ci       Int    @unique
-  lastname String
-  email    String @unique
-  password String
+  id         String       @unique
+  name       String
+  ci         Int          @unique
+  lastname   String
+  email      String       @unique
+  password   String
+  permission Permission[]
 }
 
 model Permission {
@@ -29,10 +34,12 @@ model Permission {
   receiptNo   String
   status      String
 
-  ownerId        String
+  ownerId        String        @unique
   constructionId String        @unique
+  userId         String        @unique
   owner          Owner?        @relation(fields: [ownerId], references: [id])
   construction   Construction? @relation(fields: [constructionId], references: [id])
+  user           User?         @relation(fields: [userId], references: [id])
 }
 
 model Construction {

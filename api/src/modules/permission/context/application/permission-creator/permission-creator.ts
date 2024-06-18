@@ -50,6 +50,7 @@ export class PermissionCreator {
         new StringValueObject(data.receiptNo),
         new IdValueObject(data.constructionId),
         new IdValueObject(data.ownerId),
+        new IdValueObject(data.userId),
         new EnumValueObject(data.status, [Status.PENDING])
       )
       await this.repository.save(newPermission)

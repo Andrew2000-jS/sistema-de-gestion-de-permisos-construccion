@@ -19,7 +19,8 @@ export class MySQLPermissionRepository implements PermissionRepository {
           receiptNo: permissionPrimitives.receiptNo,
           status: permissionPrimitives.status,
           constructionId: permissionPrimitives.constructionId,
-          ownerId: permissionPrimitives.ownerId
+          ownerId: permissionPrimitives.ownerId,
+          userId: permissionPrimitives.userId
         }
       })
     } catch (error) {
