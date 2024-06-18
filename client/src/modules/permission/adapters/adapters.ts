@@ -10,6 +10,7 @@ export const permissionCreatorAdapter = (data) => ({
     observation: data.observation ?? "",
     receiptNo: data.receiptNo,
     status: data.status ?? Status.PENDING,
+    userId: data.userId
   },
   construction: {
     population: Number(data.population),
