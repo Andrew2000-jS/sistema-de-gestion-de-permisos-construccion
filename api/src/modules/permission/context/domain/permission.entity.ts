@@ -21,6 +21,7 @@ export class Permission {
   private readonly status: EnumValueObject<Status>
   private readonly constructionId: IdValueObject
   private readonly ownerId: IdValueObject
+  private readonly userId: IdValueObject
 
   constructor (
     id: PermissionIdValueObject,
@@ -32,6 +33,7 @@ export class Permission {
     receiptNo: StringValueObject,
     constructionId: IdValueObject,
     ownerId: IdValueObject,
+    userId: IdValueObject,
     status: EnumValueObject<Status>
   ) {
     this.id = id
@@ -43,6 +45,7 @@ export class Permission {
     this.receiptNo = receiptNo
     this.constructionId = constructionId
     this.ownerId = ownerId
+    this.userId = userId
     this.status = status
   }
 
@@ -56,6 +59,7 @@ export class Permission {
     receiptNo: StringValueObject,
     constructionId: IdValueObject,
     ownerId: IdValueObject,
+    userId: IdValueObject,
     status: EnumValueObject<Status>
   ): Permission {
     return new Permission(
@@ -68,6 +72,7 @@ export class Permission {
       receiptNo,
       constructionId,
       ownerId,
+      userId,
       status
     )
   }
@@ -83,6 +88,7 @@ export class Permission {
       receiptNo: this.receiptNo.getValue(),
       status: this.status.getValue(),
       constructionId: this.constructionId.getValue(),
+      userId: this.userId.getValue(),
       ownerId: this.ownerId.getValue()
     }
   }
@@ -96,6 +102,7 @@ export class Permission {
     receiptNo: string
     status: Status
     constructionId: string
+    userId: string
     ownerId: string }): Permission {
     return new Permission(
       new PermissionIdValueObject(plainData.id),
@@ -107,6 +114,7 @@ export class Permission {
       new StringValueObject(plainData.receiptNo),
       new IdValueObject(plainData.constructionId),
       new IdValueObject(plainData.ownerId),
+      new IdValueObject(plainData.userId),
       new EnumValueObject(plainData.status, [Status.PENDING, Status.APPROVED, Status.CANCELED, Status.COMPLETED, Status.IN_PROGRESS, Status.REJECTED])
     )
   }
@@ -123,4 +131,5 @@ export type PermissionPrimitives = {
   status: Status
   constructionId: string
   ownerId: string
+  userId: string
 }

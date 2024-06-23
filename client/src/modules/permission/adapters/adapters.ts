@@ -10,6 +10,7 @@ export const permissionCreatorAdapter = (data) => ({
     observation: data.observation ?? "",
     receiptNo: data.receiptNo,
     status: data.status ?? Status.PENDING,
+    userId: data.userId
   },
   construction: {
     population: Number(data.population),
@@ -32,4 +33,15 @@ export const permissionCreatorAdapter = (data) => ({
     name: data.ownerName,
     address: data.ownerAddress,
   },
+});
+
+const constructionTypeTranslations = {
+  NEW: "Nueva Construcción",
+  REMODELING: "Remodelación",
+  PERIMETER_FENCE: "Cerca Perimetral",
+  EXPANSION: "Expansión",
+};
+
+export const constructionTypeAdapter = (type: string) => ({
+  translatedType: constructionTypeTranslations[type.toUpperCase()] || type,
 });

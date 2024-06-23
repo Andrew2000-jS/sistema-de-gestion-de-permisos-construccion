@@ -1,3 +1,5 @@
+'use client'
+
 import { ApiResponse } from "@/lib/common/interfaces";
 import { useState } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";

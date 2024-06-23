@@ -1,4 +1,5 @@
 "use client";
+import { constructionTypeAdapter } from "@/modules/permission/adapters";
 import { Permission } from "@/modules/permission/entities";
 import {
   Document,
@@ -56,7 +57,9 @@ function PermissionReport({ permission }: { permission: Permission }) {
           <Text style={styles.bodyText}>
             CLASE DE CONSTRUCCION:
             <Text style={styles.name}>
-              {permission.construction.type.toUpperCase()}
+              {constructionTypeAdapter(
+                permission.construction.type
+              ).translatedType.toUpperCase()}
             </Text>
           </Text>
           <Text style={styles.bodyText}>

@@ -1,12 +1,11 @@
-import { PrismaClient } from '@prisma/client'
-import { type Nullable } from '@src/shared/modules'
 import { injectable } from 'inversify'
-import { User, type UserWithoutId, type UserRepository } from '../domain'
+import { type UserWithoutId, type UserRepository, type UserPrimitives } from '../domain'
+import { PrismaSingleton } from '@src/shared/modules/context/infrastructure/orm'
 
 @injectable()
 export class MySQLUserRepository implements UserRepository {
   async delete (id: string): Promise<void> {
-    const prisma = new PrismaClient()
+    const prisma = PrismaSingleton.getInstance()
     try {
       await prisma.user.delete({
         where: { id }
@@ -19,25 +18,9 @@ export class MySQLUserRepository implements UserRepository {
     }
   }
 
-  async findById (id: string): Promise<Nullable<User>> {
-    const prisma = new PrismaClient()
-    try {
-      const foundUser = await prisma.user.findFirst({
-        where: { id }
-      })
+  async update (id: string, user: UserWithoutId): Promise<UserPrimitives> {
+    const prisma = PrismaSingleton.getInstance()
 
-      const user = User.fromPrimitives(foundUser!)
-      return user
-    } catch (error) {
-      console.log(error)
-      throw new Error(error as string)
-    } finally {
-      await prisma.$disconnect()
-    }
-  }
-
-  async update (id: string, user: UserWithoutId): Promise<User> {
-    const prisma = new PrismaClient()
     try {
       const updatedUser = await prisma.user.update({
         where: {
@@ -52,7 +35,7 @@ export class MySQLUserRepository implements UserRepository {
         }
       })
 
-      return User.fromPrimitives(updatedUser)
+      return updatedUser
     } catch (error) {
       console.log(error)
       throw new Error(error as string)

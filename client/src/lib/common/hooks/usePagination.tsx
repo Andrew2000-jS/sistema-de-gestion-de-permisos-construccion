@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+"use client";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { SortDescriptor, Selection } from "@nextui-org/react";
 import { LoadingState } from "@/lib";
 import { parse } from "date-fns/parse";
@@ -17,15 +18,15 @@ function usePagination<T>({
   const [tableData, setTableData] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [filterValue, setFilterValue] = useState("");
-  const [visibleColumns] = React.useState<Selection>(new Set(TYPE_COLUMNS));
+  const [visibleColumns] = useState<Selection>(new Set(TYPE_COLUMNS));
   const [filterKey, setFilterKey] = useState<Selection | any>("all");
   const [statusFilter, setStatusFilter] = useState<Selection>("all");
-  const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "date",
     direction: "ascending",
   });
 
-  const headerColumns = React.useMemo(() => {
+  const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
@@ -108,7 +109,7 @@ function usePagination<T>({
     return filteredItems?.slice(start, end);
   }, [page, filteredItems, rowsPerPage]);
 
-  const sortedItems = React.useMemo(() => {
+  const sortedItems = useMemo(() => {
     return [...items].sort((a: T, b: T) => {
       const first = a[sortDescriptor.column as keyof T] as number;
       const second = b[sortDescriptor.column as keyof T] as number;

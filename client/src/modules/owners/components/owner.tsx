@@ -1,9 +1,13 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import { useRequest, useSubmit } from "@/lib/common/hooks";
-import { Owner as IOwner } from "../owner.entity";
-import { filterOwner, updateOwner } from "../services";
+import {
+  AlertMessage,
+  AnimatedMessage,
+  nameRegex,
+  statusTypeAdapter,
+  useRequest,
+  useSubmit,
+} from "@/lib";
 import {
   Button,
   Card,
@@ -15,10 +19,12 @@ import {
   ListboxItem,
   Spinner,
 } from "@nextui-org/react";
-import { Controller, useForm } from "react-hook-form";
-import { AlertMessage, AnimatedMessage, nameRegex } from "@/lib";
 import { format } from "date-fns";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
+import { Owner as IOwner } from "../owner.entity";
+import { filterOwner, updateOwner } from "../services";
 
 function Owner() {
   const { id } = useParams();
@@ -31,8 +37,11 @@ function Owner() {
   });
 
   const { formState, onSubmit } = useSubmit({
-    callback: async ({ name, address, ci }) => {
-      return await updateOwner(initialValues.id, { name, address, ci });
+    callback: async (ownerData: Omit<IOwner, "id" | "permission">) => {
+      return await updateOwner(initialValues.id, {
+        ...ownerData,
+        ci: Number(ownerData.ci),
+      });
     },
   });
 
@@ -54,11 +63,7 @@ function Owner() {
             isVisible={formState.isVisible}
           >
             <AlertMessage
-              description={
-                formState.response.statusCode === 200
-                  ? "Propietario actualizado con exito!"
-                  : "Algo ha salido mal"
-              }
+              description={formState.response.message as string}
               styles={
                 formState.response.statusCode !== 200
                   ? ["text-red-800", "bg-red-50"]
@@ -129,7 +134,9 @@ function Owner() {
                           {permission.receiptNo}
                         </span>
                         <span>{format(permission.date, "yyyy-MM-dd")}</span>
-                        <span className="pr-2">{permission.status}</span>
+                        <span className="pr-2">
+                          {statusTypeAdapter(permission.status).translatedType}
+                        </span>
                       </Link>
                     </div>
                   </ListboxItem>

@@ -12,12 +12,12 @@ export class CiValueObject extends ValueObject<number> {
     const specialChars = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/
     const ciToStr = value.toString()
 
-    if (ciToStr.length < 6) {
-      throw new Exception(`La ci: ${value} tiene menos de 6 caracteres`, 'UserCiLengthTooShort')
+    if (ciToStr.length < 8) {
+      throw new Exception(`La ci: ${value} tiene menos de 8 caracteres`, 'UserCiLengthTooShort')
     }
 
-    if (ciToStr.length > 10) {
-      throw new Exception(`La ci: ${value} tiene mas de 10 caracteres`, 'UserCiLengthTooLong')
+    if (ciToStr.length > 8) {
+      throw new Exception(`La ci: ${value} tiene mas de 8 caracteres`, 'UserCiLengthTooLong')
     }
 
     if (hasStringRegex.test(ciToStr) || specialChars.test(ciToStr)) {

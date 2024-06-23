@@ -2,11 +2,9 @@
 
 import { Button, Card, Input } from "@nextui-org/react";
 import Link from "next/link";
+import { AnimatedMessage, AlertMessage, useSubmit, validateEmail } from "@/lib";
 import { useForm, Controller } from "react-hook-form";
-import { validateEmail } from "../utils";
 import { emailAuth } from "../services";
-import { useSubmit } from "@/lib/common/hooks";
-import { AnimatedMessage, AlertMessage } from "@/lib";
 import Image from "next/image";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";

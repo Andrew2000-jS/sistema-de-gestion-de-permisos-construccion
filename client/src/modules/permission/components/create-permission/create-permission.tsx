@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -18,12 +18,25 @@ import {
   createPermission,
   deleteConstruction,
 } from "../../services";
-import { AlertMessage, AnimatedMessage } from "@/lib";
+import { AlertMessage, AnimatedMessage, decodeToken } from "@/lib";
 import { useSubmit } from "@/lib/common/hooks";
 import { useRouter } from "next/navigation";
 import { createOwner, deleteOwner } from "@/modules/owners";
+import { useCookies } from "react-cookie";
 
 function CreatePermission() {
+  const [userId, setUserId] = useState<string>();
+  const [cookie] = useCookies(["session-data"]);
+
+  useEffect(() => {
+    if (cookie["session-data"]) {
+      const decodedToken = decodeToken(cookie["session-data"].token);
+      if (decodedToken) {
+        setUserId(decodedToken.userId);
+      }
+    }
+  }, [cookie]);
+
   const router = useRouter();
   const {
     control,
@@ -39,6 +52,7 @@ function CreatePermission() {
       const construction = await createConstruction(
         permissionInfo.construction
       );
+
       const owner =
         data.ownerId ?? (await createOwner(permissionInfo.owner)).data.id;
 
@@ -46,6 +60,7 @@ function CreatePermission() {
         ...permissionInfo.permission,
         constructionId: construction.data.id,
         ownerId: owner,
+        userId: userId as string,
       });
 
       if (permission.statusCode !== 200) {

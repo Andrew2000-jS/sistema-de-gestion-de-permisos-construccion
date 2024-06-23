@@ -21,6 +21,7 @@ export type Permission = {
   status: Status;
   constructionId: number;
   ownerId: number;
+  userId: string;
   owner: Owner;
   construction: Construction
 };

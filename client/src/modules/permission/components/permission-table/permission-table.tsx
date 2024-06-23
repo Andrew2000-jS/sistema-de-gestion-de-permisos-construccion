@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useContext, useMemo } from "react";
-import { ApiResponse, CustomeTable } from "@/lib";
+import { ApiResponse, CustomeTable, usePagination } from "@/lib";
 import { Permission } from "../../entities/permission.entity";
 import {
   columns,
@@ -14,7 +14,6 @@ import { FilterCtx } from "../../context";
 import { ActionsDropdown } from "./dropdown";
 import StatusChip from "./status-chip";
 import TopContent from "./top-content";
-import { usePagination } from "@/lib/common/hooks";
 
 export default function PermissionTable({
   data,
