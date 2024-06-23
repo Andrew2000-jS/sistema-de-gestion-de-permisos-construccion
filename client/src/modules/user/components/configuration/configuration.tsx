@@ -3,10 +3,12 @@
 import {
   AlertMessage,
   AnimatedMessage,
+  decodeToken,
   nameRegex,
   statusTypeAdapter,
   useRequest,
   useSubmit,
+  validateEmail,
 } from "@/lib";
 import {
   Button,
@@ -21,14 +23,26 @@ import {
 } from "@nextui-org/react";
 import { format } from "date-fns";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { Controller, useForm } from "react-hook-form";
-import { Owner as IOwner } from "../owner.entity";
-import { filterOwner, updateOwner } from "../services";
+import { filterUser, updateUser } from "../../services";
+import { User } from "../../user.entity";
 
-function Owner() {
-  const { id } = useParams();
-  const { requestData } = useRequest<IOwner>(filterOwner, {
+function Configuration() {
+  const [id, setId] = useState<string>();
+  const [cookie] = useCookies(["session-data"]);
+
+  useEffect(() => {
+    if (cookie["session-data"]) {
+      const decodedToken = decodeToken(cookie["session-data"].token);
+      if (decodedToken) {
+        setId(decodedToken.userId);
+      }
+    }
+  }, [cookie]);
+
+  const { requestData } = useRequest<User>(filterUser, {
     id,
   });
 
@@ -37,15 +51,16 @@ function Owner() {
   });
 
   const { formState, onSubmit } = useSubmit({
-    callback: async (ownerData: Omit<IOwner, "id" | "permission">) => {
-      return await updateOwner(initialValues.id, {
-        ...ownerData,
-        ci: Number(ownerData.ci),
+    callback: async (userData: Omit<User, "id" | "permission">) => {
+      return await updateUser(initialValues.id, {
+        ...userData,
+        ci: Number(userData.ci),
       });
     },
   });
 
-  const initialValues: IOwner = requestData.data[0];
+  console.log(formState);
+  const initialValues: User = requestData.data[0];
 
   return (
     <Card shadow="sm" className="w-[30em] h-[450px]">
@@ -56,7 +71,7 @@ function Owner() {
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardHeader>
-            <h1>Propietario</h1>
+            <h1>Configuracion</h1>
           </CardHeader>
           <AnimatedMessage
             position={["absolute", "top-2", "right-0"]}
@@ -79,13 +94,28 @@ function Owner() {
                 defaultValue={initialValues.name}
                 render={({ field }) => (
                   <Input
-                    description="Nombre del propietario"
+                    description="Nombre del usuario"
                     type="text"
                     validate={nameRegex}
                     {...field}
                   />
                 )}
               />
+              <Controller
+                name="lastname"
+                control={control}
+                defaultValue={initialValues.lastname}
+                render={({ field }) => (
+                  <Input
+                    description="Apellido del usuario"
+                    type="text"
+                    validate={nameRegex}
+                    {...field}
+                  />
+                )}
+              />
+            </div>
+            <div className="col-span-2 pb-5">
               <Controller
                 name="ci"
                 control={control}
@@ -99,7 +129,7 @@ function Owner() {
                         ? "El campo contiene caracteres invalidos"
                         : null
                     }
-                    description="Cedula del propietario"
+                    description="Cedula del usuario"
                     type="number"
                     {...field}
                   />
@@ -108,13 +138,14 @@ function Owner() {
             </div>
             <div className="col-span-2 pb-5">
               <Controller
-                name="address"
+                name="email"
                 control={control}
-                defaultValue={initialValues.address}
+                defaultValue={initialValues.email}
                 render={({ field }) => (
                   <Input
-                    description="Dirección del propietario"
-                    type="text"
+                    validate={validateEmail}
+                    description="Email del usuario"
+                    type="email"
                     {...field}
                   />
                 )}
@@ -155,4 +186,4 @@ function Owner() {
   );
 }
 
-export default Owner;
+export default Configuration;

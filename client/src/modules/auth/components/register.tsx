@@ -1,12 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { EyeFilledIcon, EyeSlashFilledIcon, nameRegex } from "@/lib";
+import {
+  EyeFilledIcon,
+  EyeSlashFilledIcon,
+  nameRegex,
+  validateCi,
+  validatePassword,
+  validateEmail,
+  useSubmit,
+  AnimatedMessage,
+  AlertMessage,
+} from "@/lib";
 import { Card, Button, Input, Spacer } from "@nextui-org/react";
-import { validateCi, validatePassword, validateEmail } from "../utils";
 import { useForm, Controller } from "react-hook-form";
-import { useSubmit } from "@/lib/common/hooks";
-import { AnimatedMessage, AlertMessage } from "@/lib";
 import { register } from "../services";
 import { useRouter } from "next/navigation";
 

@@ -1,9 +1,8 @@
 "use client";
 
-import { ApiResponse, CustomeTable } from "@/lib";
+import { ApiResponse, CustomeTable, usePagination } from "@/lib";
 import { Owner } from "../../owner.entity";
 import { OWNER_COLUMNS, columns, filterColumns } from "./data";
-import { usePagination } from "@/lib/common/hooks";
 import { useCallback, useContext, useMemo } from "react";
 import { FilterCtx } from "../../context";
 import TopContent from "./top-content";

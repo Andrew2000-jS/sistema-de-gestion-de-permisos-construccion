@@ -46,7 +46,8 @@ function Navigation() {
   const pathname = usePathname();
   const isHidden =
     !/^\/permissions(\/.*)?$/.test(pathname) &&
-    !/^\/owners(\/.*)?$/.test(pathname);
+    !/^\/owners(\/.*)?$/.test(pathname) &&
+    !/^\/user(\/.*)?$/.test(pathname);
 
   return (
     <Navbar
@@ -120,7 +121,9 @@ function Navigation() {
             </DropdownTrigger>
           </NavbarItem>
           <DropdownMenu>
-            <DropdownItem>Configuracion</DropdownItem>
+            <DropdownItem>
+              <Link href="/user/configuration">Configuracion</Link>
+            </DropdownItem>
             <DropdownItem onClick={handleDeleteCookie}>
               Cerrar Sesion
             </DropdownItem>
