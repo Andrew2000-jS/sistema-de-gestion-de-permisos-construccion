@@ -21,12 +21,12 @@ Table Permission {
   observation String [not null]
   receiptNo String [not null]
   status String [not null]
-  ownerId String [unique, not null]
+  ownerId String [not null]
+  userId String [not null]
   constructionId String [unique, not null]
-  userId String [unique, not null]
   owner Owner
-  construction Construction
   user User
+  construction Construction
 }
 
 Table Construction {
@@ -72,9 +72,9 @@ Table Owner {
 
 Ref: Permission.ownerId > Owner.id
 
-Ref: Permission.constructionId - Construction.id
-
 Ref: Permission.userId > User.id
+
+Ref: Permission.constructionId - Construction.id
 
 Ref: Construction.areaId - Area.id
 

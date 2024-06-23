@@ -34,12 +34,12 @@ model Permission {
   receiptNo   String
   status      String
 
-  ownerId        String        @unique
+  ownerId        String
+  userId         String
   constructionId String        @unique
-  userId         String        @unique
   owner          Owner?        @relation(fields: [ownerId], references: [id])
-  construction   Construction? @relation(fields: [constructionId], references: [id])
   user           User?         @relation(fields: [userId], references: [id])
+  construction   Construction? @relation(fields: [constructionId], references: [id])
 }
 
 model Construction {

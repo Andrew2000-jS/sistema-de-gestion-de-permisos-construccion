@@ -35,7 +35,7 @@ export class UserUpdater {
       const updatedUser = await this.repository.update(id, data)
 
       return {
-        message: 'Usuario actualizado',
+        message: 'Usuario actualizado, por favor cierre sesion par ver los cambios',
         statusCode: 200,
         data: updatedUser
       }
