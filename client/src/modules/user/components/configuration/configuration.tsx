@@ -59,7 +59,6 @@ function Configuration() {
     },
   });
 
-  console.log(formState);
   const initialValues: User = requestData.data[0];
 
   return (

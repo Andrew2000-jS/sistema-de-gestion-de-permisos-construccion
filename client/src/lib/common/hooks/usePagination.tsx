@@ -71,7 +71,7 @@ function usePagination<T>({
       Array.from(statusFilter).length !== statusOptions.length
     ) {
       filteredInfo = filteredInfo.filter((user) =>
-        Array.from(statusFilter).includes(user.status)
+        Array.from(statusFilter).includes(user.status.toLowerCase())
       );
     }
     if (filterData) {

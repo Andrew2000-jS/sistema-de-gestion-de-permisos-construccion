@@ -2,7 +2,7 @@
 
 import { Checkbox, Input, Select, SelectItem } from "@nextui-org/react";
 import { Controller } from "react-hook-form";
-import { nameRegex, positiveNumberRegex } from "@/lib";
+import { nameRegex, validateCi } from "@/lib";
 import { useState } from "react";
 import { useRequest } from "@/lib/common/hooks";
 import { Owner, getOwners } from "@/modules/owners";
@@ -50,7 +50,7 @@ function OwnerForm({ control }) {
                   label="C.I Propietario"
                   className="w-full"
                   variant="bordered"
-                  validate={positiveNumberRegex}
+                  validate={validateCi}
                   minLength={8}
                   maxLength={8}
                   {...field}

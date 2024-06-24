@@ -329,6 +329,28 @@ function Permission() {
                   )}
                 />
               </div>
+              <div className="col-span-1 pb-5">
+                <Input
+                  description="Fecha de creacion"
+                  type="date"
+                  readOnly
+                  value={format(
+                    initialValues.createdAt as string,
+                    "yyyy-MM-dd"
+                  )}
+                />
+              </div>
+              <div className="col-span-1 pb-5">
+                <Input
+                  description="Fecha de actualizacion"
+                  type="date"
+                  readOnly
+                  value={format(
+                    initialValues.updatedAt as string,
+                    "yyyy-MM-dd"
+                  )}
+                />
+              </div>
               <div className="col-span-2 pb-5">
                 <Controller
                   name="observation"

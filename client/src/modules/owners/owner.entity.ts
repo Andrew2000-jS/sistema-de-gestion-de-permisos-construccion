@@ -6,4 +6,6 @@ export type Owner = {
   address: string;
   ci: number;
   permission: Permission[]
+  createdAt?: string
+  updatedAt?: string
 };
