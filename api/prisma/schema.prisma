@@ -22,6 +22,8 @@ model User {
   email      String       @unique
   password   String
   permission Permission[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
 }
 
 model Permission {
@@ -40,6 +42,8 @@ model Permission {
   owner          Owner?        @relation(fields: [ownerId], references: [id])
   user           User?         @relation(fields: [userId], references: [id])
   construction   Construction? @relation(fields: [constructionId], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
 model Construction {
@@ -59,6 +63,8 @@ model Construction {
   population     Int
   sanitaryPermit String
   Permission     Permission?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 }
 
 model Area {
@@ -82,4 +88,6 @@ model Owner {
   name       String
   address    String
   permission Permission[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
 }
