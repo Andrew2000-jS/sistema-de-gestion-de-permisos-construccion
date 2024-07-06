@@ -46,7 +46,7 @@ function OwnerForm({ control }) {
               render={({ field }) => (
                 <Input
                   isRequired
-                  type="text"
+                  type="number"
                   label="C.I Propietario"
                   className="w-full"
                   variant="bordered"

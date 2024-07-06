@@ -21,7 +21,7 @@ function ConstructionForm({ control }) {
             render={({ field }) => (
               <Input
                 isRequired
-                type="text"
+                type="number"
                 label="Poblacion"
                 className="w-full"
                 validate={positiveNumberRegex}
@@ -90,7 +90,7 @@ function ConstructionForm({ control }) {
             render={({ field }) => (
               <Input
                 isRequired
-                type="text"
+                type="number"
                 label="Numero de pisos"
                 className="w-full"
                 variant="bordered"
