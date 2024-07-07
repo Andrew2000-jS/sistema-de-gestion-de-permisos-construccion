@@ -7,7 +7,7 @@ import { nameRegex, positiveNumberRegex } from "@/lib";
 function ConstructionFormArea({ control }) {
   return (
     <div>
-      <h3 className="pb-5">Datos de la construccion</h3>
+      <h3 className="pb-5">Datos de la construcción</h3>
       <div className="max-h-[300px] overflow-y-auto">
         <div className="flex justify-between pb-5 gap-2">
           <Controller
@@ -18,7 +18,7 @@ function ConstructionFormArea({ control }) {
               <Input
                 isRequired
                 type="number"
-                label="Area de construccion"
+                label="Area de construcción"
                 className="w-full"
                 variant="bordered"
                 minLength={1}
@@ -36,7 +36,7 @@ function ConstructionFormArea({ control }) {
               <Input
                 isRequired
                 type="number"
-                label="Area del terreno"
+                label="Área del terreno"
                 className="w-full"
                 validate={positiveNumberRegex}
                 description={"En m²2"}
@@ -72,7 +72,7 @@ function ConstructionFormArea({ control }) {
               <Input
                 isRequired
                 type="text"
-                label="Compañia de construccion"
+                label="Compañia de construcción"
                 className="w-full"
                 variant="bordered"
                 minLength={5}

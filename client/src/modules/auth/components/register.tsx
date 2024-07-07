@@ -144,7 +144,7 @@ function Register() {
                 <Input
                   isRequired
                   type="text"
-                  label="Cedula"
+                  label="Cédula"
                   className="w-full"
                   variant="bordered"
                   validate={validateCi}

@@ -85,7 +85,7 @@ function OwnerForm({ control }) {
                 <Input
                   isRequired
                   type="text"
-                  label="Direccion del propietario"
+                  label="Dirección del propietario"
                   className="w-full"
                   variant="bordered"
                   minLength={5}

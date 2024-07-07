@@ -7,6 +7,7 @@ import { useCallback, useContext, useMemo } from "react";
 import { FilterCtx } from "../../context";
 import TopContent from "./top-content";
 import { ActionsDropdown } from "./dropdown";
+import { format } from "date-fns";
 
 function OwnersTable({ data, loading }: ApiResponse<Owner[]>) {
   const { filterData } = useContext(FilterCtx);
@@ -57,6 +58,10 @@ function OwnersTable({ data, loading }: ApiResponse<Owner[]>) {
       return owner?.permission?.length;
     } else if (columnKey === "cedula") {
       return owner.ci.toString();
+    } else if (columnKey === "createdAt") {
+      return format(cellValue!.toString(), "dd/MM/yyyy");
+    } else if (columnKey === "updatedAt") {
+      return format(cellValue!.toString(), "dd/MM/yyyy");
     } else {
       return cellValue?.toString();
     }
@@ -75,7 +80,7 @@ function OwnersTable({ data, loading }: ApiResponse<Owner[]>) {
       setSortDescriptor={setSortDescriptor}
       tableData={tableData}
       topContent={topContent}
-      className="w-[50em]"
+      className="w-[60em]"
     />
   );
 }

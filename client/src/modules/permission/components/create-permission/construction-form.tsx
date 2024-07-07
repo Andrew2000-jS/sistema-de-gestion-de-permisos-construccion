@@ -22,7 +22,7 @@ function ConstructionForm({ control }) {
               <Input
                 isRequired
                 type="number"
-                label="Poblacion"
+                label="Población"
                 className="w-full"
                 validate={positiveNumberRegex}
                 variant="bordered"
@@ -57,7 +57,7 @@ function ConstructionForm({ control }) {
               <Input
                 isRequired
                 type="text"
-                label="Direccion de la obra..."
+                label="Dirección de la obra..."
                 className="w-full"
                 minLength={5}
                 variant="bordered"
@@ -91,7 +91,7 @@ function ConstructionForm({ control }) {
               <Input
                 isRequired
                 type="number"
-                label="Numero de pisos"
+                label="Número de pisos"
                 className="w-full"
                 variant="bordered"
                 validate={positiveNumberRegex}
@@ -106,8 +106,8 @@ function ConstructionForm({ control }) {
             render={({ field }) => (
               <Select
                 isRequired
-                label="Tipo de construccion"
-                placeholder="Seleccione el tipo de construccion"
+                label="Tipo de construcción"
+                placeholder="Seleccione el tipo de construcción"
                 className="w-full"
                 {...field}
               >

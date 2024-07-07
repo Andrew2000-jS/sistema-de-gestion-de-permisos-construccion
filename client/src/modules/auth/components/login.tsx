@@ -78,7 +78,7 @@ function Login() {
                 <Input
                   isRequired
                   type="number"
-                  label="Cedula"
+                  label="Cédula"
                   className="w-full"
                   variant="bordered"
                   validate={validateCi}

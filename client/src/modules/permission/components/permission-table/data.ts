@@ -1,7 +1,7 @@
 import { ChipProps } from "@nextui-org/react";
 
 const columns = [
-  {name: "CEDULA", uid: "cedula", sortable: true},
+  {name: "CÉDULA", uid: "cedula", sortable: true},
   {name: "NÚMERO DE RECIBO", uid: "receiptNo", sortable: true},
   {name: "MONTO", uid: "amount", sortable: true},
   {name: "FECHA", uid: "date", sortable: true},
@@ -33,7 +33,7 @@ const filterColumns = [
   {name: "Monto", uid: "amount"},
   {name: "CIV", uid: "civ"},
   {name: "Cantidad", uid: "quantity"},
-  {name: "Cedula", uid: "ci"},
+  {name: "Cédula", uid: "ci"},
 ];
 
 const PERMISSION_COLUMNS = [
