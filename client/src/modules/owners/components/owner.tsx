@@ -120,6 +120,21 @@ function Owner() {
                 )}
               />
             </div>
+            <div className="grid grid-cols-2 gap-4">
+              <Input
+                description="Fecha de creacion"
+                type="date"
+                readOnly
+                value={format(initialValues.createdAt as string, "yyyy-MM-dd")}
+              />
+
+              <Input
+                description="Fecha de actualizacion"
+                type="date"
+                readOnly
+                value={format(initialValues.updatedAt as string, "yyyy-MM-dd")}
+              />
+            </div>
             <div>
               <h3 className="py-5">Permisos de construccion</h3>
               <Listbox>

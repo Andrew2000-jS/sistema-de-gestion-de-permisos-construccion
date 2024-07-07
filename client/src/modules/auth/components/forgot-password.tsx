@@ -90,7 +90,7 @@ function ForgotPassword() {
                 <Input
                   isRequired
                   type="email"
-                  placeholder="Ingrese su correo electronico"
+                  placeholder="Ingrese su correo electrónico"
                   className="w-full"
                   variant="bordered"
                   {...field}

@@ -83,7 +83,7 @@ export default function PermissionTable({
       } else if (columnKey === "actions") {
         return <ActionsDropdown permission={permission} />;
       } else if (columnKey === "date") {
-        return format(cellValue.toString(), "dd/MM/yyyy");
+        return format(cellValue!.toString(), "dd/MM/yyyy");
       } else if (columnKey === "cedula") {
         return permission.owner.ci.toString();
       } else if (columnKey === "amount") {

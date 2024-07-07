@@ -52,7 +52,7 @@ function LoginEmail() {
             />
             <h2 className="text-lg font-bold">Inicio de Sesión</h2>
             <p className="text-sm py-3">
-              Ingresa tu correo electronico para iniciar sesión.
+              Ingresa tu correo electrónico para iniciar sesión.
             </p>
           </div>
           {formState.response.message && (

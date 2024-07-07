@@ -25,7 +25,7 @@ import { permissionStatusObj } from "./data";
 import { Controller, useForm } from "react-hook-form";
 import { constructionTypeColumns } from "./create-permission/data";
 import { permissionCreatorAdapter } from "../adapters";
-import { AlertMessage, AnimatedMessage } from "@/lib";
+import { AlertMessage, AnimatedMessage, positiveNumberRegex } from "@/lib";
 import { Owner, getOwners } from "@/modules/owners";
 
 function Permission() {
@@ -205,6 +205,7 @@ function Permission() {
                   render={({ field }) => (
                     <Input
                       type="number"
+                      validate={positiveNumberRegex}
                       description="Area de construcción (m²2)"
                       {...field}
                     />
@@ -220,6 +221,7 @@ function Permission() {
                     <Input
                       description="Area del terreno (m²2)"
                       type="number"
+                      validate={positiveNumberRegex}
                       {...field}
                     />
                   )}
@@ -231,7 +233,12 @@ function Permission() {
                   control={control}
                   defaultValue={initialValues.construction.floorsNo}
                   render={({ field }) => (
-                    <Input description="N.º de pisos" {...field} />
+                    <Input
+                      description="N.º de pisos"
+                      {...field}
+                      type="number"
+                      validate={positiveNumberRegex}
+                    />
                   )}
                 />
               </div>
@@ -241,7 +248,12 @@ function Permission() {
                   control={control}
                   defaultValue={initialValues.construction.population}
                   render={({ field }) => (
-                    <Input description="Población" {...field} />
+                    <Input
+                      description="Población"
+                      type="number"
+                      validate={positiveNumberRegex}
+                      {...field}
+                    />
                   )}
                 />
               </div>
@@ -326,6 +338,28 @@ function Permission() {
                         </SelectItem>
                       ))}
                     </Select>
+                  )}
+                />
+              </div>
+              <div className="col-span-1 pb-5">
+                <Input
+                  description="Fecha de creacion"
+                  type="date"
+                  readOnly
+                  value={format(
+                    initialValues.createdAt as string,
+                    "yyyy-MM-dd"
+                  )}
+                />
+              </div>
+              <div className="col-span-1 pb-5">
+                <Input
+                  description="Fecha de actualizacion"
+                  type="date"
+                  readOnly
+                  value={format(
+                    initialValues.updatedAt as string,
+                    "yyyy-MM-dd"
                   )}
                 />
               </div>

@@ -46,6 +46,8 @@ function Configuration() {
     id,
   });
 
+  console.log(requestData);
+
   const { control, handleSubmit } = useForm({
     defaultValues: requestData.data[0],
   });
@@ -59,11 +61,10 @@ function Configuration() {
     },
   });
 
-  console.log(formState);
   const initialValues: User = requestData.data[0];
 
   return (
-    <Card shadow="sm" className="w-[30em] h-[450px]">
+    <Card shadow="sm" className="w-[30em] h-[420px]">
       {requestData.loading ? (
         <div className="h-full w-full flex flex-col items-center justify-center">
           <Spinner size="md" />
@@ -122,6 +123,7 @@ function Configuration() {
                 defaultValue={initialValues.ci}
                 render={({ field }) => (
                   <Input
+                    type="number"
                     minLength={8}
                     maxLength={8}
                     validate={(value: string) =>
@@ -130,7 +132,6 @@ function Configuration() {
                         : null
                     }
                     description="Cedula del usuario"
-                    type="number"
                     {...field}
                   />
                 )}
@@ -150,29 +151,6 @@ function Configuration() {
                   />
                 )}
               />
-            </div>
-            <div>
-              <h3 className="py-5">Permisos de construccion</h3>
-              <Listbox>
-                {initialValues?.permission?.map((permission) => (
-                  <ListboxItem key={permission.id} showDivider variant="light">
-                    <div>
-                      <Link
-                        href={`/permissions/${permission.id}`}
-                        className="flex items-center justify-between"
-                      >
-                        <span className="font-semibold pr-5">
-                          {permission.receiptNo}
-                        </span>
-                        <span>{format(permission.date, "yyyy-MM-dd")}</span>
-                        <span className="pr-2">
-                          {statusTypeAdapter(permission.status).translatedType}
-                        </span>
-                      </Link>
-                    </div>
-                  </ListboxItem>
-                ))}
-              </Listbox>
             </div>
           </CardBody>
           <CardFooter className="flex justify-end">

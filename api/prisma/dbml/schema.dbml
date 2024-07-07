@@ -10,6 +10,8 @@ Table User {
   email String [unique, not null]
   password String [not null]
   permission Permission [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
 }
 
 Table Permission {
@@ -27,6 +29,8 @@ Table Permission {
   owner Owner
   user User
   construction Construction
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
 }
 
 Table Construction {
@@ -45,6 +49,8 @@ Table Construction {
   population Int [not null]
   sanitaryPermit String [not null]
   Permission Permission
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
 }
 
 Table Area {
@@ -68,6 +74,8 @@ Table Owner {
   name String [not null]
   address String [not null]
   permission Permission [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
 }
 
 Ref: Permission.ownerId > Owner.id

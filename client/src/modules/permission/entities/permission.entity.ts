@@ -24,4 +24,6 @@ export type Permission = {
   userId: string;
   owner: Owner;
   construction: Construction
+  createdAt?: string
+  updatedAt?: string
 };

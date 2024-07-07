@@ -1,17 +1,20 @@
 const columns = [
-  { name: "CEDULA", uid: "cedula", sortable: true },
+  { name: "CÉDULA", uid: "cedula", sortable: true },
   { name: "NOMBRE", uid: "name", sortable: true },
-  { name: "PERMISOS", uid: "permissionsLength", sortable: true },
+  { name: "NÚM. DE PERMISOS", uid: "permissionsLength", sortable: true },
+  { name: "FECHA DE CREACIÓN", uid: "createdAt", sortable: true },
+  { name: "FECHA DE ACTUALIZACIÓN", uid: "updatedAt", sortable: true },
   { name: "ACCIONES", uid: "actions" },
 ];
 
 const filterColumns = [
-  { name: "Cedula", uid: "ci" },
+  { name: "Cédula", uid: "ci" },
   { name: "Nombre", uid: "name" },
-  { name: "Permiso", uid: "permissionsLength" },
+  { name: "Fecha de creación", uid: "createdAt"},
+  { name: "Fecha de actualización", uid: "updatedAt"},
 ];
 
-const OWNER_COLUMNS = ["cedula", "name", "permissionsLength"];
+const OWNER_COLUMNS = ["cédula", "name", "permissionsLength", "createdAt", "updatedAt"];
 
 export type ColumnsType = (typeof columns)[0];
 
